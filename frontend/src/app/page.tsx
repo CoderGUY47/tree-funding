@@ -637,74 +637,92 @@ export default function Homepage() {
             </div>
           </div>
 
-          <div className="row" style={{ marginTop: '50px' }}>
-            <div className="col-md-6 col-md-offset-3 col-sm-12 text-center" style={{ margin: '0 auto', maxWidth: '680px' }}>
-              {/* Testimonials Frame */}
-              <div style={{ background: '#fff', border: '1px solid #f0f0f0', padding: '65px 40px 35px 40px', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', position: 'relative', minHeight: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="row">
+            <div className="testimonial-wrapper">
+              <div className="testimonial-card">
                 
                 {/* Overlapping Reviewer Avatar */}
-                <div style={{ position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)', zIndex: 2 }}>
-                  <img 
-                    src={testimonials[currentTestimonial].photo} 
-                    alt={testimonials[currentTestimonial].name}
-                    style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #fff', boxShadow: '0 8px 24px rgba(124, 176, 50, 0.25)' }}
-                  />
-                </div>
+                <img 
+                  src={testimonials[currentTestimonial].photo} 
+                  alt={testimonials[currentTestimonial].name}
+                  className="testimonial-avatar"
+                />
 
                 {/* Star Ratings */}
-                <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '15px', color: '#7cb032' }}>
+                <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '15px', color: '#7cb032', marginTop: '10px' }}>
                   <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
                 </div>
 
                 {/* Quote details */}
-                <p style={{ fontSize: '18px', color: '#34495e', fontStyle: 'italic', lineHeight: '1.8', margin: '0 0 25px 0', fontWeight: 300, fontFamily: "'Playfair Display', serif", maxWidth: '540px' }}>
+                <p className="testimonial-quote">
                   "{testimonials[currentTestimonial].quote}"
                 </p>
 
                 {/* Reviewer Details */}
-                <div style={{ textAlign: 'center' }}>
-                  <h5 style={{ margin: 0, fontWeight: 'bold', fontSize: '16px', color: '#222', fontFamily: "'Outfit', sans-serif" }}>{testimonials[currentTestimonial].name}</h5>
-                  <span style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '4px', display: 'block' }}>{testimonials[currentTestimonial].role}</span>
+                <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                  <h5 className="testimonial-author-name">{testimonials[currentTestimonial].name}</h5>
+                  <span className="testimonial-author-role">{testimonials[currentTestimonial].role}</span>
                 </div>
 
-                {/* Slider Controls */}
-                <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: '-22px', right: '-22px', display: 'flex', justifyContent: 'space-between', width: 'calc(100% + 44px)', pointerEvents: 'none' }}>
+                {/* Desktop controls (absolute positioned inside cards) */}
+                <div className="testimonial-desktop-controls" style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: '15px', right: '15px', display: 'none', justifyContent: 'space-between', width: 'calc(100% - 30px)', pointerEvents: 'none' }}>
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-                    style={{ pointerEvents: 'auto', width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #eee', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', outline: 'none', transition: 'all 0.2s' }}
-                    className="slider-arrow-btn"
+                    style={{ pointerEvents: 'auto' }}
+                    className="testimonial-arrow-btn"
                     aria-label="Previous Testimonial"
                   >
-                    <FaChevronLeft style={{ fontSize: '16px' }} />
+                    <FaChevronLeft style={{ fontSize: '15px' }} />
                   </button>
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-                    style={{ pointerEvents: 'auto', width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #eee', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', outline: 'none', transition: 'all 0.2s' }}
-                    className="slider-arrow-btn"
+                    style={{ pointerEvents: 'auto' }}
+                    className="testimonial-arrow-btn"
                     aria-label="Next Testimonial"
                   >
-                    <FaChevronRight style={{ fontSize: '16px' }} />
+                    <FaChevronRight style={{ fontSize: '15px' }} />
                   </button>
                 </div>
 
-                {/* Slide dots Indicators */}
-                <div style={{ display: 'flex', gap: '8px', marginTop: '25px' }}>
-                  {testimonials.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentTestimonial(index)}
-                      style={{
-                        width: '8px',
-                        height: '8px',
-                        borderRadius: '50%',
-                        background: currentTestimonial === index ? '#7cb032' : '#ddd',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.3s'
-                      }}
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
+                {/* Mobile & Tablet controls (dots and arrows combined bottom inline wrapper) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginTop: '20px', width: '100%' }}>
+                  {/* Left Arrow (visible on mobile only) */}
+                  <button 
+                    onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
+                    className="testimonial-arrow-btn testimonial-mobile-arrow"
+                    aria-label="Previous Testimonial"
+                  >
+                    <FaChevronLeft style={{ fontSize: '14px' }} />
+                  </button>
+
+                  {/* Dots Indicator */}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentTestimonial(index)}
+                        style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: currentTestimonial === index ? '#7cb032' : '#ddd',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.3s'
+                        }}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Right Arrow (visible on mobile only) */}
+                  <button 
+                    onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
+                    className="testimonial-arrow-btn testimonial-mobile-arrow"
+                    aria-label="Next Testimonial"
+                  >
+                    <FaChevronRight style={{ fontSize: '14px' }} />
+                  </button>
                 </div>
 
               </div>
