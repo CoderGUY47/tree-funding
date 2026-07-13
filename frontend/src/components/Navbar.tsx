@@ -381,11 +381,23 @@ export default function Navbar() {
                 </div>
               )}
               {!user && (
-                <ul>
-                  <li>
-                    <a className="btn btn-theme" href="/login">DONATE NOW</a>    
-                  </li>
-                </ul>
+                <a 
+                  className="btn btn-theme" 
+                  href="/login" 
+                  style={{ 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    margin: 0, 
+                    height: '44px', 
+                    padding: '0 20px',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase' 
+                  }}
+                >
+                  DONATE NOW
+                </a>
               )}
             </div>
           </div>
