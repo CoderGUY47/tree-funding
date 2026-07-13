@@ -28,8 +28,10 @@ app.use(express.json());
 
 // Prefix rewrite middleware to support Vercel monorepo routing
 app.use((req, res, next) => {
-  if (req.url.startsWith('/api/backend')) {
-    req.url = req.url.replace('/api/backend', '/api');
+  if (req.url === '/api/backend' || req.url === '/api/backend/') {
+    req.url = '/';
+  } else if (req.url.startsWith('/api/backend/')) {
+    req.url = req.url.replace('/api/backend/', '/api/');
   }
   next();
 });
