@@ -78,3 +78,43 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
 .counter-block-1:hover span:not(.counter-icon) {
   color: #7cb032 !important;
 }
+
+/* Bulletproof custom hero buttons to override bootstrap and theme conflicts */
+.hero-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 48px !important;
+  padding: 0 25px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  box-sizing: border-box !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  gap: 8px !important;
+}
+
+.hero-btn-green {
+  background: #7cb032 !important;
+  border: 2px solid #7cb032 !important;
+  color: #fff !important;
+}
+
+.hero-btn-green:hover {
+  background: #6a9926 !important;
+  border-color: #6a9926 !important;
+  color: #fff !important;
+}
+
+.hero-btn-white {
+  background: transparent !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+.hero-btn-white:hover {
+  background: #fff !important;
+  color: #7cb032 !important;
+}

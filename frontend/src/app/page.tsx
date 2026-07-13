@@ -206,17 +206,48 @@ export default function Homepage() {
       <section 
         className="section-banner" 
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${slides[currentSlide].image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          transition: 'background-image 1.2s ease-in-out',
           minHeight: '100vh',
+          height: '100vh',
           display: 'flex',
           alignItems: 'center',
-          position: 'relative'
+          position: 'relative',
+          overflow: 'hidden'
         }}
       >
-        <div className="container">
+        {/* Slides Images list using object-fit: cover */}
+        {slides.map((slide, idx) => (
+          <img
+            key={idx}
+            src={slide.image}
+            alt={slide.title}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: currentSlide === idx ? 1 : 0,
+              transition: 'opacity 1.2s ease-in-out',
+              zIndex: 0
+            }}
+          />
+        ))}
+
+        {/* Gradient Overlay */}
+        <div 
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65))',
+            zIndex: 1
+          }}
+        />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <div className="row">
             <div className="col-md-9 col-sm-12">
               <div className="banner-content" style={{ animation: 'fadeInUp 1s', textAlign: 'left' }}>
@@ -227,10 +258,10 @@ export default function Homepage() {
                   {slides[currentSlide].subtitle}
                 </p>
                 <div className="slider-button" style={{ marginTop: '35px', display: 'flex', gap: '15px' }}>
-                  <Link href="/explore" className="btn btn-theme" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7cb032', border: '2px solid #7cb032', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px', boxSizing: 'border-box' }}>
+                  <Link href="/explore" className="hero-btn hero-btn-green">
                     Explore Projects <FaArrowRight />
                   </Link>
-                  <Link href="/register" className="btn btn-pure-white-border" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '2px solid #fff', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px', background: 'transparent', boxSizing: 'border-box' }}>
+                  <Link href="/register" className="hero-btn hero-btn-white">
                     Start Funding <FaHeart style={{ color: '#7cb032' }} />
                   </Link>
                 </div>
