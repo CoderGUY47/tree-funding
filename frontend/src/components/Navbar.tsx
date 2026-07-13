@@ -215,7 +215,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`}>
+            <div className={`navbar-collapse my-navbar-menu pull-left ${mobileMenuOpen ? 'in' : ''}`}>
               <ul className="nav navbar-nav">
                 <li>
                   <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>

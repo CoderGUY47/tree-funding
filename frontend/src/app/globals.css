@@ -392,8 +392,15 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
   }
 }
 
-@media (min-width: 768px) {
-  .navbar-collapse.collapse {
+.my-navbar-menu {
+  display: block !important;
+}
+
+@media (max-width: 767px) {
+  .my-navbar-menu {
+    display: none !important;
+  }
+  .my-navbar-menu.in {
     display: block !important;
   }
 }
