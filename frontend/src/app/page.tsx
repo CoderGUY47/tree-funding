@@ -21,7 +21,8 @@ import {
   FaTrophy,
   FaFileAlt,
   FaChevronRight,
-  FaChevronLeft
+  FaChevronLeft,
+  FaQuoteLeft
 } from 'react-icons/fa';
 
 interface Campaign {
@@ -638,41 +639,46 @@ export default function Homepage() {
           <div className="row">
             <div className="col-md-8 col-md-offset-2 col-sm-12 text-center">
               {/* Testimonials Frame */}
-              <div style={{ background: '#fff', border: '1px solid #eee', padding: '40px 30px', borderRadius: '8px', boxShadow: '0 4px 15px rgba(0,0,0,0.02)', position: 'relative', minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ background: '#fff', border: '1px solid #f0f0f0', padding: '65px 45px', borderRadius: '12px', boxShadow: '0 15px 45px rgba(0,0,0,0.06)', position: 'relative', minHeight: '320px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 
+                {/* Decorative Quote Icon */}
+                <FaQuoteLeft style={{ fontSize: '42px', color: '#7cb032', opacity: 0.18, marginBottom: '20px' }} />
+
                 {/* Quote details */}
-                <p style={{ fontSize: '15px', color: '#555', fontStyle: 'italic', lineHeight: '1.8', margin: '0 0 25px 0' }}>
+                <p style={{ fontSize: '20px', color: '#2c3e50', fontStyle: 'italic', lineHeight: '1.8', margin: '0 0 30px 0', fontWeight: 300, fontFamily: "'Playfair Display', serif" }}>
                   "{testimonials[currentTestimonial].quote}"
                 </p>
 
                 {/* Author Frame */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
                   <img 
                     src={testimonials[currentTestimonial].photo} 
                     alt={testimonials[currentTestimonial].name}
-                    style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
+                    style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #7cb032', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
                   />
                   <div style={{ textAlign: 'left' }}>
-                    <h5 style={{ margin: 0, fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{testimonials[currentTestimonial].name}</h5>
-                    <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{testimonials[currentTestimonial].role}</span>
+                    <h5 style={{ margin: 0, fontWeight: 'bold', fontSize: '18px', color: '#222', fontFamily: "'Outfit', sans-serif" }}>{testimonials[currentTestimonial].name}</h5>
+                    <span style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '2px', display: 'block' }}>{testimonials[currentTestimonial].role}</span>
                   </div>
                 </div>
 
                 {/* Slider Controls */}
-                <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: '-20px', right: '-20px', display: 'flex', justifyContent: 'space-between', width: 'calc(100% + 40px)', pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: '-25px', right: '-25px', display: 'flex', justifyContent: 'space-between', width: 'calc(100% + 50px)', pointerEvents: 'none' }}>
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-                    style={{ pointerEvents: 'auto', width: '36px', height: '36px', borderRadius: '50%', border: '1px solid #ddd', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', outline: 'none' }}
+                    style={{ pointerEvents: 'auto', width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #eee', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', outline: 'none', transition: 'all 0.2s' }}
+                    className="slider-arrow-btn"
                     aria-label="Previous Testimonial"
                   >
-                    <FaChevronLeft />
+                    <FaChevronLeft style={{ fontSize: '16px' }} />
                   </button>
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-                    style={{ pointerEvents: 'auto', width: '36px', height: '36px', borderRadius: '50%', border: '1px solid #ddd', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', outline: 'none' }}
+                    style={{ pointerEvents: 'auto', width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #eee', background: '#fff', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', outline: 'none', transition: 'all 0.2s' }}
+                    className="slider-arrow-btn"
                     aria-label="Next Testimonial"
                   >
-                    <FaChevronRight />
+                    <FaChevronRight style={{ fontSize: '16px' }} />
                   </button>
                 </div>
 
