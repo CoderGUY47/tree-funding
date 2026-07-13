@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
   try {
     // 1. Try validating standard local JWT token first
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tree_funding_jwt_secret_key_2026_super_secure');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30');
       // Ensure req.user has string id property
       req.user = {
         id: decoded.id || decoded._id,

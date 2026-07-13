@@ -58,7 +58,7 @@ const register = async (req, res) => {
     // Generate JWT
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
-      process.env.JWT_SECRET || 'tree_funding_jwt_secret_key_2026_super_secure',
+      process.env.JWT_SECRET || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
       { expiresIn: '7d' }
     );
 
@@ -103,7 +103,7 @@ const login = async (req, res) => {
     // Generate JWT
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'tree_funding_jwt_secret_key_2026_super_secure',
+      process.env.JWT_SECRET || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
       { expiresIn: '7d' }
     );
 
@@ -156,7 +156,7 @@ const googleLogin = async (req, res) => {
     // Generate JWT
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'tree_funding_jwt_secret_key_2026_super_secure',
+      process.env.JWT_SECRET || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
       { expiresIn: '7d' }
     );
 

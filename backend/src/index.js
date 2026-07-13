@@ -73,7 +73,7 @@ const verifyToken = async (request, response, next) => {
   try {
     // Attempt local JWT secret validation first (cookie-based flow)
     try {
-      const khojaUser = jwt.verify(choltiToken, process.env.JWT_SECRET || "drivefleet_jwt_secret_key");
+      const khojaUser = jwt.verify(choltiToken, process.env.JWT_SECRET || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30");
       request.user = khojaUser;
       return next();
     } catch (jwtBhul) {
@@ -132,7 +132,7 @@ app.post("/api/auth/login", async (request, response) => {
         name: milDeyaUser.name,
         role: milDeyaUser.role || "user"
       },
-      process.env.JWT_SECRET || "drivefleet_jwt_secret_key",
+      process.env.JWT_SECRET || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
       { expiresIn: "7d" }
     );
 
