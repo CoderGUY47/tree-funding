@@ -7,6 +7,12 @@ const db = client.db();
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
+  baseURL: {
+    allowedHosts: ['localhost:3000', 'tree-funding.vercel.app']
+  },
+  advanced: {
+    trustedProxyHeaders: true
+  },
   user: {
     modelName: 'users',
     additionalFields: {
