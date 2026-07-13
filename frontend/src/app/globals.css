@@ -391,3 +391,9 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
     @apply font-sans;
   }
 }
+
+@media (min-width: 768px) {
+  .navbar-collapse.collapse {
+    display: block !important;
+  }
+}
