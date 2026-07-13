@@ -11,7 +11,7 @@ const Campaign = require('./src/models/Campaign');
 
 const seedData = async () => {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tree_funding';
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/tree_funding';
     await mongoose.connect(mongoUri);
     console.log('MongoDB Connected for seeding campaigns.');
 
