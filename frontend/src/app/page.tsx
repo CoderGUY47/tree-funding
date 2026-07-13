@@ -210,7 +210,7 @@ export default function Homepage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           transition: 'background-image 1.2s ease-in-out',
-          minHeight: '620px',
+          minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           position: 'relative'
@@ -227,10 +227,10 @@ export default function Homepage() {
                   {slides[currentSlide].subtitle}
                 </p>
                 <div className="slider-button" style={{ marginTop: '35px', display: 'flex', gap: '15px' }}>
-                  <Link href="/explore" className="btn btn-theme" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7cb032', borderColor: '#7cb032', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px' }}>
+                  <Link href="/explore" className="btn btn-theme" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#7cb032', border: '2px solid #7cb032', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px', boxSizing: 'border-box' }}>
                     Explore Projects <FaArrowRight />
                   </Link>
-                  <Link href="/register" className="btn btn-pure-white-border" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '2px solid #fff', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px', background: 'transparent' }}>
+                  <Link href="/register" className="btn btn-pure-white-border" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '2px solid #fff', color: '#fff', fontWeight: 'bold', height: '46px', padding: '0 25px', borderRadius: '4px', textTransform: 'uppercase', fontSize: '13px', background: 'transparent', boxSizing: 'border-box' }}>
                     Start Funding <FaHeart style={{ color: '#7cb032' }} />
                   </Link>
                 </div>
