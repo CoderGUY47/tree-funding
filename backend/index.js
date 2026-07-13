@@ -27,6 +27,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Prefix rewrite middleware to support Vercel monorepo routing
+app.use((req, res, next) => {
+  if (req.url.startsWith('/api/backend')) {
+    req.url = req.url.replace('/api/backend', '/api');
+  }
+  next();
+});
+
 // Mount API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);

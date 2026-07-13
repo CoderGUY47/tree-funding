@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+  baseURL: typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? '/api/backend'
+    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'),
 });
 
 // Automatically inject JWT token into requests

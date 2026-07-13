@@ -113,12 +113,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         name,
         image: photoUrl || '',
-        data: {
-          role,
-          credits: role === 'Supporter' ? 50 : 20,
-          photoUrl
-        }
-      });
+        role,
+        credits: role === 'Supporter' ? 50 : 20,
+        photoUrl
+      } as any);
       
       if (response.error) {
         throw new Error(response.error.message || 'Registration failed.');

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
-import { FaUsers, FaTrashAlt, FaExclamationTriangle, FaCheckCircle, FaUndoAlt } from 'react-icons/fa';
+import { FaUsers, FaTrashAlt, FaExclamationTriangle, FaExclamationCircle, FaCheckCircle, FaUndoAlt } from 'react-icons/fa';
 
 interface UserRecord {
   _id: string;
