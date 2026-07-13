@@ -8,6 +8,32 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
   font-family: 'Playfair Display', serif !important;
 }
 
+/* Force container size to 80% on all screen viewports */
+.container {
+  width: 80% !important;
+  max-width: 80% !important;
+}
+
+/* Redesign Top Bar Social Icons to Rounded Circle Divs */
+.top-bar-social a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #7cb032 !important;
+  margin-right: 6px !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.top-bar-social a:hover {
+  background: #7cb032 !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+}
+
 /* Counter Block Styling & Hover Fix */
 .counter-block-1 {
   background: #7cb032 !important;
