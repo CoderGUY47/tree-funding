@@ -146,7 +146,7 @@ export default function DashboardLayout({
                     />
                   ) : (
                     <div style={{ width: '45px', height: '45px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '16px' }}>
-                      {user.name.charAt(0).toUpperCase()}
+                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                   )}
                   <div>
