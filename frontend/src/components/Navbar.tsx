@@ -42,8 +42,13 @@ export default function Navbar() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [imageError, setImageError] = useState(false);
   
   const notificationsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [user]);
 
   const githubRepoUrl = 'https://github.com/coderguy/tree-funding-client';
 
@@ -324,10 +329,11 @@ export default function Navbar() {
                   </div>
 
                   {/* Profile Avatar */}
-                  {user.photoUrl ? (
+                  {user.photoUrl && !imageError ? (
                     <img 
                       src={user.photoUrl} 
                       alt="Avatar" 
+                      onError={() => setImageError(true)}
                       style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
                     />
                   ) : (

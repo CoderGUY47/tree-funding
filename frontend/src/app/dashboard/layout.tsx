@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -30,6 +30,11 @@ export default function DashboardLayout({
   const { user, loading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [user]);
 
   // Redirect to login if user session is not found
   useEffect(() => {
@@ -128,10 +133,11 @@ export default function DashboardLayout({
                 
                 {/* Profile Card */}
                 <div style={{ borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {user.photoUrl ? (
+                  {user.photoUrl && !imageError ? (
                     <img 
                       src={user.photoUrl} 
                       alt="Profile" 
+                      onError={() => setImageError(true)}
                       style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
                     />
                   ) : (
