@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
@@ -216,7 +215,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`} style={{ display: mobileMenuOpen ? 'block' : 'none' }}>
+            <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`} style={{ display: mobileMenuOpen ? 'block' : undefined }}>
               <ul className="nav navbar-nav">
                 <li>
                   <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
