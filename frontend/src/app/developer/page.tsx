@@ -135,7 +135,6 @@ export default function DeveloperProfile() {
           position: relative;
         }
         .dev-card:hover {
-          transform: translateY(-8px);
           box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
           border-color: #7cb032;
         }
