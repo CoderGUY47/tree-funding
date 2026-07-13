@@ -30,13 +30,11 @@ export default function Register() {
   const [photoUrl, setPhotoUrl] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [activeRole, setActiveRole] = useState<'Supporter' | 'Creator' | 'Admin'>('Supporter');
+  const [activeRole, setActiveRole] = useState<'Supporter' | 'Creator'>('Supporter');
 
-  const handleTabChange = (selectedRole: 'Supporter' | 'Creator' | 'Admin') => {
+  const handleTabChange = (selectedRole: 'Supporter' | 'Creator') => {
     setActiveRole(selectedRole);
-    if (selectedRole !== 'Admin') {
-      setRole(selectedRole);
-    }
+    setRole(selectedRole);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,7 +120,7 @@ export default function Register() {
                 <CardContent style={{ padding: 0 }}>
                   {/* Role Selector Tabs */}
                   <div style={{ display: 'flex', gap: '8px', background: '#f5f7f3', padding: '6px', borderRadius: '10px', marginBottom: '25px' }}>
-                    {(['Supporter', 'Creator', 'Admin'] as const).map((tRole) => (
+                    {(['Supporter', 'Creator'] as const).map((tRole) => (
                       <button
                         key={tRole}
                         type="button"
@@ -151,138 +149,117 @@ export default function Register() {
                     </div>
                   )}
 
-                  {activeRole === 'Admin' ? (
-                    <div style={{ 
-                      background: '#fef3c7', 
-                      borderLeft: '4px solid #d97706', 
-                      padding: '20px', 
-                      borderRadius: '8px', 
-                      color: '#92400e', 
-                      textAlign: 'left', 
-                      fontSize: '13px', 
-                      lineHeight: '1.6', 
-                      marginBottom: '20px' 
-                    }}>
-                      <strong style={{ fontSize: '14px', display: 'block', marginBottom: '6px' }}>⚠️ Admin Self-Registration Disabled</strong>
-                      For platform security, Administrator accounts cannot be self-registered. Please use the default administrative credentials seeded during startup to log in:
-                      <div style={{ background: 'rgba(255,255,255,0.6)', padding: '12px', borderRadius: '6px', marginTop: '12px', fontFamily: 'monospace', fontSize: '12px', color: '#78350f' }}>
-                        Email: <strong>admin@treefunding.com</strong><br />
-                        Password: <strong>adminpassword123</strong>
+                  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    
+                    <div className="row">
+                      {/* Full Name */}
+                      <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
+                        <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <FaUser style={{ color: '#7cb032' }} /> Full Name
+                        </Label>
+                        <Input
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="e.g. John Doe"
+                          style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
+                        />
+                      </div>
+
+                      {/* Email Address */}
+                      <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
+                        <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <FaEnvelope style={{ color: '#7cb032' }} /> Email Address
+                        </Label>
+                        <Input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="e.g. john@example.com"
+                          style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
+                        />
                       </div>
                     </div>
-                  ) : (
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                      
-                      <div className="row">
-                        {/* Full Name */}
-                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
-                          <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FaUser style={{ color: '#7cb032' }} /> Full Name
-                          </Label>
-                          <Input
-                            type="text"
-                            required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="e.g. John Doe"
-                            style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                          />
-                        </div>
 
-                        {/* Email Address */}
-                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
-                          <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FaEnvelope style={{ color: '#7cb032' }} /> Email Address
-                          </Label>
-                          <Input
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="e.g. john@example.com"
-                            style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                          />
-                        </div>
+                    <div className="row">
+                      {/* Password */}
+                      <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
+                        <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <FaLock style={{ color: '#7cb032' }} /> Password
+                        </Label>
+                        <Input
+                          type="password"
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Choose password (min 6 chars)"
+                          style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
+                        />
                       </div>
 
-                      <div className="row">
-                        {/* Password */}
-                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
-                          <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FaLock style={{ color: '#7cb032' }} /> Password
-                          </Label>
-                          <Input
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Choose password (min 6 chars)"
-                            style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                          />
-                        </div>
-
-                        {/* Photo URL */}
-                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
-                          <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FaImage style={{ color: '#7cb032' }} /> Avatar Photo URL (Optional)
-                          </Label>
-                          <Input
-                            type="url"
-                            value={photoUrl}
-                            onChange={(e) => setPhotoUrl(e.target.value)}
-                            placeholder="e.g. https://images.unsplash.com/..."
-                            style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                          />
-                        </div>
+                      {/* Photo URL */}
+                      <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left', marginBottom: '15px' }}>
+                        <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <FaImage style={{ color: '#7cb032' }} /> Avatar Photo URL (Optional)
+                        </Label>
+                        <Input
+                          type="url"
+                          value={photoUrl}
+                          onChange={(e) => setPhotoUrl(e.target.value)}
+                          placeholder="e.g. https://images.unsplash.com/..."
+                          style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
+                        />
                       </div>
+                    </div>
 
-                      {/* Submit Actions */}
-                      <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
-                        <Button
-                          type="submit"
-                          disabled={loading}
-                          style={{ 
-                            background: '#7cb032', 
-                            color: '#ffffff', 
-                            fontWeight: 'bold', 
-                            height: '44px', 
-                            flex: 1, 
-                            borderRadius: '8px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '6px',
-                            border: 'none',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          <FaUserPlus /> {loading ? 'Registering...' : 'Register'}
-                        </Button>
+                    {/* Submit Actions */}
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                      <Button
+                        type="submit"
+                        disabled={loading}
+                        style={{ 
+                          background: '#7cb032', 
+                          color: '#ffffff', 
+                          fontWeight: 'bold', 
+                          height: '44px', 
+                          flex: 1, 
+                          borderRadius: '8px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <FaUserPlus /> {loading ? 'Registering...' : 'Register'}
+                      </Button>
 
-                        <Button
-                          type="button"
-                          onClick={handleGoogleRegister}
-                          style={{ 
-                            background: '#1e211c', 
-                            color: '#ffffff', 
-                            fontWeight: 'bold', 
-                            height: '44px', 
-                            flex: 1, 
-                            borderRadius: '8px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '6px',
-                            border: 'none',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          <FaGoogle /> Google Register
-                        </Button>
-                      </div>
+                      <Button
+                        type="button"
+                        onClick={handleGoogleRegister}
+                        style={{ 
+                          background: '#1e211c', 
+                          color: '#ffffff', 
+                          fontWeight: 'bold', 
+                          height: '44px', 
+                          flex: 1, 
+                          borderRadius: '8px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <FaGoogle /> Google Register
+                      </Button>
+                    </div>
 
-                    </form>
-                  )}
+                  </form>
 
                   <div style={{ marginTop: '30px', borderTop: '1px solid #f2f5f0', paddingTop: '20px', fontSize: '13px', color: '#656b60', textAlign: 'left' }}>
                     Already have an account? <Link href="/login" style={{ color: '#7cb032', fontWeight: 'bold' }}>Login here</Link>.
