@@ -276,10 +276,15 @@ export default function Homepage() {
 
           <div className="row">
             <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '30px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '220px', transition: 'all 0.3s' }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 20px' }}>
+              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
                   1
                 </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400" 
+                  alt="Create or Browse"
+                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
+                />
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Create or Browse</h3>
                 <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
                   Creators outline environmental milestones and launch campaigns. Supporters browse verified active campaigns.
@@ -288,10 +293,15 @@ export default function Homepage() {
             </div>
 
             <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '30px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '220px', transition: 'all 0.3s' }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 20px' }}>
+              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
                   2
                 </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=400" 
+                  alt="Pledge Wallet Credits"
+                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
+                />
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Pledge Wallet Credits</h3>
                 <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
                   Supporters purchase platform credits and pledge them directly toward environmental projects.
@@ -300,10 +310,15 @@ export default function Homepage() {
             </div>
 
             <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '30px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '220px', transition: 'all 0.3s' }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 20px' }}>
+              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
                   3
                 </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=400" 
+                  alt="Verify & Payout"
+                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
+                />
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Verify & Payout</h3>
                 <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
                   Once the community verifies milestones, the platform approves payout withdrawals to fund forestry actions.
