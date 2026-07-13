@@ -118,3 +118,13 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
   background: #fff !important;
   color: #7cb032 !important;
 }
+
+/* Premium Category Cards Hover Effect */
+.category-card {
+  transition: all 0.3s ease-in-out !important;
+}
+
+.category-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3) !important;
+}

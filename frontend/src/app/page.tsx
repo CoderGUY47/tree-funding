@@ -475,10 +475,24 @@ export default function Homepage() {
             {/* Category 1 */}
             <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
               <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div style={{ border: '1px solid #eee', borderRadius: '6px', padding: '25px 20px', textAlign: 'center', background: '#fafafa', transition: 'all 0.2s', cursor: 'pointer' }}>
+                <div 
+                  className="category-card" 
+                  style={{ 
+                    border: 'none', 
+                    borderRadius: '6px', 
+                    padding: '30px 20px', 
+                    textAlign: 'center', 
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=400')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                >
                   <FaLeaf style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#333', margin: 0 }}>Reforestation</h4>
-                  <span style={{ fontSize: '11px', color: '#999', marginTop: '5px', display: 'block' }}>Saplings & Woodlands</span>
+                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Reforestation</h4>
+                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Saplings & Woodlands</span>
                 </div>
               </Link>
             </div>
@@ -486,10 +500,24 @@ export default function Homepage() {
             {/* Category 2 */}
             <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
               <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div style={{ border: '1px solid #eee', borderRadius: '6px', padding: '25px 20px', textAlign: 'center', background: '#fafafa', transition: 'all 0.2s', cursor: 'pointer' }}>
+                <div 
+                  className="category-card" 
+                  style={{ 
+                    border: 'none', 
+                    borderRadius: '6px', 
+                    padding: '30px 20px', 
+                    textAlign: 'center', 
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=400')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                >
                   <FaCoins style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#333', margin: 0 }}>Solar Power</h4>
-                  <span style={{ fontSize: '11px', color: '#999', marginTop: '5px', display: 'block' }}>Microgrids & Cells</span>
+                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Solar Power</h4>
+                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Microgrids & Cells</span>
                 </div>
               </Link>
             </div>
@@ -497,10 +525,24 @@ export default function Homepage() {
             {/* Category 3 */}
             <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
               <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div style={{ border: '1px solid #eee', borderRadius: '6px', padding: '25px 20px', textAlign: 'center', background: '#fafafa', transition: 'all 0.2s', cursor: 'pointer' }}>
+                <div 
+                  className="category-card" 
+                  style={{ 
+                    border: 'none', 
+                    borderRadius: '6px', 
+                    padding: '30px 20px', 
+                    textAlign: 'center', 
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=400')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                >
                   <FaUsers style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#333', margin: 0 }}>Humanitarian</h4>
-                  <span style={{ fontSize: '11px', color: '#999', marginTop: '5px', display: 'block' }}>Community Rations</span>
+                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Humanitarian</h4>
+                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Community Rations</span>
                 </div>
               </Link>
             </div>
@@ -508,10 +550,24 @@ export default function Homepage() {
             {/* Category 4 */}
             <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
               <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div style={{ border: '1px solid #eee', borderRadius: '6px', padding: '25px 20px', textAlign: 'center', background: '#fafafa', transition: 'all 0.2s', cursor: 'pointer' }}>
+                <div 
+                  className="category-card" 
+                  style={{ 
+                    border: 'none', 
+                    borderRadius: '6px', 
+                    padding: '30px 20px', 
+                    textAlign: 'center', 
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=400')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                  }}
+                >
                   <FaBriefcase style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#333', margin: 0 }}>Social Forestry</h4>
-                  <span style={{ fontSize: '11px', color: '#999', marginTop: '5px', display: 'block' }}>Arid Land Grids</span>
+                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Social Forestry</h4>
+                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Arid Land Grids</span>
                 </div>
               </Link>
             </div>
