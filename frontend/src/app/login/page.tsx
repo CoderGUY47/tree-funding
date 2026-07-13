@@ -20,6 +20,21 @@ import { Button } from '@/components/ui/button';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [activeRole, setActiveRole] = useState<'Supporter' | 'Creator' | 'Admin'>('Supporter');
+
+  const handleTabChange = (role: 'Supporter' | 'Creator' | 'Admin') => {
+    setActiveRole(role);
+    if (role === 'Admin') {
+      setEmail('admin@treefunding.com');
+      setPassword('adminpassword123');
+    } else if (role === 'Creator') {
+      setEmail('creator@treefunding.com');
+      setPassword('creatorpassword123');
+    } else {
+      setEmail('');
+      setPassword('');
+    }
+  };
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -101,6 +116,31 @@ export default function Login() {
                 </CardHeader>
 
                 <CardContent style={{ padding: 0 }}>
+                  {/* Role Selection Tabs */}
+                  <div style={{ display: 'flex', gap: '8px', background: '#f5f7f3', padding: '6px', borderRadius: '10px', marginBottom: '25px' }}>
+                    {(['Supporter', 'Creator', 'Admin'] as const).map((role) => (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => handleTabChange(role)}
+                        style={{
+                          flex: 1,
+                          padding: '10px 0',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                          borderRadius: '8px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          background: activeRole === role ? '#7cb032' : 'transparent',
+                          color: activeRole === role ? '#ffffff' : '#555e50'
+                        }}
+                      >
+                        {role.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
+
                   {error && (
                     <div className="alert alert-danger" style={{ fontSize: '12px', textAlign: 'center', borderRadius: '6px', marginBottom: '20px' }}>
                       {error}
