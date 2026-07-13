@@ -480,7 +480,7 @@ export default function Homepage() {
       </section>
 
       {/* SECTION 3: IMPACT IN NUMBERS (EXTRA SECTION 3) */}
-      <section className="section-content-block section-counter section-black-bg-overlay" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.85)), url('/images/home_1_slider_1.jpg')", backgroundSize: 'cover', backgroundAttachment: 'fixed', color: '#fff', padding: '80px 0' }}>
+      <section className="section-content-block section-counter section-black-bg-overlay" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200')", backgroundSize: 'cover', backgroundAttachment: 'fixed', color: '#fff', padding: '80px 0' }}>
         <div className="container">
           <div className="row section-heading-wrapper" style={{ marginBottom: '45px' }}>
             <div className="col-md-12 text-center">

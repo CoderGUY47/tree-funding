@@ -7,3 +7,48 @@ body, p, input, select, textarea, button, .btn, li, a, span, label, td, th {
 h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a {
   font-family: 'Playfair Display', serif !important;
 }
+
+/* Counter Block Styling & Hover Fix */
+.counter-block-1 {
+  background: #7cb032 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 30px 20px !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease-in-out !important;
+  margin-bottom: 20px;
+}
+
+.counter-block-1 .counter-icon {
+  color: #fff !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.counter-block-1 h4 {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.counter-block-1 span:not(.counter-icon) {
+  color: #fff !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Hover State Overrides */
+.counter-block-1:hover {
+  background: #fff !important;
+  border-color: #7cb032 !important;
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.counter-block-1:hover .counter-icon {
+  color: #7cb032 !important;
+}
+
+.counter-block-1:hover h4 {
+  color: #555 !important;
+}
+
+.counter-block-1:hover span:not(.counter-icon) {
+  color: #7cb032 !important;
+}
