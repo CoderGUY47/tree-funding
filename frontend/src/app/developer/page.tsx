@@ -117,6 +117,8 @@ export default function DeveloperProfile() {
 
       {/* Unique Card Styles */}
       <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+
         .dev-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -128,13 +130,13 @@ export default function DeveloperProfile() {
           border: 1px solid #eef2eb;
           border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 4px 20px rgba(124, 176, 50, 0.03);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
         }
         .dev-card:hover {
           transform: translateY(-8px);
-          box-shadow: 0 12px 30px rgba(124, 176, 50, 0.12);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
           border-color: #7cb032;
         }
         .dev-image-wrapper {
@@ -174,14 +176,16 @@ export default function DeveloperProfile() {
           position: relative;
         }
         .dev-name {
-          font-size: 18px;
-          font-weight: bold;
-          color: #1e211c;
+          font-family: 'Outfit', sans-serif;
+          font-size: 20px;
+          font-weight: 800;
+          color: #0b0c0a;
           margin: 0 0 5px 0;
           text-transform: uppercase;
           display: flex;
           align-items: center;
           gap: 6px;
+          letter-spacing: -0.3px;
         }
         .dev-role {
           font-size: 12px;
