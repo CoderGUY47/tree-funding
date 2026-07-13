@@ -13,6 +13,20 @@ export const auth = betterAuth({
   advanced: {
     trustedProxyHeaders: true
   },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user: any) => {
+          return {
+            data: {
+              ...user,
+              credits: 50
+            }
+          };
+        }
+      }
+    }
+  },
   user: {
     modelName: 'users',
     additionalFields: {
@@ -46,6 +60,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      overrideUserInfoOnSignIn: true,
       mapProfileToUser: (profile: any) => {
         return {
           id: profile.sub,
@@ -53,9 +68,6 @@ export const auth = betterAuth({
           email: profile.email,
           emailVerified: profile.email_verified,
           image: profile.picture,
-          // Custom fields mapping
-          role: 'Supporter',
-          credits: 50, // Default Google social sign-up credits
           photoUrl: profile.picture || ''
         };
       }
