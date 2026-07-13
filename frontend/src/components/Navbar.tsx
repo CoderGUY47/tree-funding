@@ -218,44 +218,44 @@ export default function Navbar() {
             <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`} style={{ display: mobileMenuOpen ? 'block' : undefined }}>
               <ul className="nav navbar-nav">
                 <li>
-                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <FaHome /> Home
+                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                    <FaHome /> HOME
                   </a>
                 </li>
                 <li>
-                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <FaCompass /> Explore Campaigns
+                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                    <FaCompass /> EXPLORE CAMPAIGNS
                   </a>
                 </li>
                 <li>
-                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <FaGithub /> Join as Developer
+                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                    <FaGithub /> JOIN AS DEVELOPER
                   </a>
                 </li>
                 
                 {user ? (
                   <>
                     <li>
-                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaFolderOpen /> Dashboard
+                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                        <FaFolderOpen /> DASHBOARD
                       </a>
                     </li>
                     <li style={{ cursor: 'pointer' }}>
-                      <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaSignOutAlt /> Logout
+                      <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                        <FaSignOutAlt /> LOGOUT
                       </a>
                     </li>
                   </>
                 ) : (
                   <>
-                    <li>
-                      <a href="/login" className={pathname === '/login' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaSignInAlt /> Login
+                    <li style={{ background: '#7cb032' }}>
+                      <a href="/login" className={pathname === '/login' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fff', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                        <FaSignInAlt style={{ color: '#fff' }} /> LOGIN
                       </a>
                     </li>
                     <li>
-                      <a href="/register" className={pathname === '/register' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaUserPlus /> Register
+                      <a href="/register" className={pathname === '/register' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                        <FaUserPlus /> REGISTER
                       </a>
                     </li>
                   </>
@@ -344,7 +344,7 @@ export default function Navbar() {
               {!user && (
                 <ul>
                   <li>
-                    <a className="btn btn-theme" href="/login">Donate Now</a>    
+                    <a className="btn btn-theme" href="/login">DONATE NOW</a>    
                   </li>
                 </ul>
               )}
