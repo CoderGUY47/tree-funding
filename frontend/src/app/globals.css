@@ -397,3 +397,17 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
     display: block !important;
   }
 }
+
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+.navbar-default .navbar-nav > li:not([style*="background"]) > a:hover {
+  color: #7cb032 !important;
+  --nav-link-color: #7cb032 !important;
+}
+
+.navbar-default .navbar-nav > li > a.link-active {
+  color: #7cb032 !important;
+}

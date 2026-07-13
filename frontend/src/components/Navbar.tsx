@@ -218,17 +218,17 @@ export default function Navbar() {
             <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`} style={{ display: mobileMenuOpen ? 'block' : undefined }}>
               <ul className="nav navbar-nav">
                 <li>
-                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
                     <FaHome /> HOME
                   </a>
                 </li>
                 <li>
-                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/explore' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
                     <FaCompass /> EXPLORE CAMPAIGNS
                   </a>
                 </li>
                 <li>
-                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/developer' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
                     <FaGithub /> JOIN AS DEVELOPER
                   </a>
                 </li>
@@ -236,12 +236,12 @@ export default function Navbar() {
                 {user ? (
                   <>
                     <li>
-                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname.startsWith('/dashboard') ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
                         <FaFolderOpen /> DASHBOARD
                       </a>
                     </li>
                     <li style={{ cursor: 'pointer' }}>
-                      <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                      <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: 'var(--nav-link-color, #ffffff)' }}>
                         <FaSignOutAlt /> LOGOUT
                       </a>
                     </li>
@@ -249,12 +249,12 @@ export default function Navbar() {
                 ) : (
                   <>
                     <li style={{ background: '#7cb032' }}>
-                      <a href="/login" className={pathname === '/login' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fff', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                        <FaSignInAlt style={{ color: '#fff' }} /> LOGIN
+                      <a href="/login" className={pathname === '/login' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#ffffff', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                        <FaSignInAlt style={{ color: '#ffffff' }} /> LOGIN
                       </a>
                     </li>
                     <li>
-                      <a href="/register" className={pathname === '/register' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase' }}>
+                      <a href="/register" className={pathname === '/register' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/register' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
                         <FaUserPlus /> REGISTER
                       </a>
                     </li>
