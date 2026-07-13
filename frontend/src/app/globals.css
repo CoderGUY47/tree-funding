@@ -410,9 +410,18 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
   font-weight: bold !important;
 }
 
-.navbar-default .navbar-nav > li:not([style*="background"]) > a:hover {
+.navbar-default .navbar-nav > li:not([style*="background"]) > a:hover,
+.navbar-default .navbar-nav > li:not([style*="background"]) > a:focus,
+.navbar-default .navbar-nav > li:not([style*="background"]):hover > a,
+.navbar-default .navbar-nav > li:not([style*="background"]):focus > a {
+  background-color: transparent !important;
   color: #7cb032 !important;
   --nav-link-color: #7cb032 !important;
+}
+
+.navbar-default .navbar-nav > li:not([style*="background"]):hover,
+.navbar-default .navbar-nav > li:not([style*="background"]):focus {
+  background-color: transparent !important;
 }
 
 .navbar-default .navbar-nav > li > a.link-active {
