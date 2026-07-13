@@ -217,27 +217,27 @@ export default function Navbar() {
 
             <div className={`navbar-collapse my-navbar-menu pull-left ${mobileMenuOpen ? 'in' : ''}`}>
               <ul className="nav navbar-nav">
-                <li>
-                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaHome /> HOME
+                <li style={pathname === '/' ? { background: '#7cb032' } : undefined}>
+                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
+                    <FaHome style={{ color: pathname === '/' ? '#000000' : 'inherit' }} /> HOME
                   </a>
                 </li>
-                <li>
-                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/explore' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaCompass /> EXPLORE CAMPAIGNS
+                <li style={pathname === '/explore' ? { background: '#7cb032' } : undefined}>
+                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/explore' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
+                    <FaCompass style={{ color: pathname === '/explore' ? '#000000' : 'inherit' }} /> EXPLORE CAMPAIGNS
                   </a>
                 </li>
-                <li>
-                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/developer' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaGithub /> JOIN AS DEVELOPER
+                <li style={pathname === '/developer' ? { background: '#7cb032' } : undefined}>
+                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/developer' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
+                    <FaGithub style={{ color: pathname === '/developer' ? '#000000' : 'inherit' }} /> JOIN AS DEVELOPER
                   </a>
                 </li>
                 
                 {user ? (
                   <>
-                    <li>
-                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname.startsWith('/dashboard') ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
-                        <FaFolderOpen /> DASHBOARD
+                    <li style={pathname.startsWith('/dashboard') ? { background: '#7cb032' } : undefined}>
+                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname.startsWith('/dashboard') ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
+                        <FaFolderOpen style={{ color: pathname.startsWith('/dashboard') ? '#000000' : 'inherit' }} /> DASHBOARD
                       </a>
                     </li>
                     {/* On Mobile only: show Avatar and Logout inside menu */}

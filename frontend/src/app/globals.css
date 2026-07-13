@@ -416,5 +416,5 @@ h1, h2, h3, h4, h5, h6, .page-header h3, .section-heading-1, .logo span, .logo a
 }
 
 .navbar-default .navbar-nav > li > a.link-active {
-  color: #7cb032 !important;
+  color: #000000 !important;
 }
