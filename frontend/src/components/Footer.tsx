@@ -4,16 +4,16 @@ import React from 'react';
 import Link from 'next/link';
 import { 
   FaFacebookF, 
-  FaTwitter, 
-  FaGooglePlusG, 
   FaLinkedinIn, 
-  FaMapMarkerAlt, 
   FaEnvelope, 
   FaPhoneAlt, 
-  FaShareAlt, 
-  FaAngleDoubleRight,
-  FaTree
+  FaMapMarkerAlt, 
+  FaAngleDoubleRight, 
+  FaTree,
+  FaShareAlt,
+  FaGithub
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -185,10 +185,10 @@ export default function Footer() {
                     <p style={{ margin: 0 }}>
                       Spread The Word
                       <br />
-                      <a href="#" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="Facebook"><FaFacebookF /></a>
-                      <a href="#" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="Twitter"><FaTwitter /></a>
-                      <a href="#" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="Google Plus"><FaGooglePlusG /></a>
-                      <a href="#" className="footer-social-icon" aria-label="LinkedIn"><FaLinkedinIn /></a>
+                      <a href="https://github.com/CoderGUY47" target="_blank" rel="noopener noreferrer" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="GitHub"><FaGithub /></a>
+                      <a href="https://x.com/CoderGUY47" target="_blank" rel="noopener noreferrer" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="Twitter / X"><FaXTwitter /></a>
+                      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" style={{ marginRight: '10px' }} aria-label="Facebook"><FaFacebookF /></a>
+                      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="LinkedIn"><FaLinkedinIn /></a>
                     </p>
                   </div>
                 </div>

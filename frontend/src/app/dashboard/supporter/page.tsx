@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { FaHeart, FaHourglassHalf, FaCheckCircle, FaLeaf, FaUser, FaCoins } from 'react-icons/fa';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Contribution {
   _id: string;
@@ -119,6 +120,32 @@ export default function SupporterHome() {
           </div>
         </div>
       </div>
+
+      {/* Chart Section */}
+      {approvedContributions.length > 0 && (
+        <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '4px', padding: '20px', marginBottom: '30px', marginTop: '10px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FaCoins style={{ color: '#7cb032' }} /> Contribution Distribution (Credits)
+          </h3>
+          <div style={{ width: '100%', height: 220 }}>
+            <ResponsiveContainer>
+              <BarChart data={approvedContributions.map(c => ({
+                name: c.campaignTitle.length > 15 ? c.campaignTitle.substring(0, 15) + '...' : c.campaignTitle,
+                Amount: c.contributionAmount
+              }))} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f5f5f5" />
+                <XAxis dataKey="name" stroke="#888" fontSize={9} tickLine={false} />
+                <YAxis stroke="#888" fontSize={9} tickLine={false} />
+                <Tooltip 
+                  contentStyle={{ background: '#fff', border: '1px solid #eee', borderRadius: '4px', fontSize: '11px' }}
+                  cursor={{ fill: '#fbfbfb' }}
+                />
+                <Bar dataKey="Amount" fill="#7cb032" radius={[4, 4, 0, 0]} barSize={35} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       {/* Approved List */}
       <div style={{ marginTop: '20px' }}>

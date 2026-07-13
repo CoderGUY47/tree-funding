@@ -16,8 +16,8 @@ import {
 } from 'react-icons/fa';
 
 export default function DeveloperProfile() {
-  const clientRepo = 'https://github.com/coderguy/tree-funding-client';
-  const serverRepo = 'https://github.com/coderguy/tree-funding-server';
+  const clientRepo = 'https://github.com/CoderGUY47/tree-funding';
+  const serverRepo = 'https://github.com/CoderGUY47/tree-funding';
 
   return (
     <div>
@@ -79,22 +79,22 @@ export default function DeveloperProfile() {
 
                 <ul className="team-social-share-2 clearfix" style={{ listStyle: 'none', padding: 0, margin: '0 0 25px 0', display: 'flex', gap: '10px' }}>
                   <li>
-                    <a href={clientRepo} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#333', fontSize: '14px' }} title="GitHub Client">
+                    <a href="https://github.com/CoderGUY47" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#333', fontSize: '14px' }} title="GitHub Profile">
                       <FaGithub />
                     </a>
                   </li>
                   <li>
-                    <a href="#" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#3b5998', fontSize: '14px' }} title="Facebook">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#3b5998', fontSize: '14px' }} title="Facebook">
                       <FaFacebookF />
                     </a>
                   </li>
                   <li>
-                    <a href="#" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#007bb6', fontSize: '14px' }} title="LinkedIn">
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#007bb6', fontSize: '14px' }} title="LinkedIn">
                       <FaLinkedinIn />
                     </a>
                   </li>
                   <li>
-                    <a href="#" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#1da1f2', fontSize: '14px' }} title="Twitter">
+                    <a href="https://x.com/CoderGUY47" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#f5f5f5', color: '#1da1f2', fontSize: '14px' }} title="Twitter / X">
                       <FaTwitter />
                     </a>
                   </li>

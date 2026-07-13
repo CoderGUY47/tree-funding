@@ -7,8 +7,6 @@ import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { 
   FaFacebookF, 
-  FaTwitter, 
-  FaGooglePlusG, 
   FaInstagram, 
   FaYoutube, 
   FaPhoneAlt, 
@@ -25,6 +23,7 @@ import {
   FaSignInAlt,
   FaGithub
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 interface NotificationItem {
   _id: string;
@@ -116,11 +115,11 @@ export default function Navbar() {
             <div className="row">
               <div className="col-lg-6 col-md-6 col-sm-12 text-left hidden-sm hidden-xs">
                 <div className="top-bar-social" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-                  <a href="#" aria-label="Twitter"><FaTwitter /></a>
-                  <a href="#" aria-label="Google Plus"><FaGooglePlusG /></a>
-                  <a href="#" aria-label="Instagram"><FaInstagram /></a>
-                  <a href="#" aria-label="YouTube"><FaYoutube /></a>
+                  <a href="https://github.com/CoderGUY47" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>
+                  <a href="https://x.com/CoderGUY47" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"><FaXTwitter /></a>
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF /></a>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
+                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FaYoutube /></a>
                 </div>
               </div>  
               

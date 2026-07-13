@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { Layers, Hourglass, CheckCircle2, Eye, Award, Check, X, ClipboardList, Mail } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface Campaign {
   _id: string;
@@ -153,6 +154,35 @@ export default function CreatorHome() {
           </div>
         </div>
       </div>
+
+      {/* Chart Section */}
+      {campaigns.length > 0 && (
+        <div className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-6 space-y-4">
+          <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+            <Award className="h-4.5 w-4.5 text-emerald-500" /> Campaign Funding Progress (Credits)
+          </h3>
+          <div style={{ width: '100%', height: 240 }}>
+            <ResponsiveContainer>
+              <BarChart data={campaigns.map(c => ({
+                name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
+                Goal: c.fundingGoal,
+                Raised: c.amountRaised
+              }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f1f23" />
+                <XAxis dataKey="name" stroke="#52525b" fontSize={9} tickLine={false} />
+                <YAxis stroke="#52525b" fontSize={9} tickLine={false} />
+                <Tooltip 
+                  contentStyle={{ background: '#09090b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '11px', color: '#fff' }}
+                  cursor={{ fill: '#18181b' }}
+                />
+                <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }} />
+                <Bar dataKey="Goal" fill="#27272a" radius={[4, 4, 0, 0]} barSize={25} />
+                <Bar dataKey="Raised" fill="#10b981" radius={[4, 4, 0, 0]} barSize={25} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       {/* Pending Contributions to review */}
       <div className="space-y-4">

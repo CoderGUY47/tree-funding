@@ -19,7 +19,8 @@ import {
   FaUniversity, 
   FaUsers, 
   FaFlag, 
-  FaShieldAlt 
+  FaShieldAlt,
+  FaUser
 } from 'react-icons/fa';
 
 export default function DashboardLayout({
@@ -69,6 +70,7 @@ export default function DashboardLayout({
           { path: '/dashboard/supporter/contributions', label: 'My Contributions', icon: <FaHeart /> },
           { path: '/dashboard/supporter/purchase', label: 'Purchase Credits', icon: <FaCoins /> },
           { path: '/dashboard/supporter/payments', label: 'Payment History', icon: <FaHistory /> },
+          { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       case 'Creator':
         return [
@@ -77,6 +79,7 @@ export default function DashboardLayout({
           { path: '/dashboard/creator/my-campaigns', label: 'My Campaigns', icon: <FaBriefcase /> },
           { path: '/dashboard/creator/payments', label: 'Payment History', icon: <FaHistory /> },
           { path: '/dashboard/creator/withdrawals', label: 'Request Payout', icon: <FaCreditCard /> },
+          { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       case 'Admin':
         return [
@@ -85,6 +88,7 @@ export default function DashboardLayout({
           { path: '/dashboard/admin/withdrawals', label: 'Withdrawal Requests', icon: <FaUniversity /> },
           { path: '/dashboard/admin/users', label: 'Manage Users', icon: <FaUsers /> },
           { path: '/dashboard/admin/reports', label: 'Flagged Campaigns', icon: <FaFlag /> },
+          { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       default:
         return [];
