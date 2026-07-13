@@ -215,7 +215,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`} style={{ display: mobileMenuOpen ? 'block' : undefined }}>
+            <div className={`navbar-collapse collapse pull-left ${mobileMenuOpen ? 'in' : ''}`}>
               <ul className="nav navbar-nav">
                 <li>
                   <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
@@ -240,7 +240,23 @@ export default function Navbar() {
                         <FaFolderOpen /> DASHBOARD
                       </a>
                     </li>
-                    <li style={{ cursor: 'pointer' }}>
+                    {/* On Mobile only: show Avatar and Logout inside menu */}
+                    <li className="visible-xs hidden-sm hidden-md hidden-lg" style={{ display: 'flex', alignItems: 'center', padding: '10px 15px', gap: '10px' }}>
+                      {user.photoUrl && !imageError ? (
+                        <img 
+                          src={user.photoUrl} 
+                          alt="Avatar" 
+                          onError={() => setImageError(true)}
+                          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
+                        />
+                      ) : (
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '12px' }}>
+                          {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                        </div>
+                      )}
+                      <span style={{ color: '#fff', fontSize: '13px' }}>{user.email}</span>
+                    </li>
+                    <li className="visible-xs hidden-sm hidden-md hidden-lg" style={{ cursor: 'pointer' }}>
                       <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: 'var(--nav-link-color, #ffffff)' }}>
                         <FaSignOutAlt /> LOGOUT
                       </a>
@@ -336,9 +352,32 @@ export default function Navbar() {
                     />
                   ) : (
                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
-                      {user.name.charAt(0).toUpperCase()}
+                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                   )}
+
+                  {/* Logout Button */}
+                  <button 
+                    onClick={logout}
+                    className="btn btn-theme"
+                    style={{ 
+                      background: '#7cb032', 
+                      color: '#ffffff', 
+                      border: 'none', 
+                      height: '36px', 
+                      padding: '0 15px', 
+                      borderRadius: '4px', 
+                      fontSize: '12px', 
+                      fontWeight: 'bold', 
+                      textTransform: 'uppercase',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <FaSignOutAlt /> LOGOUT
+                  </button>
                 </div>
               )}
               {!user && (
