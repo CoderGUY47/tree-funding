@@ -30,7 +30,7 @@ const seedAdmin = async () => {
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tree_funding');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tree_funding');
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     
     // Seed admin account
