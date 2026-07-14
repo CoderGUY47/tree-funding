@@ -68,33 +68,33 @@ const seedData = async () => {
     await supporter.save();
     console.log('Seeded Users: Admin, Creator, Supporter.');
 
-    // 3. Seed Campaigns
+    // 3. Seed Campaigns (including Oldage Home, Old People, Old School, Food Issue)
     const campaign1 = new Campaign({
       creatorEmail: creator.email,
       creatorName: creator.name,
-      title: 'Support Stray Children & Local Orphanages',
-      story: 'This campaign is designed to support stray children and local orphanages who have no one. Contributions will provide fresh meals, warm clothes, textbooks, and shelter infrastructure.',
+      title: 'Restoring Comfort: Shelter and Care for Old Age Homes',
+      story: 'Support local old age homes by improving living conditions, providing warm bedding, and upgrading sanitation blocks for abandoned elder citizens.',
       category: 'Humanitarian',
       fundingGoal: 15000,
       minimumContribution: 100,
       amountRaised: 4200,
       deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-      rewardInfo: 'Ecosystem Protector - An official badge and quarterly updates.',
-      imageUrl: '/images/cause_1.jpg',
+      rewardInfo: 'Elder Shield badge - Profile badge and quarterly updates.',
+      imageUrl: '/images/cause_3.jpg',
       status: 'approved'
     });
 
     const campaign2 = new Campaign({
       creatorEmail: creator.email,
       creatorName: creator.name,
-      title: 'Feed the Hungry: Community Food Shelter',
-      story: 'Help us keep local food shelters and community kitchens stocked. This campaign supplies healthy ingredients, warm meals, and basic hygienic products.',
+      title: 'Hunger Relief: Food Distribution Campaign',
+      story: 'Provide essential dry rations (rice, grains, lentils, oil) and nutritious hot meals to low-income families suffering from food security issues.',
       category: 'Social Care',
       fundingGoal: 8000,
       minimumContribution: 50,
       amountRaised: 6000,
       deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      rewardInfo: 'Solar Supporter Plaque - Engraved name on dashboard list.',
+      rewardInfo: 'Food Supporter Plaque - Engraved name on community center wall.',
       imageUrl: '/images/cause_2.jpg',
       status: 'approved'
     });
@@ -102,15 +102,30 @@ const seedData = async () => {
     const campaign3 = new Campaign({
       creatorEmail: creator.email,
       creatorName: creator.name,
-      title: 'Care and Support for Shelterless Elderly',
-      story: 'Empower our community workers to provide medical checkups, nutritious food packages, warm blankets, and housing support for elderly citizens.',
+      title: 'Companion and Medical Aid for Abandoned Old People',
+      story: 'Deploy medical health checkup teams and companions to provide daily health monitoring and basic medicines for elderly folks living alone in rural areas.',
       category: 'Humanitarian',
       fundingGoal: 12000,
       minimumContribution: 75,
       amountRaised: 8900,
       deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-      rewardInfo: 'Elder Shield badge - Profile badge and name listed.',
-      imageUrl: '/images/cause_3.jpg',
+      rewardInfo: 'Health Guardian badge - Profile certificate and quarterly report.',
+      imageUrl: '/images/cause_1.jpg',
+      status: 'approved'
+    });
+
+    const campaign4 = new Campaign({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      title: 'Eco-Revival: Reforesting and Greenifying the Old School Grounds',
+      story: 'Plant 2,000 native shade-bearing and fruit saplings in the old school campus to rebuild clean green spaces for student learning and recreational activities.',
+      category: 'Reforestation',
+      fundingGoal: 10000,
+      minimumContribution: 80,
+      amountRaised: 2500,
+      deadline: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
+      rewardInfo: 'Green Alumnus badge - Plant tagged with your name.',
+      imageUrl: '/images/event_1.jpg',
       status: 'approved'
     });
 
@@ -132,8 +147,9 @@ const seedData = async () => {
     await campaign1.save();
     await campaign2.save();
     await campaign3.save();
+    await campaign4.save();
     await pendingCampaign.save();
-    console.log('Seeded Campaigns: 3 Approved, 1 Pending.');
+    console.log('Seeded Campaigns: 4 Approved (including Oldage, Food, and School themes), 1 Pending.');
 
     // 4. Seed Contributions
     const contribution1 = new Contribution({
@@ -214,13 +230,13 @@ const seedData = async () => {
 
     // 7. Seed Notifications
     const notification1 = new Notification({
-      message: 'Your contribution of 150 credits to Support Stray Children & Local Orphanages was approved by Green Creator.',
+      message: 'Your contribution of 150 credits to Restoring Comfort: Shelter and Care for Old Age Homes was approved by Green Creator.',
       toEmail: supporter.email,
       actionRoute: '/dashboard/supporter/contributions'
     });
 
     const notification2 = new Notification({
-      message: 'S.M. Hasan has contributed 100 credits to Feed the Hungry: Community Food Shelter.',
+      message: 'S.M. Hasan has contributed 100 credits to Hunger Relief: Food Campaign.',
       toEmail: creator.email,
       actionRoute: '/dashboard'
     });

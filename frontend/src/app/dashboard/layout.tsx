@@ -68,7 +68,7 @@ export default function DashboardLayout({
       case 'Supporter':
         return [
           { path: '/dashboard', label: 'Home Dashboard', icon: <FaTachometerAlt /> },
-          { path: '/explore', label: 'Explore Campaigns', icon: <FaCompass /> },
+          { path: '/dashboard/supporter/explore', label: 'Explore Campaigns', icon: <FaCompass /> },
           { path: '/dashboard/supporter/contributions', label: 'My Contributions', icon: <FaHeart /> },
           { path: '/dashboard/supporter/purchase', label: 'Purchase Credit', icon: <FaCoins /> },
           { path: '/dashboard/supporter/payments', label: 'Payment History', icon: <FaHistory /> },

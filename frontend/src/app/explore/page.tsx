@@ -21,20 +21,20 @@ interface Campaign {
 
 const defaultFallbackCampaigns: Campaign[] = [
   {
-    _id: 'fallback_1',
-    title: 'Support Stray Children & Local Orphanages',
-    story: 'This campaign is designed to support stray children and local orphanages who have no one. Contributions will provide fresh meals, warm clothes, textbooks, and shelter infrastructure to help kids build a safe, hopeful future.',
+    _id: 'fallback_oldage',
+    title: 'Restoring Comfort: Shelter and Care for Old Age Homes',
+    story: 'Support local old age homes by improving living conditions, providing warm bedding, and upgrading sanitation blocks for abandoned elder citizens.',
     fundingGoal: 15000,
     amountRaised: 4200,
-    imageUrl: '/images/cause_1.jpg',
+    imageUrl: '/images/cause_3.jpg',
     category: 'Humanitarian',
     deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
     creatorName: 'Green Creator'
   },
   {
-    _id: 'fallback_2',
-    title: 'Feed the Hungry: Community Food Shelter',
-    story: 'Help us keep local food shelters and community kitchens stocked. This campaign supplies healthy ingredients, warm meals, and basic hygienic products directly to shelterless individuals and families in need.',
+    _id: 'fallback_food',
+    title: 'Hunger Relief: Food Distribution Campaign',
+    story: 'Provide essential dry rations (rice, grains, lentils, oil) and nutritious hot meals to low-income families suffering from food security issues.',
     fundingGoal: 8000,
     amountRaised: 6000,
     imageUrl: '/images/cause_2.jpg',
@@ -43,91 +43,25 @@ const defaultFallbackCampaigns: Campaign[] = [
     creatorName: 'Green Creator'
   },
   {
-    _id: 'fallback_3',
-    title: 'Care and Support for Shelterless Elderly',
-    story: 'Empower our community workers to provide medical checkups, nutritious food packages, warm blankets, and housing support for abandoned elder citizens who have no families to look after them.',
+    _id: 'fallback_elderly',
+    title: 'Companion and Medical Aid for Abandoned Old People',
+    story: 'Deploy medical health checkup teams and companions to provide daily health monitoring and basic medicines for elderly folks living alone in rural areas.',
     fundingGoal: 12000,
     amountRaised: 8900,
-    imageUrl: '/images/cause_3.jpg',
+    imageUrl: '/images/cause_1.jpg',
     category: 'Humanitarian',
     deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
     creatorName: 'Green Creator'
   },
   {
-    _id: 'fallback_4',
-    title: 'Clean Water Tube Wells for Arid Villages',
-    story: 'Help construct deep-water tube wells to provide clean, arsenic-free drinking water to remote agrarian villages, protecting thousands of families from waterborne diseases.',
-    fundingGoal: 9500,
-    amountRaised: 5300,
-    imageUrl: '/images/event_1.jpg',
-    category: 'Other',
-    deadline: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_5',
-    title: 'Empower Orphan Education & Textbooks',
-    story: 'Provide primary school textbooks, bags, tuition support, and uniform materials to orphan students attending local community schools in rural areas.',
-    fundingGoal: 6500,
-    amountRaised: 3900,
-    imageUrl: '/images/event_2.jpg',
-    category: 'Humanitarian',
-    deadline: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_6',
-    title: 'Mobile Medical Health Clinics',
-    story: 'Deploy a fully equipped mobile medical clinic van offering free standard diagnostic checks, basic checkups, and necessary medicines to low-income farming families.',
-    fundingGoal: 14000,
-    amountRaised: 7200,
-    imageUrl: '/images/event_3.jpg',
-    category: 'Other',
-    deadline: new Date(Date.now() + 40 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_7',
-    title: 'Emergency Aid: Flood Rations & Kits',
-    story: 'Provide urgent food packages (rice, lentils, oil), water purification tablets, and clean shelter kits to rural families displaced by recent river floods.',
+    _id: 'fallback_school',
+    title: 'Eco-Revival: Reforesting and Greenifying the Old School Grounds',
+    story: 'Plant 2,000 native shade-bearing and fruit saplings in the old school campus to rebuild clean green spaces for student learning and recreational activities.',
     fundingGoal: 10000,
-    amountRaised: 9400,
-    imageUrl: '/images/cause_2.jpg',
-    category: 'Social Care',
-    deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_8',
-    title: 'Protect Coastal Wildlife & Nesting Grounds',
-    story: 'Fund coastal patrols to clean plastic debris and protect endangered marine turtle nesting grounds along sandy coastal tourist regions.',
-    fundingGoal: 7000,
-    amountRaised: 3400,
-    imageUrl: '/images/cause_1.jpg',
-    category: 'Forestry',
-    deadline: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_9',
-    title: 'Reforest Dryland Community Lands',
-    story: 'Support planting 10,000 native and fruit-bearing trees on drylands to mitigate soil degradation, improve air quality, and provide sustainable income sources for local residents.',
-    fundingGoal: 11000,
-    amountRaised: 8100,
-    imageUrl: '/images/cause_3.jpg',
+    amountRaised: 2500,
+    imageUrl: '/images/event_1.jpg',
     category: 'Reforestation',
     deadline: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000).toISOString(),
-    creatorName: 'Green Creator'
-  },
-  {
-    _id: 'fallback_10',
-    title: 'Clean Solar Microgrids for Rural Classrooms',
-    story: 'Provide off-grid rural schools with clean solar energy panel installations to power basic lighting, fans, and digital learning devices.',
-    fundingGoal: 8500,
-    amountRaised: 6200,
-    imageUrl: '/images/event_1.jpg',
-    category: 'Solar',
-    deadline: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
     creatorName: 'Green Creator'
   }
 ];
