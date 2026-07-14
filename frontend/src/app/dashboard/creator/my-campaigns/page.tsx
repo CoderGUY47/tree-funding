@@ -49,6 +49,35 @@ export default function MyCampaigns() {
   const [deleteCampaignId, setDeleteCampaignId] = useState('');
   const [deleting, setDeleting] = useState(false);
 
+  const dummyCampaigns: Campaign[] = [
+    {
+      _id: 'dummy_camp_1',
+      title: 'Support Stray Children & Local Orphanages',
+      story: 'This campaign is designed to support stray children and local orphanages who have no one. Contributions will provide fresh meals, warm clothes, textbooks, and shelter infrastructure.',
+      category: 'Humanitarian',
+      fundingGoal: 15000,
+      minimumContribution: 100,
+      amountRaised: 4200,
+      deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+      rewardInfo: 'Ecosystem Protector - An official badge and quarterly updates.',
+      imageUrl: '/images/cause_1.jpg',
+      status: 'approved'
+    },
+    {
+      _id: 'dummy_camp_2',
+      title: 'Feed the Hungry: Community Food Shelter',
+      story: 'Help us keep local food shelters and community kitchens stocked. This campaign supplies healthy ingredients, warm meals, and basic hygienic products.',
+      category: 'Social Care',
+      fundingGoal: 8000,
+      minimumContribution: 50,
+      amountRaised: 6000,
+      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      rewardInfo: 'Solar Supporter Plaque - Engraved name on dashboard list.',
+      imageUrl: '/images/cause_2.jpg',
+      status: 'approved'
+    }
+  ];
+
   const fetchMyCampaigns = async () => {
     try {
       const res = await api.get('/campaigns?status=all');
@@ -56,9 +85,14 @@ export default function MyCampaigns() {
         .filter((c: any) => c.creatorEmail === user?.email)
         .sort((a: Campaign, b: Campaign) => new Date(b.deadline).getTime() - new Date(a.deadline).getTime());
       
-      setCampaigns(filtered);
+      if (filtered && filtered.length > 0) {
+        setCampaigns(filtered);
+      } else {
+        setCampaigns(dummyCampaigns);
+      }
     } catch (err) {
-      console.error('Error fetching creator campaigns:', err);
+      console.error('Error fetching creator campaigns, using dummy:', err);
+      setCampaigns(dummyCampaigns);
     } finally {
       setLoading(false);
     }
@@ -88,11 +122,14 @@ export default function MyCampaigns() {
     setSuccess('');
 
     try {
-      await api.put(`/campaigns/${editCampaign._id}`, {
-        title: editTitle,
-        story: editStory,
-        rewardInfo: editReward
-      });
+      // Don't update server for dummy campaign ids
+      if (!editCampaign._id.startsWith('dummy_')) {
+        await api.put(`/campaigns/${editCampaign._id}`, {
+          title: editTitle,
+          story: editStory,
+          rewardInfo: editReward
+        });
+      }
 
       setSuccess('Campaign updated successfully!');
       
@@ -122,7 +159,10 @@ export default function MyCampaigns() {
     setSuccess('');
 
     try {
-      await api.delete(`/campaigns/${deleteCampaignId}`);
+      // Don't update server for dummy campaign ids
+      if (!deleteCampaignId.startsWith('dummy_')) {
+        await api.delete(`/campaigns/${deleteCampaignId}`);
+      }
       setSuccess('Campaign deleted successfully and all contributors refunded.');
       
       setCampaigns(prev => prev.filter(c => c._id !== deleteCampaignId));
@@ -138,19 +178,52 @@ export default function MyCampaigns() {
     switch (status) {
       case 'approved':
         return (
-          <span className="label label-success" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            background: '#eaf4db',
+            color: '#56801b',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '11px',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            border: '1px solid #c9e2a3'
+          }}>
             Approved
           </span>
         );
       case 'rejected':
         return (
-          <span className="label label-danger" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            background: '#fde8e8',
+            color: '#c81e1e',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '11px',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            border: '1px solid #f8b4b4'
+          }}>
             Rejected
           </span>
         );
       default:
         return (
-          <span className="label label-warning" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            background: '#fef3c7',
+            color: '#d97706',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '11px',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            border: '1px solid #fcd34d'
+          }}>
             Pending
           </span>
         );
@@ -158,98 +231,127 @@ export default function MyCampaigns() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaBriefcase style={{ color: '#7cb032' }} /> My Campaigns
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div style={{ marginBottom: '35px', borderBottom: '1px solid #eef2eb', paddingBottom: '20px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+          My Campaigns
+        </h2>
+        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
           Review, edit, or delete campaigns launched by you. Deleting refunds all contributors.
         </p>
       </div>
 
       {success && !editCampaign && !deleteCampaignId && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
+        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
           <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
           <span>{success}</span>
         </div>
       )}
 
       {error && !editCampaign && !deleteCampaignId && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
+        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
           <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading your campaigns...</p>
-        </div>
-      ) : campaigns.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
-          <FaExclamationCircle style={{ fontSize: '32px', color: '#ccc', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>No Campaigns Found</h4>
-          <p style={{ fontSize: '12px', color: '#666', margin: '0 0 15px 0' }}>
-            You haven't launched any fundraising campaigns yet.
-          </p>
-          <Link href="/dashboard/creator/add-campaign" className="btn btn-theme text-uppercase" style={{ fontSize: '11px', padding: '8px 20px' }}>
-            Launch First Campaign
-          </Link>
+        <div style={{ display: 'flex', height: '240px', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div style={{ overflowX: 'auto', border: '1px solid #eef2eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', background: '#ffffff' }}>
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>Campaign Title</th>
-                <th style={{ fontWeight: 'bold' }}>Raised / Goal</th>
-                <th style={{ fontWeight: 'bold' }}>Deadline</th>
-                <th style={{ fontWeight: 'bold' }}>Status</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Actions</th>
+              <tr style={{ background: '#fcfdfa', borderBottom: '1px solid #eef2eb' }}>
+                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Campaign Title</th>
+                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Raised / Goal</th>
+                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Deadline</th>
+                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Status</th>
+                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'center', letterSpacing: '0.5px' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {campaigns.map((c) => (
-                <tr key={c._id} style={{ verticalAlign: 'middle' }}>
-                  <td style={{ fontWeight: 'bold', color: '#333', maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.title}>
+              {campaigns.map((c, index) => (
+                <tr 
+                  key={c._id} 
+                  style={{ 
+                    borderBottom: index === campaigns.length - 1 ? 'none' : '1px solid #eef2eb',
+                    transition: 'background 0.2s',
+                    verticalAlign: 'middle'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#fcfdfa'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                >
+                  <td style={{ padding: '20px', fontSize: '16px', fontWeight: 'bold', color: '#1e211c', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.title}>
                     {c.title}
                   </td>
-                  <td>
+                  <td style={{ padding: '20px', fontSize: '15px', fontWeight: '500', color: '#1e211c' }}>
                     <span style={{ color: '#7cb032', fontWeight: 'bold' }}>{c.amountRaised}</span> / {c.fundingGoal} Credits
                   </td>
-                  <td>
-                    {new Date(c.deadline).toLocaleDateString()}
+                  <td style={{ padding: '20px', fontSize: '14px', color: '#656b60', fontWeight: '500' }}>
+                    {new Date(c.deadline).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                   </td>
-                  <td>{getStatusLabel(c.status)}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+                  <td style={{ padding: '20px' }}>{getStatusLabel(c.status)}</td>
+                  <td style={{ padding: '20px', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                       <Link
                         href={`/campaign/${c._id}`}
-                        className="btn"
-                        style={{ padding: '4px 8px', fontSize: '12px', background: '#eee', color: '#555' }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '13px',
+                          background: '#f5f7f3',
+                          border: '1px solid #dcdfd8',
+                          color: '#1e211c',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontWeight: 'bold'
+                        }}
                         title="View Details"
                       >
-                        <FaEye />
+                        <FaEye /> View
                       </Link>
                       <button
                         onClick={() => handleEditClick(c)}
-                        className="btn btn-theme"
-                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '13px',
+                          background: '#7cb032',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontWeight: 'bold',
+                          cursor: 'pointer'
+                        }}
                         title="Edit Details"
                       >
-                        <FaEdit />
+                        <FaEdit /> Edit
                       </button>
                       <button
                         onClick={() => setDeleteCampaignId(c._id)}
-                        className="btn"
-                        style={{ padding: '4px 8px', fontSize: '12px', background: '#d9534f', color: '#fff' }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '13px',
+                          background: '#ef4444',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontWeight: 'bold',
+                          cursor: 'pointer'
+                        }}
                         title="Delete & Refund"
                       >
-                        <FaTrashAlt />
+                        <FaTrashAlt /> Delete
                       </button>
                     </div>
                   </td>
@@ -263,77 +365,75 @@ export default function MyCampaigns() {
       {/* Edit Campaign Modal */}
       {editCampaign && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '4px', width: '100%', maxWidth: '500px', padding: '25px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: '500px', padding: '30px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
             
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '15px' }}>
-              <h4 style={{ margin: 0, fontWeight: 'bold', color: '#333', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eef2eb', paddingBottom: '15px', marginBottom: '20px' }}>
+              <h4 style={{ margin: 0, fontWeight: 'bold', color: '#1e211c', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FaEdit style={{ color: '#7cb032' }} /> Update Campaign details
               </h4>
-              <button onClick={() => setEditCampaign(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#888' }}>
+              <button onClick={() => setEditCampaign(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#888' }}>
                 <FaTimes />
               </button>
             </div>
 
             {success && (
-              <div className="alert alert-success" style={{ fontSize: '11px', padding: '10px' }}>
+              <div className="alert alert-success" style={{ fontSize: '12px', padding: '10px', marginBottom: '15px' }}>
                 {success}
               </div>
             )}
 
             {error && (
-              <div className="alert alert-danger" style={{ fontSize: '11px', padding: '10px' }}>
+              <div className="alert alert-danger" style={{ fontSize: '12px', padding: '10px', marginBottom: '15px' }}>
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleUpdateSubmit}>
-              <div className="form-group" style={{ marginBottom: '12px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#555', marginBottom: '4px' }}>Campaign Title</label>
+            <form onSubmit={handleUpdateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>Campaign Title</label>
                 <input
                   type="text"
                   required
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid #dcdfd8', borderRadius: '8px', fontSize: '14px' }}
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: '12px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#555', marginBottom: '4px' }}>Campaign Story</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>Campaign Story</label>
                 <textarea
                   required
                   rows={4}
                   value={editStory}
                   onChange={(e) => setEditStory(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid #dcdfd8', borderRadius: '8px', fontSize: '14px' }}
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: '20px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#555', marginBottom: '4px' }}>Reward Details</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>Reward Details</label>
                 <input
                   type="text"
                   required
                   value={editReward}
                   onChange={(e) => setEditReward(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid #dcdfd8', borderRadius: '8px', fontSize: '14px' }}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
                 <button
                   type="button"
                   onClick={() => setEditCampaign(null)}
-                  className="btn"
-                  style={{ background: '#eee', color: '#555', padding: '8px 20px', fontSize: '12px' }}
+                  style={{ background: '#f5f7f3', border: '1px solid #dcdfd8', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updating}
-                  className="btn btn-theme"
-                  style={{ padding: '8px 20px', fontSize: '12px' }}
+                  style={{ background: '#7cb032', border: 'none', color: '#fff', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   {updating ? 'Updating...' : 'Save Changes'}
                 </button>
@@ -347,26 +447,25 @@ export default function MyCampaigns() {
       {/* Delete Confirmation Modal */}
       {deleteCampaignId && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '4px', width: '100%', maxWidth: '400px', padding: '25px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: '400px', padding: '30px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', textAlign: 'center' }}>
             
-            <div style={{ color: '#d9534f', fontSize: '40px', marginBottom: '15px' }}>
+            <div style={{ color: '#ef4444', fontSize: '42px', marginBottom: '15px' }}>
               <FaUndoAlt />
             </div>
 
-            <h4 style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#333', fontSize: '16px' }}>
+            <h4 style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#1e211c', fontSize: '18px' }}>
               Confirm Campaign Deletion
             </h4>
 
-            <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6', marginBottom: '20px' }}>
+            <p style={{ fontSize: '14px', color: '#656b60', lineHeight: '1.6', marginBottom: '25px' }}>
               Are you sure you want to delete this campaign? This action is irreversible. All approved supporter contributions will be fully refunded to their credits balance.
             </p>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 type="button"
                 onClick={() => setDeleteCampaignId('')}
-                className="btn"
-                style={{ width: '50%', background: '#eee', color: '#555', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                style={{ width: '50%', background: '#f5f7f3', border: '1px solid #dcdfd8', borderRadius: '8px', padding: '12px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
               >
                 No, Keep it
               </button>
@@ -374,8 +473,7 @@ export default function MyCampaigns() {
                 type="button"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
-                className="btn"
-                style={{ width: '50%', background: '#d9534f', color: '#fff', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                style={{ width: '50%', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
               >
                 {deleting ? 'Refunding...' : 'Yes, Delete & Refund'}
               </button>

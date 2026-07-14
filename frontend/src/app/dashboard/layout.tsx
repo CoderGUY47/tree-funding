@@ -163,29 +163,42 @@ export default function DashboardLayout({
                 </div>
 
                 {/* Sidebar Navigation list */}
-                <h4 style={{ fontSize: '12px', color: '#999', textTransform: 'uppercase', fontWeight: 'bold', margin: '0 0 10px 0', borderBottom: '1px solid #f9f9f9', paddingBottom: '5px' }}>Workspace Menus</h4>
+                <h4 style={{ fontSize: '14px', color: '#1e211c', textTransform: 'uppercase', fontWeight: 'bold', margin: '0 0 15px 0', borderBottom: '1px solid #eef2eb', paddingBottom: '8px', letterSpacing: '0.5px' }}>Workspace Menus</h4>
                 <ul className="list-unstyled" style={{ margin: 0, padding: 0 }}>
                   {links.map((link) => {
                     const isActive = pathname === link.path;
                     return (
-                      <li key={link.path} style={{ margin: '5px 0' }}>
+                      <li key={link.path} style={{ margin: '8px 0' }}>
                         <Link 
                           href={link.path}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '10px',
-                            padding: '10px 15px',
-                            borderRadius: '4px',
-                            fontSize: '12px',
+                            gap: '12px',
+                            padding: '12px 18px',
+                            borderRadius: '8px',
+                            fontSize: '15px',
                             fontWeight: 'bold',
-                            color: isActive ? '#fff' : '#555',
+                            color: isActive ? '#fff' : '#1e211c',
                             background: isActive ? '#7cb032' : 'transparent',
                             textDecoration: 'none',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            border: isActive ? 'none' : '1px solid transparent'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isActive) {
+                              e.currentTarget.style.background = '#f5f7f3';
+                              e.currentTarget.style.borderColor = '#eef2eb';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isActive) {
+                              e.currentTarget.style.background = 'transparent';
+                              e.currentTarget.style.borderColor = 'transparent';
+                            }
                           }}
                         >
-                          <span style={{ display: 'inline-flex', fontSize: '14px' }}>{link.icon}</span>
+                          <span style={{ display: 'inline-flex', fontSize: '16px', color: isActive ? '#fff' : '#7cb032' }}>{link.icon}</span>
                           {link.label}
                         </Link>
                       </li>
