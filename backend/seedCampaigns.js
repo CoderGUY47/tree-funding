@@ -8,91 +8,238 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const User = require('./src/models/User');
 const Campaign = require('./src/models/Campaign');
+const Contribution = require('./src/models/Contribution');
+const Withdrawal = require('./src/models/Withdrawal');
+const Notification = require('./src/models/Notification');
+const Report = require('./src/models/Report');
+const Payment = require('./src/models/Payment');
 
 const seedData = async () => {
   try {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/tree_funding';
     await mongoose.connect(mongoUri);
-    console.log('MongoDB Connected for seeding campaigns.');
+    console.log('MongoDB Connected for seeding sandbox data.');
 
-    // 1. Clear existing campaigns
+    // 1. Clear existing collections
+    await User.deleteMany({});
     await Campaign.deleteMany({});
-    console.log('Cleared existing campaigns.');
+    await Contribution.deleteMany({});
+    await Withdrawal.deleteMany({});
+    await Notification.deleteMany({});
+    await Report.deleteMany({});
+    await Payment.deleteMany({});
+    console.log('Cleared all collections (Users, Campaigns, Contributions, Withdrawals, Notifications, Reports, Payments).');
 
-    // 2. Ensure default Creator user exists
-    const creatorEmail = 'creator@treefunding.com';
-    let creator = await User.findOne({ email: creatorEmail });
+    const salt = await bcrypt.genSalt(10);
+    const adminHashed = await bcrypt.hash('adminpassword123', salt);
+    const creatorHashed = await bcrypt.hash('creatorpassword123', salt);
+    const supporterHashed = await bcrypt.hash('supporterpassword123', salt);
 
-    if (!creator) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('creatorpassword123', salt);
+    // 2. Seed Users (setting photoUrl to '' so they default to initials fallback)
+    const admin = new User({
+      name: 'System Administrator',
+      email: 'admin@treefunding.com',
+      password: adminHashed,
+      photoUrl: '',
+      role: 'Admin',
+      credits: 99999
+    });
 
-      creator = new User({
-        name: 'Green Creator',
-        email: creatorEmail,
-        password: hashedPassword,
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
-        role: 'Creator',
-        credits: 500
-      });
+    const creator = new User({
+      name: 'Green Creator',
+      email: 'creator@treefunding.com',
+      password: creatorHashed,
+      photoUrl: '',
+      role: 'Creator',
+      credits: 500
+    });
 
-      await creator.save();
-      console.log('Default Creator user seeded successfully.');
-    }
+    const supporter = new User({
+      name: 'S.M. Hasan',
+      email: 'supporter@treefunding.com',
+      password: supporterHashed,
+      photoUrl: '',
+      role: 'Supporter',
+      credits: 450
+    });
 
-    // 3. Define campaigns using template images matching index.html
-    const campaigns = [
-      {
-        creatorEmail: creator.email,
-        creatorName: creator.name,
-        title: 'Support Stray Children & Local Orphanages',
-        story: 'This campaign is designed to support stray children and local orphanages who have no one. Contributions will provide fresh meals, warm clothes, textbooks, and shelter infrastructure to help kids build a safe, hopeful future.',
-        category: 'Humanitarian',
-        fundingGoal: 15000,
-        minimumContribution: 100,
-        amountRaised: 4200,
-        deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
-        rewardInfo: 'Ecosystem Protector - An official badge on your profile and quarterly updates on the kids progress.',
-        imageUrl: '/images/cause_1.jpg',
-        status: 'approved'
-      },
-      {
-        creatorEmail: creator.email,
-        creatorName: creator.name,
-        title: 'Feed the Hungry: Community Food Shelter',
-        story: 'Help us keep local food shelters and community kitchens stocked. This campaign supplies healthy ingredients, warm meals, and basic hygienic products directly to shelterless individuals and families in need.',
-        category: 'Social Care',
-        fundingGoal: 8000,
-        minimumContribution: 50,
-        amountRaised: 6000,
-        deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-        rewardInfo: 'Solar Supporter Plaque - Your name engraved on the main power station panel, plus a fresh basket of garden vegetables.',
-        imageUrl: '/images/cause_2.jpg',
-        status: 'approved'
-      },
-      {
-        creatorEmail: creator.email,
-        creatorName: creator.name,
-        title: 'Care and Support for Shelterless Elderly',
-        story: 'Empower our community workers to provide medical checkups, nutritious food packages, warm blankets, and housing support for abandoned elder citizens who have no families to look after them.',
-        category: 'Humanitarian',
-        fundingGoal: 12000,
-        minimumContribution: 75,
-        amountRaised: 8900,
-        deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 days from now
-        rewardInfo: 'Coastal Protector - An ecosystem badge on your user profile and quarterly updates on the growth and survival rates of the saplings.',
-        imageUrl: '/images/cause_3.jpg',
-        status: 'approved'
-      }
-    ];
+    await admin.save();
+    await creator.save();
+    await supporter.save();
+    console.log('Seeded Users: Admin, Creator, Supporter.');
 
-    await Campaign.insertMany(campaigns);
-    console.log('Successfully seeded 3 approved campaigns matching template images!');
+    // 3. Seed Campaigns
+    const campaign1 = new Campaign({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      title: 'Support Stray Children & Local Orphanages',
+      story: 'This campaign is designed to support stray children and local orphanages who have no one. Contributions will provide fresh meals, warm clothes, textbooks, and shelter infrastructure.',
+      category: 'Humanitarian',
+      fundingGoal: 15000,
+      minimumContribution: 100,
+      amountRaised: 4200,
+      deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+      rewardInfo: 'Ecosystem Protector - An official badge and quarterly updates.',
+      imageUrl: '/images/cause_1.jpg',
+      status: 'approved'
+    });
+
+    const campaign2 = new Campaign({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      title: 'Feed the Hungry: Community Food Shelter',
+      story: 'Help us keep local food shelters and community kitchens stocked. This campaign supplies healthy ingredients, warm meals, and basic hygienic products.',
+      category: 'Social Care',
+      fundingGoal: 8000,
+      minimumContribution: 50,
+      amountRaised: 6000,
+      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      rewardInfo: 'Solar Supporter Plaque - Engraved name on dashboard list.',
+      imageUrl: '/images/cause_2.jpg',
+      status: 'approved'
+    });
+
+    const campaign3 = new Campaign({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      title: 'Care and Support for Shelterless Elderly',
+      story: 'Empower our community workers to provide medical checkups, nutritious food packages, warm blankets, and housing support for elderly citizens.',
+      category: 'Humanitarian',
+      fundingGoal: 12000,
+      minimumContribution: 75,
+      amountRaised: 8900,
+      deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
+      rewardInfo: 'Elder Shield badge - Profile badge and name listed.',
+      imageUrl: '/images/cause_3.jpg',
+      status: 'approved'
+    });
+
+    const pendingCampaign = new Campaign({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      title: 'Reforest the Coastal Mangroves of Sundarbans',
+      story: 'Help us plant 5,000 mangrove saplings to protect vulnerable coastal villages from cyclone surges and restore marine biodiversity.',
+      category: 'Environment',
+      fundingGoal: 20000,
+      minimumContribution: 150,
+      amountRaised: 0,
+      deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      rewardInfo: 'Mangrove Guardian - Planting coordinates and drone shot of trees.',
+      imageUrl: '/images/cause_mangrove_1783708491831.png',
+      status: 'pending'
+    });
+
+    await campaign1.save();
+    await campaign2.save();
+    await campaign3.save();
+    await pendingCampaign.save();
+    console.log('Seeded Campaigns: 3 Approved, 1 Pending.');
+
+    // 4. Seed Contributions
+    const contribution1 = new Contribution({
+      campaignId: campaign1._id,
+      campaignTitle: campaign1.title,
+      contributionAmount: 150,
+      supporterEmail: supporter.email,
+      supporterName: supporter.name,
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      status: 'approved'
+    });
+
+    const contribution2 = new Contribution({
+      campaignId: campaign2._id,
+      campaignTitle: campaign2.title,
+      contributionAmount: 100,
+      supporterEmail: supporter.email,
+      supporterName: supporter.name,
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      status: 'pending'
+    });
+
+    const contribution3 = new Contribution({
+      campaignId: campaign3._id,
+      campaignTitle: campaign3.title,
+      contributionAmount: 50,
+      supporterEmail: supporter.email,
+      supporterName: supporter.name,
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      status: 'rejected'
+    });
+
+    await contribution1.save();
+    await contribution2.save();
+    await contribution3.save();
+    console.log('Seeded Contributions: 1 Approved, 1 Pending, 1 Rejected.');
+
+    // 5. Seed Withdrawals
+    const withdrawal1 = new Withdrawal({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      withdrawalCredit: 300,
+      withdrawalAmount: 15,
+      paymentSystem: 'Bkash',
+      accountNumber: '01712345678',
+      status: 'pending'
+    });
+
+    const withdrawal2 = new Withdrawal({
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      withdrawalCredit: 200,
+      withdrawalAmount: 10,
+      paymentSystem: 'Stripe',
+      accountNumber: 'pm_card_visa',
+      status: 'approved',
+      withdrawDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+    });
+
+    await withdrawal1.save();
+    await withdrawal2.save();
+    console.log('Seeded Withdrawals: 1 Pending, 1 Approved.');
+
+    // 6. Seed Reports
+    const report = new Report({
+      campaignId: campaign2._id,
+      campaignTitle: campaign2.title,
+      reporterEmail: supporter.email,
+      reporterName: supporter.name,
+      reason: 'The campaign progress tracker contains duplicate image files and hasn\'t uploaded invoice statements.'
+    });
+
+    await report.save();
+    console.log('Seeded 1 Campaign Report.');
+
+    // 7. Seed Notifications
+    const notification1 = new Notification({
+      message: 'Your contribution of 150 credits to Support Stray Children & Local Orphanages was approved by Green Creator.',
+      toEmail: supporter.email,
+      actionRoute: '/dashboard/supporter/contributions'
+    });
+
+    const notification2 = new Notification({
+      message: 'S.M. Hasan has contributed 100 credits to Feed the Hungry: Community Food Shelter.',
+      toEmail: creator.email,
+      actionRoute: '/dashboard'
+    });
+
+    const notification3 = new Notification({
+      message: 'Withdrawal payout of $10 was approved by System Administrator.',
+      toEmail: creator.email,
+      actionRoute: '/dashboard/creator/payments'
+    });
+
+    await notification1.save();
+    await notification2.save();
+    await notification3.save();
+    console.log('Seeded Notifications.');
 
     mongoose.connection.close();
-    console.log('Mongoose connection closed.');
+    console.log('Database seeding finished successfully!');
   } catch (err) {
-    console.error('Error seeding campaigns:', err);
+    console.error('Error seeding database:', err);
     process.exit(1);
   }
 };

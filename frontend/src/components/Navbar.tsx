@@ -242,7 +242,12 @@ export default function Navbar() {
                     </li>
                     {/* On Mobile only: show Avatar and Logout inside menu */}
                     <li className="visible-xs hidden-sm hidden-md hidden-lg" style={{ display: 'flex', alignItems: 'center', padding: '10px 15px', gap: '10px' }}>
-                      {user.photoUrl && !imageError ? (
+                      {user.photoUrl && 
+                       user.photoUrl !== 'null' && 
+                       user.photoUrl !== 'undefined' && 
+                       user.photoUrl.trim() !== '' && 
+                       (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
+                       !imageError ? (
                         <img 
                           src={user.photoUrl} 
                           alt="Avatar" 
@@ -343,7 +348,12 @@ export default function Navbar() {
                   </div>
 
                   {/* Profile Avatar */}
-                  {user.photoUrl && !imageError ? (
+                  {user.photoUrl && 
+                   user.photoUrl !== 'null' && 
+                   user.photoUrl !== 'undefined' && 
+                   user.photoUrl.trim() !== '' && 
+                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
+                   !imageError ? (
                     <img 
                       src={user.photoUrl} 
                       alt="Avatar" 

@@ -76,7 +76,12 @@ export default function ProfilePage() {
           <div style={{ background: '#fff', border: '1px solid #eee', padding: '30px 20px', borderRadius: '4px', textAlign: 'center' }}>
             {/* Avatar container */}
             <div style={{ display: 'inline-block', position: 'relative', marginBottom: '20px' }}>
-              {photoUrl && !imageError ? (
+              {photoUrl && 
+               photoUrl !== 'null' && 
+               photoUrl !== 'undefined' && 
+               photoUrl.trim() !== '' && 
+               (photoUrl.startsWith('http') || photoUrl.startsWith('/')) && 
+               !imageError ? (
                 <img 
                   src={photoUrl} 
                   alt={name}

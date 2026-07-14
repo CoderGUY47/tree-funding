@@ -137,7 +137,12 @@ export default function DashboardLayout({
                 
                 {/* Profile Card */}
                 <div style={{ borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {user.photoUrl && !imageError ? (
+                  {user.photoUrl && 
+                   user.photoUrl !== 'null' && 
+                   user.photoUrl !== 'undefined' && 
+                   user.photoUrl.trim() !== '' && 
+                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
+                   !imageError ? (
                     <img 
                       src={user.photoUrl} 
                       alt="Profile" 

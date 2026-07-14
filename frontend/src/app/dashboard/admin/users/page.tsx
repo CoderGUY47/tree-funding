@@ -126,7 +126,11 @@ export default function ManageUsers() {
                 <tr key={u._id} style={{ verticalAlign: 'middle' }}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {u.photoUrl ? (
+                      {u.photoUrl && 
+                       u.photoUrl !== 'null' && 
+                       u.photoUrl !== 'undefined' && 
+                       u.photoUrl.trim() !== '' && 
+                       (u.photoUrl.startsWith('http') || u.photoUrl.startsWith('/')) ? (
                         <img
                           src={u.photoUrl}
                           alt={u.name}
