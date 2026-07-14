@@ -5,6 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaAward, FaLayerGroup, FaEye, FaCheck, FaTimes, FaEnvelope } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface Campaign {
   _id: string;
@@ -300,59 +302,56 @@ export default function CreatorHome() {
             No pending contributions to review at this moment.
           </div>
         ) : (
-          <div className="overflow-x-auto border border-zinc-100 rounded-2xl shadow-sm">
-            <table className="w-full border-collapse bg-white">
-              <thead>
-                <tr className="bg-zinc-50 border-b border-zinc-100">
-                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Supporter</th>
-                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Campaign Title</th>
-                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Amount Pledged</th>
-                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contributions.map((c) => (
-                  <tr
-                    key={c._id}
-                    className="border-b border-zinc-100 last:border-b-0 hover:bg-zinc-50 transition-colors duration-150 align-middle"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {contributions.map((c) => (
+              <Card key={c._id} className="border border-zinc-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col justify-between rounded-2xl bg-white overflow-hidden">
+                <CardHeader className="pb-3 text-left">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="min-w-0">
+                      <h4 className="font-extrabold text-zinc-800 text-sm leading-tight truncate">
+                        {c.supporterName}
+                      </h4>
+                      <p className="text-[11px] text-zinc-500 flex items-center gap-1 mt-1 font-semibold truncate">
+                        <FaEnvelope className="text-zinc-400 shrink-0" /> {c.supporterEmail}
+                      </p>
+                    </div>
+                    <span className="shrink-0 bg-emerald-50 text-emerald-700 text-xs font-black px-2.5 py-1 rounded-full border border-emerald-100">
+                      {c.contributionAmount} cr
+                    </span>
+                  </div>
+                </CardHeader>
+                <CardContent className="py-2 text-left">
+                  <p className="text-[10px] text-zinc-400 uppercase font-black tracking-wide mb-1">Target Campaign</p>
+                  <p className="text-xs font-bold text-zinc-700 line-clamp-2 h-8 leading-snug" title={c.campaignTitle}>
+                    {c.campaignTitle}
+                  </p>
+                </CardContent>
+                <CardFooter className="pt-3 pb-4 border-t border-zinc-50 flex gap-2 justify-end px-4">
+                  <Button
+                    onClick={() => setSelectedContribution(c)}
+                    variant="outline"
+                    className="h-8 text-[10px] font-bold border-zinc-200 hover:bg-zinc-50 px-2.5 cursor-pointer rounded-lg inline-flex items-center gap-1"
                   >
-                    <td className="px-5 py-5">
-                      <p className="text-base font-bold text-zinc-900 m-0">{c.supporterName}</p>
-                      <p className="text-xs text-zinc-500 m-0 mt-1 flex items-center gap-1"><FaEnvelope /> {c.supporterEmail}</p>
-                    </td>
-                    <td className="px-5 py-5 text-base font-bold text-zinc-900 max-w-[240px] overflow-hidden text-ellipsis whitespace-nowrap" title={c.campaignTitle}>
-                      {c.campaignTitle}
-                    </td>
-                    <td className="px-5 py-5 text-base font-bold text-emerald-600">{c.contributionAmount} cr</td>
-                    <td className="px-5 py-5 text-center">
-                      <div className="flex gap-2 justify-center">
-                        <button
-                          onClick={() => setSelectedContribution(c)}
-                          className="px-3 py-1.5 text-xs bg-zinc-100 border border-zinc-200 text-zinc-800 rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-zinc-200 transition-colors"
-                          title="View Details"
-                        >
-                          <FaEye /> View
-                        </button>
-                        <button
-                          onClick={() => handleApprove(c._id)}
-                          disabled={processingId !== ''}
-                          className="px-3 py-1.5 text-xs bg-emerald-500 text-white rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-emerald-600 transition-colors border-none disabled:opacity-60"
-                        >
-                          <FaCheck /> Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(c._id)}
-                          disabled={processingId !== ''}
-                          className="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-red-600 transition-colors border-none disabled:opacity-60"
-                        >
-                          <FaTimes /> Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    <FaEye /> View
+                  </Button>
+                  <Button
+                    onClick={() => handleReject(c._id)}
+                    disabled={processingId !== ''}
+                    variant="destructive"
+                    className="h-8 text-[10px] font-bold bg-red-500 hover:bg-red-600 text-white border-none px-2.5 cursor-pointer rounded-lg inline-flex items-center gap-1"
+                  >
+                    <FaTimes /> Reject
+                  </Button>
+                  <Button
+                    onClick={() => handleApprove(c._id)}
+                    disabled={processingId !== ''}
+                    className="h-8 text-[10px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white border-none px-2.5 cursor-pointer rounded-lg inline-flex items-center gap-1"
+                  >
+                    <FaCheck /> Approve
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
           </div>
         )}
       </div>
