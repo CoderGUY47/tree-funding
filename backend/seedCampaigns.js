@@ -185,10 +185,34 @@ const seedData = async () => {
       status: 'rejected'
     });
 
+    const contribution4 = new Contribution({
+      campaignId: campaign4._id,
+      campaignTitle: campaign4.title,
+      contributionAmount: 120,
+      supporterEmail: supporter.email,
+      supporterName: supporter.name,
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      status: 'approved'
+    });
+
+    const contribution5 = new Contribution({
+      campaignId: campaign1._id,
+      campaignTitle: campaign1.title,
+      contributionAmount: 200,
+      supporterEmail: supporter.email,
+      supporterName: supporter.name,
+      creatorEmail: creator.email,
+      creatorName: creator.name,
+      status: 'pending'
+    });
+
     await contribution1.save();
     await contribution2.save();
     await contribution3.save();
-    console.log('Seeded Contributions: 1 Approved, 1 Pending, 1 Rejected.');
+    await contribution4.save();
+    await contribution5.save();
+    console.log('Seeded Contributions: 5 items (2 Approved, 2 Pending, 1 Rejected).');
 
     // 5. Seed Withdrawals
     const withdrawal1 = new Withdrawal({

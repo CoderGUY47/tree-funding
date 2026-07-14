@@ -298,7 +298,7 @@ export default function Navbar() {
                   <div className="relative" ref={notificationsRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     <button
                       onClick={() => setNotificationsOpen(!notificationsOpen)}
-                      style={{ background: 'none', border: 'none', color: '#333', fontSize: '18px', cursor: 'pointer', position: 'relative', outline: 'none' }}
+                      style={{ background: 'none', border: 'none', color: '#fff', fontSize: '18px', cursor: 'pointer', position: 'relative', outline: 'none' }}
                       aria-label="Notifications"
                     >
                       <FaBell style={{ display: 'block' }} />
@@ -311,7 +311,7 @@ export default function Navbar() {
 
                     {notificationsOpen && (
                       <div className="notification-popup-container" style={{ position: 'absolute', right: 0, top: '35px', width: '320px', background: '#fff', border: '1px solid #ddd', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 1000, overflow: 'hidden' }}>
-                        <div style={{ padding: '10px 15px', borderBottom: '1px solid #eee', background: '#fcfcfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ padding: '10px 15px', borderBottom: '1px solid #ffffff', background: '#fcfcfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <strong style={{ fontSize: '12px', color: '#333' }}>Alert Notifications</strong>
                           {unreadCount > 0 && (
                             <button onClick={handleMarkAllAsRead} style={{ background: 'none', border: 'none', color: '#7cb032', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>
