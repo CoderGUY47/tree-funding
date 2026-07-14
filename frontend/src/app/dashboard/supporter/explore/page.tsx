@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import { FaSearch, FaClock, FaUser, FaCoins, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 
 interface Campaign {
@@ -22,6 +23,7 @@ interface Campaign {
 
 export default function SupporterExplore() {
   const { user, refreshProfile } = useAuth();
+  const router = useRouter();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -272,10 +274,10 @@ export default function SupporterExplore() {
                     </span>
                   </div>
                   <button
-                    onClick={() => handleOpenDetails(camp)}
+                    onClick={() => router.push(`/campaign/${camp._id}`)}
                     className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer border-none transition-colors"
                   >
-                    View Details & Contribute
+                    View Details
                   </button>
                 </div>
 

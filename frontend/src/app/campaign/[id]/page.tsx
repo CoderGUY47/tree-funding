@@ -92,7 +92,7 @@ export default function CampaignDetails() {
     try {
       await api.post('/contributions', {
         campaignId: campaign._id,
-        amount: Number(amount),
+        contributionAmount: Number(amount),
       });
 
       setContribSuccess('Contribution submitted successfully! Locked pending creator approval.');
