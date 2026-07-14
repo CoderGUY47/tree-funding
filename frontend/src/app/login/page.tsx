@@ -64,184 +64,132 @@ export default function Login() {
   };
 
   return (
-    <div style={{ background: '#fcfdfa', minHeight: '100vh' }}>
+    <div className="bg-zinc-50 min-h-screen flex flex-col font-sans">
       <Navbar />
 
       {/* PAGE HEADER */}
       <section 
-        className="page-header" 
+        className="relative py-20 text-white text-center bg-cover bg-center shrink-0" 
         style={{
-          backgroundImage: `linear-gradient(rgba(18, 20, 15, 0.75), rgba(18, 20, 15, 0.85)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          padding: '80px 0',
-          color: '#fff',
-          textAlign: 'center'
+          backgroundImage: `linear-gradient(rgba(18, 20, 15, 0.75), rgba(18, 20, 15, 0.85)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200')`
         }}
       >
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12">
-              <h3 style={{ color: '#fff', fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', margin: 0 }}>
-                Sign In
-              </h3>
-              <p className="page-breadcrumb" style={{ fontSize: '12px', color: '#ccc', marginTop: '10px' }}>
-                <Link href="/" style={{ color: '#ccc' }}>Home</Link> / Login
-              </p>
-            </div>
-          </div>
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h3 className="text-white text-3xl font-black uppercase tracking-tight m-0">
+            Sign In
+          </h3>
+          <p className="text-xs text-zinc-300 mt-2 font-medium">
+            <Link href="/" className="text-zinc-300 hover:text-white no-underline">Home</Link> / Login
+          </p>
         </div>
       </section>
 
       {/* FORM BODY */}
-      <section style={{ padding: '80px 0' }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
-              
-              <Card style={{ 
-                background: '#ffffff', 
-                border: '1px solid #eef2eb', 
-                borderRadius: '16px', 
-                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)',
-                padding: '40px 30px'
-              }}>
-                <CardHeader style={{ padding: '0 0 25px 0', textAlign: 'left' }}>
-                  <CardTitle style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FaSignInAlt style={{ color: '#7cb032' }} /> Sign In to TreeFund
-                  </CardTitle>
-                  <CardDescription style={{ fontSize: '13px', color: '#656b60', marginTop: '5px' }}>
-                    Enter your account credentials to access your fundraising or support workspace.
-                  </CardDescription>
-                </CardHeader>
+      <section className="py-20 flex-grow flex items-center justify-center">
+        <div className="container mx-auto px-4 w-full max-w-md">
+          
+          <Card className="bg-white border border-zinc-150 rounded-2xl shadow-lg p-8">
+            <CardHeader className="p-0 pb-6 text-left">
+              <CardTitle className="text-xl font-extrabold text-zinc-900 flex items-center gap-2 m-0">
+                <FaSignInAlt className="text-emerald-500" /> Sign In to TreeFund
+              </CardTitle>
+              <CardDescription className="text-xs text-zinc-500 mt-1.5 font-medium leading-relaxed">
+                Enter your account credentials to access your fundraising or support workspace.
+              </CardDescription>
+            </CardHeader>
 
-                <CardContent style={{ padding: 0 }}>
-                  {/* Role Selection Tabs */}
-                  <div style={{ display: 'flex', gap: '8px', background: '#f5f7f3', padding: '6px', borderRadius: '10px', marginBottom: '25px' }}>
-                    {(['Supporter', 'Creator', 'Admin'] as const).map((role) => (
-                      <button
-                        key={role}
-                        type="button"
-                        onClick={() => handleTabChange(role)}
-                        style={{
-                          flex: 1,
-                          padding: '10px 0',
-                          fontSize: '12px',
-                          fontWeight: 'bold',
-                          borderRadius: '8px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          background: activeRole === role ? '#7cb032' : 'transparent',
-                          color: activeRole === role ? '#ffffff' : '#555e50'
-                        }}
-                      >
-                        {role.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
+            <CardContent className="p-0">
+              {/* Role Selection Tabs */}
+              <div className="flex gap-1.5 bg-zinc-100 p-1.5 rounded-xl mb-6">
+                {(['Supporter', 'Creator', 'Admin'] as const).map((role) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => handleTabChange(role)}
+                    className={`flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg border-none cursor-pointer transition-colors ${
+                      activeRole === role 
+                        ? 'bg-emerald-600 text-white shadow-xs' 
+                        : 'bg-transparent text-zinc-500 hover:text-zinc-800'
+                    }`}
+                  >
+                    {role}
+                  </button>
+                ))}
+              </div>
 
-                  {error && (
-                    <div className="alert alert-danger" style={{ fontSize: '12px', textAlign: 'center', borderRadius: '6px', marginBottom: '20px' }}>
-                      {error}
-                    </div>
-                  )}
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs text-center mb-5 font-bold">
+                  {error}
+                </div>
+              )}
 
-                  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    
-                    {/* Email Input */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left' }}>
-                      <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaEnvelope style={{ color: '#7cb032' }} /> Email Address
-                      </Label>
-                      <Input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. admin@treefunding.com"
-                        style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                      />
-                    </div>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                
+                {/* Email Input */}
+                <div className="flex flex-col gap-1.5 text-left">
+                  <Label className="text-xs font-bold text-zinc-800 flex items-center gap-1.5">
+                    <FaEnvelope className="text-emerald-500" /> Email Address
+                  </Label>
+                  <Input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="e.g. admin@treefunding.com"
+                    className="h-11 rounded-xl border border-zinc-250 px-4 text-sm focus-visible:ring-emerald-500"
+                  />
+                </div>
 
-                    {/* Password Input */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'left' }}>
-                      <Label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FaLock style={{ color: '#7cb032' }} /> Password
-                      </Label>
-                      <Input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter password"
-                        style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
-                      />
-                    </div>
+                {/* Password Input */}
+                <div className="flex flex-col gap-1.5 text-left">
+                  <Label className="text-xs font-bold text-zinc-800 flex items-center gap-1.5">
+                    <FaLock className="text-emerald-500" /> Password
+                  </Label>
+                  <Input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    className="h-11 rounded-xl border border-zinc-250 px-4 text-sm focus-visible:ring-emerald-500"
+                  />
+                </div>
 
-                    {/* Submit Actions */}
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
-                      <Button
-                        type="submit"
-                        disabled={loading}
-                        style={{ 
-                          background: '#7cb032', 
-                          color: '#ffffff', 
-                          fontWeight: 'bold', 
-                          height: '44px', 
-                          flex: 1, 
-                          borderRadius: '8px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          border: 'none',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <FaSignInAlt /> {loading ? 'Signing In...' : 'Sign In'}
-                      </Button>
+                {/* Submit Actions */}
+                <div className="flex gap-3 mt-2">
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 flex-1 rounded-xl flex items-center justify-center gap-1.5 border-none cursor-pointer transition-colors"
+                  >
+                    <FaSignInAlt /> {loading ? 'Signing In...' : 'Sign In'}
+                  </Button>
 
-                      <Button
-                        type="button"
-                        onClick={handleGoogleLogin}
-                        style={{ 
-                          background: '#1e211c', 
-                          color: '#ffffff', 
-                          fontWeight: 'bold', 
-                          height: '44px', 
-                          flex: 1, 
-                          borderRadius: '8px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          border: 'none',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <FaGoogle /> Google Sign In
-                      </Button>
-                    </div>
+                  <Button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    className="bg-zinc-900 hover:bg-zinc-800 text-white font-bold h-11 flex-1 rounded-xl flex items-center justify-center gap-1.5 border-none cursor-pointer transition-colors"
+                  >
+                    <FaGoogle /> Google Sign In
+                  </Button>
+                </div>
 
-                  </form>
+              </form>
 
-                  <div style={{ marginTop: '30px', borderTop: '1px solid #f2f5f0', paddingTop: '20px', fontSize: '13px', color: '#656b60', textAlign: 'left' }}>
-                    Don't have an account? <Link href="/register" style={{ color: '#7cb032', fontWeight: 'bold' }}>Register here</Link>.
-                    <div style={{ background: '#f5f7f3', borderLeft: '3px solid #7cb032', padding: '12px', borderRadius: '4px', marginTop: '15px' }}>
-                      <span style={{ fontSize: '11px', color: '#555e50', display: 'block', lineHeight: '1.6' }}>
-                        💡 <strong>Quick access credentials:</strong><br />
-                        Email: <code>admin@treefunding.com</code><br />
-                        Password: <code>adminpassword123</code>
-                      </span>
-                    </div>
-                  </div>
+              <div className="mt-6 border-t border-zinc-100 pt-5 text-xs text-zinc-500 text-left leading-relaxed">
+                Don't have an account? <Link href="/register" className="text-emerald-600 hover:underline font-bold">Register here</Link>.
+                <div className="bg-zinc-50 border-l-4 border-emerald-500 p-4 rounded-r-xl mt-4">
+                  <span className="text-[10px] text-zinc-650 block leading-relaxed">
+                    💡 <strong>Quick access credentials:</strong><br />
+                    Email: <code className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-800">admin@treefunding.com</code><br />
+                    Password: <code className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-800">adminpassword123</code>
+                  </span>
+                </div>
+              </div>
 
-                </CardContent>
-              </Card>
+            </CardContent>
+          </Card>
 
-            </div>
-          </div>
         </div>
       </section>
 

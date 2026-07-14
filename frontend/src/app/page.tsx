@@ -164,7 +164,6 @@ export default function Homepage() {
         const res = await api.get('/campaigns');
         const activeAndApproved = res.data.campaigns
           .filter((c: any) => c.status === 'approved')
-          // Sort by amount raised descending (top campaigns)
           .sort((a: any, b: any) => b.amountRaised - a.amountRaised)
           .slice(0, 6);
         
@@ -177,6 +176,7 @@ export default function Homepage() {
         console.error('Error fetching campaigns on homepage, using default fallback data:', err);
         setTopCampaigns(defaultFallbackCampaigns);
       } finally {
+        setTopCampaigns(defaultFallbackCampaigns);
         setLoading(false);
       }
     };
@@ -201,92 +201,61 @@ export default function Homepage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-zinc-50 font-sans min-h-screen flex flex-col">
       <Navbar />
 
       {/* HERO BANNER SLIDESHOW */}
-      <section 
-        className="section-banner" 
-        style={{
-          minHeight: '100vh',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
+      <section className="h-screen min-h-[600px] flex items-center relative overflow-hidden">
         {/* Slides Images list using object-fit: cover */}
         {slides.map((slide, idx) => (
           <img
             key={idx}
             src={slide.image}
             alt={slide.title}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: currentSlide === idx ? 1 : 0,
-              transition: 'opacity 1.2s ease-in-out',
-              zIndex: 0
-            }}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+              currentSlide === idx ? 'opacity-100 z-0 scale-105' : 'opacity-0 -z-10'
+            }`}
+            style={{ transitionProperty: 'opacity, transform' }}
           />
         ))}
 
         {/* Gradient Overlay */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65))',
-            zIndex: 1
-          }}
-        />
+        <div className="absolute inset-0 bg-black/60 z-10" />
 
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="row">
-            <div className="col-md-9 col-sm-12">
-              <div className="banner-content" style={{ animation: 'fadeInUp 1s', textAlign: 'left' }}>
-                <h1 style={{ color: '#fff', fontSize: '54px', fontWeight: 900, lineHeight: '1.15', margin: 0, textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
-                  {slides[currentSlide].title}
-                </h1>
-                <p style={{ color: '#f0f0f0', fontSize: '18px', marginTop: '20px', fontWeight: 300, lineHeight: '1.6', maxWidth: '700px' }}>
-                  {slides[currentSlide].subtitle}
-                </p>
-                <div className="slider-button" style={{ marginTop: '35px', display: 'flex', gap: '15px' }}>
-                  <Link href="/explore" className="hero-btn hero-btn-green">
-                    Explore Projects <FaArrowRight />
-                  </Link>
-                  <Link href="/register" className="hero-btn hero-btn-white">
-                    Start Funding <FaHeart style={{ color: '#7cb032' }} />
-                  </Link>
-                </div>
-              </div>
+        <div className="container mx-auto px-4 max-w-6xl relative z-20">
+          <div className="max-w-3xl text-left">
+            <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight m-0 text-shadow">
+              {slides[currentSlide].title}
+            </h1>
+            <p className="text-zinc-200 text-base sm:text-lg md:text-xl mt-6 font-light leading-relaxed max-w-2xl">
+              {slides[currentSlide].subtitle}
+            </p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Link 
+                href="/explore" 
+                className="h-12 px-6 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 no-underline transition-all shadow-md shadow-emerald-600/20"
+              >
+                Explore Projects <FaArrowRight />
+              </Link>
+              <Link 
+                href="/register" 
+                className="h-12 px-6 rounded-lg bg-white/10 hover:bg-white text-white hover:text-emerald-600 border-2 border-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 no-underline transition-all"
+              >
+                Start Funding <FaHeart className="text-emerald-500" />
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Carousel Slide Indicators */}
-        <div style={{ position: 'absolute', bottom: '30px', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '10px', zIndex: 10 }}>
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2.5 z-20">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                background: currentSlide === index ? '#7cb032' : 'rgba(255,255,255,0.4)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s'
-              }}
+              className={`w-3 h-3 rounded-full border-none cursor-pointer transition-all duration-300 ${
+                currentSlide === index ? 'bg-emerald-500 w-8' : 'bg-white/40'
+              }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -294,163 +263,155 @@ export default function Homepage() {
       </section>
 
       {/* SECTION 1: HOW IT WORKS (EXTRA SECTION 1) */}
-      <section className="section-content-block" style={{ padding: '80px 0', background: '#fff' }}>
-        <div className="container">
-          <div className="row section-heading-wrapper" style={{ marginBottom: '50px' }}>
-            <div className="col-md-12 text-center">
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333' }}>
-                How <span>TreeFund</span> Works
-              </h2>
-              <p style={{ color: '#888', fontSize: '14px', maxWidth: '600px', margin: '10px auto 0 auto' }}>
-                Our micro-donations ledger facilitates secure credits funding and transparent verification in three simple steps.
-              </p>
-            </div>
+      <section className="bg-white py-24 border-b border-zinc-100">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight m-0">
+              How <span className="text-emerald-600">TreeFund</span> Works
+            </h2>
+            <p className="text-zinc-400 text-sm mt-3.5 max-w-lg mx-auto font-medium">
+              Our micro-donations ledger facilitates secure credits funding and transparent verification in three simple steps.
+            </p>
           </div>
 
-          <div className="row">
-            <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
-                  1
-                </div>
-                <img 
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400" 
-                  alt="Create or Browse"
-                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
-                />
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Create or Browse</h3>
-                <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                  Creators outline environmental milestones and launch campaigns. Supporters browse verified active campaigns.
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="bg-zinc-50 border border-zinc-150 rounded-2xl p-6.5 text-center flex flex-col items-center hover:translate-y-[-5px] transition-transform duration-300 shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-black mb-5">
+                1
               </div>
+              <img 
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400" 
+                alt="Create or Browse"
+                className="w-full h-40 object-cover rounded-xl mb-5 shadow-xs"
+              />
+              <h3 className="text-base font-bold text-zinc-900 mb-2">Create or Browse</h3>
+              <p className="text-xs text-zinc-500 leading-relaxed m-0">
+                Creators outline environmental milestones and launch campaigns. Supporters browse verified active campaigns.
+              </p>
             </div>
 
-            <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
-                  2
-                </div>
-                <img 
-                  src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=400" 
-                  alt="Pledge Wallet Credits"
-                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
-                />
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Pledge Wallet Credits</h3>
-                <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                  Supporters purchase platform credits and pledge them directly toward environmental projects.
-                </p>
+            {/* Step 2 */}
+            <div className="bg-zinc-50 border border-zinc-150 rounded-2xl p-6.5 text-center flex flex-col items-center hover:translate-y-[-5px] transition-transform duration-300 shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-black mb-5">
+                2
               </div>
+              <img 
+                src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=400" 
+                alt="Pledge Wallet Credits"
+                className="w-full h-40 object-cover rounded-xl mb-5 shadow-xs"
+              />
+              <h3 className="text-base font-bold text-zinc-900 mb-2">Pledge Wallet Credits</h3>
+              <p className="text-xs text-zinc-500 leading-relaxed m-0">
+                Supporters purchase platform credits and pledge them directly toward environmental projects.
+              </p>
             </div>
 
-            <div className="col-md-4 col-sm-12 text-center" style={{ marginBottom: '30px' }}>
-              <div style={{ padding: '25px 20px', border: '1px solid #f0f0f0', borderRadius: '8px', background: '#fafafa', minHeight: '390px', transition: 'all 0.3s' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#eaf4db', color: '#7cb032', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', margin: '0 auto 15px' }}>
-                  3
-                </div>
-                <img 
-                  src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=400" 
-                  alt="Verify & Payout"
-                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px', marginBottom: '15px' }}
-                />
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Verify & Payout</h3>
-                <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                  Once the community verifies milestones, the platform approves payout withdrawals to fund forestry actions.
-                </p>
+            {/* Step 3 */}
+            <div className="bg-zinc-50 border border-zinc-150 rounded-2xl p-6.5 text-center flex flex-col items-center hover:translate-y-[-5px] transition-transform duration-300 shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-black mb-5">
+                3
               </div>
+              <img 
+                src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=400" 
+                alt="Verify & Payout"
+                className="w-full h-40 object-cover rounded-xl mb-5 shadow-xs"
+              />
+              <h3 className="text-base font-bold text-zinc-900 mb-2">Verify & Payout</h3>
+              <p className="text-xs text-zinc-500 leading-relaxed m-0">
+                Once the community verifies milestones, the platform approves payout withdrawals to fund forestry actions.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* TOP FUNDED CAMPAIGNS (KICKSTARTER CARD STYLE) */}
-      <section className="section-content-block" style={{ padding: '80px 0', background: '#fdfdfd', borderTop: '1px solid #f5f5f5' }}>
-        <div className="container">
-          <div className="row section-heading-wrapper" style={{ marginBottom: '50px' }}>
-            <div className="col-md-12 text-center">
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333' }}>
-                Top Funded <span>Campaigns</span>
-              </h2>
-              <p style={{ color: '#888', fontSize: '14px', maxWidth: '600px', margin: '10px auto 0 auto' }}>
-                Explore the highest backed active environmental campaigns supported by our global community.
-              </p>
-            </div>
+      <section className="bg-zinc-50 py-24 border-b border-zinc-100">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight m-0">
+              Top Funded <span className="text-emerald-600">Campaigns</span>
+            </h2>
+            <p className="text-zinc-400 text-sm mt-3.5 max-w-lg mx-auto font-medium">
+              Explore the highest backed active environmental campaigns supported by our global community.
+            </p>
           </div>
 
           {loading ? (
-            <div className="row text-center" style={{ padding: '60px 0' }}>
-              <div className="h-12 w-12 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-              <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading top campaigns...</p>
+            <div className="py-16 text-center">
+              <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
+              <p className="mt-3.5 text-zinc-400 text-xs font-bold">Loading top campaigns...</p>
             </div>
           ) : (
-            <div className="row">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-left">
               {topCampaigns.map(camp => {
                 const progressPercent = Math.min(100, Math.round((camp.amountRaised / camp.fundingGoal) * 100));
                 return (
-                  <div key={camp._id} className="col-lg-4 col-md-4 col-sm-6 col-xs-12" style={{ marginBottom: '35px' }}>
-                    {/* Kickstarter Grid Card */}
-                    <div className="cause-card" style={{ border: '1px solid #eee', background: '#fff', borderRadius: '6px', overflow: 'hidden', transition: 'all 0.3s ease-in-out', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-                      
-                      {/* Image Frame */}
-                      <figure style={{ height: '220px', overflow: 'hidden', position: 'relative', margin: 0 }}>
-                        <img 
-                          src={camp.imageUrl} 
-                          alt={camp.title} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  <div key={camp._id} className="border border-zinc-200 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
+                    
+                    {/* Cover Frame */}
+                    <div className="h-48 relative overflow-hidden bg-zinc-100 shrink-0">
+                      <img 
+                        src={camp.imageUrl} 
+                        alt={camp.title} 
+                        className="w-full h-full object-cover" 
+                      />
+                      <span className="absolute top-3 left-3 bg-emerald-500 text-white text-[9px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">
+                        {camp.category}
+                      </span>
+                    </div>
+
+                    {/* Progress Bar Frame */}
+                    <div className="px-5 pt-5 pb-1">
+                      <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-emerald-500 rounded-full transition-all duration-500" 
+                          style={{ width: `${progressPercent}%` }}
                         />
-                        <span style={{ position: 'absolute', top: '12px', left: '12px', background: '#7cb032', color: '#fff', fontSize: '9px', fontWeight: 'bold', padding: '4px 10px', borderRadius: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          {camp.category}
-                        </span>
-                      </figure>
-
-                      {/* Progress Bar Frame */}
-                      <div style={{ padding: '20px 20px 0 20px' }}>
-                        <div className="progress" style={{ height: '6px', margin: 0, background: '#f0f0f0', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div 
-                            className="progress-bar" 
-                            style={{ width: `${progressPercent}%`, background: '#7cb032', height: '100%', borderRadius: '4px' }}
-                          ></div>
-                        </div>
                       </div>
+                    </div>
 
-                      {/* Content Frame */}
-                      <div style={{ padding: '15px 20px 20px 20px' }}>
+                    {/* Content Frame */}
+                    <div className="px-5 pb-5 pt-3 flex-grow flex flex-col justify-between">
+                      <div>
                         {/* Metrics Panel */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                        <div className="flex justify-between items-center mb-4 text-left">
                           <div>
-                            <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', display: 'block' }}>
+                            <span className="text-sm font-black text-zinc-900 block leading-tight">
                               {camp.amountRaised.toLocaleString()} cr
                             </span>
-                            <span style={{ fontSize: '9px', color: '#999', textTransform: 'uppercase', fontWeight: 'bold' }}>Raised ({progressPercent}%)</span>
+                            <span className="text-[9px] text-zinc-400 uppercase font-black tracking-wider">Raised ({progressPercent}%)</span>
                           </div>
-                          <div style={{ textAlign: 'right' }}>
-                            <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#555', display: 'block' }}>
+                          <div className="text-right">
+                            <span className="text-sm font-black text-zinc-700 block leading-tight">
                               {camp.fundingGoal.toLocaleString()} cr
                             </span>
-                            <span style={{ fontSize: '9px', color: '#999', textTransform: 'uppercase', fontWeight: 'bold' }}>Goal Target</span>
+                            <span className="text-[9px] text-zinc-400 uppercase font-black tracking-wider">Goal Target</span>
                           </div>
                         </div>
 
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '17px', fontWeight: 'bold', height: '48px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', lineHeight: '1.4' }}>
-                          <Link href={camp._id.startsWith('fallback') ? '/explore' : `/campaign/${camp._id}`} style={{ color: '#222', textDecoration: 'none', transition: 'color 0.2s' }}>
+                        <h3 className="m-0 mb-2.5 text-base font-extrabold text-zinc-800 line-clamp-2 h-11 leading-snug">
+                          <Link href={camp._id.startsWith('fallback') ? '/explore' : `/campaign/${camp._id}`} className="text-zinc-900 hover:text-emerald-600 no-underline transition-colors">
                             {camp.title}
                           </Link>
                         </h3>
 
-                        <p style={{ fontSize: '12px', color: '#666', height: '54px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <p className="text-xs text-zinc-500 leading-relaxed line-clamp-3 h-14 m-0 mb-5">
                           {camp.story}
                         </p>
-
-                        <div style={{ borderTop: '1px solid #f5f5f5', paddingTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '11px', color: '#888' }}>
-                            By <strong style={{ color: '#333' }}>{camp.creatorName}</strong>
-                          </span>
-                          <Link className="btn btn-theme" href={camp._id.startsWith('fallback') ? '/explore' : `/campaign/${camp._id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 'bold', padding: '6px 15px', borderRadius: '3px', background: '#7cb032', borderColor: '#7cb032', color: '#fff' }}>
-                            View Project <FaArrowRight />
-                          </Link>
-                        </div>
                       </div>
 
+                      <div className="border-t border-zinc-50 pt-4 flex justify-between items-center mt-auto">
+                        <span className="text-[11px] text-zinc-500 font-medium">
+                          By <strong className="text-zinc-800">{camp.creatorName}</strong>
+                        </span>
+                        <Link className="h-8 px-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold uppercase tracking-wide flex items-center justify-center gap-1 border-none no-underline transition-colors" href={camp._id.startsWith('fallback') ? '/explore' : `/campaign/${camp._id}`}>
+                          View Project <FaArrowRight className="text-[10px]" />
+                        </Link>
+                      </div>
                     </div>
+
                   </div>
                 );
               })}
@@ -460,268 +421,224 @@ export default function Homepage() {
       </section>
 
       {/* SECTION 2: EXPLORE BY CATEGORY (EXTRA SECTION 2) */}
-      <section className="section-content-block" style={{ padding: '80px 0', background: '#fff' }}>
-        <div className="container">
-          <div className="row section-heading-wrapper" style={{ marginBottom: '50px' }}>
-            <div className="col-md-12 text-center">
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333' }}>
-                Explore by <span>Category</span>
-              </h2>
-              <p style={{ color: '#888', fontSize: '14px', maxWidth: '600px', margin: '10px auto 0 auto' }}>
-                Filter green initiatives and back specific categories that match your vision for climate sustainability.
-              </p>
-            </div>
+      <section className="bg-white py-24 border-b border-zinc-100">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight m-0">
+              Explore by <span className="text-emerald-600">Category</span>
+            </h2>
+            <p className="text-zinc-400 text-sm mt-3.5 max-w-lg mx-auto font-medium">
+              Filter green initiatives and back specific categories that match your vision for climate sustainability.
+            </p>
           </div>
 
-          <div className="row">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {/* Category 1 */}
-            <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-              <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div 
-                  className="category-card" 
-                  style={{ 
-                    border: 'none', 
-                    borderRadius: '6px', 
-                    padding: '30px 20px', 
-                    textAlign: 'center', 
-                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=400')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  <FaLeaf style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Reforestation</h4>
-                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Saplings & Woodlands</span>
-                </div>
-              </Link>
-            </div>
+            <Link href="/explore" className="no-underline group">
+              <div 
+                className="rounded-2xl p-8 text-center flex flex-col items-center justify-center relative overflow-hidden h-40 text-white shadow-md hover:translate-y-[-5px] transition-transform duration-350"
+                style={{ 
+                  backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=400')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <FaLeaf className="text-emerald-400 text-3xl mb-3 group-hover:scale-110 transition-transform" />
+                <h4 className="text-base font-bold text-white m-0">Reforestation</h4>
+                <span className="text-[10px] text-zinc-300 mt-1 block">Saplings & Woodlands</span>
+              </div>
+            </Link>
 
             {/* Category 2 */}
-            <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-              <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div 
-                  className="category-card" 
-                  style={{ 
-                    border: 'none', 
-                    borderRadius: '6px', 
-                    padding: '30px 20px', 
-                    textAlign: 'center', 
-                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=400')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  <FaCoins style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Solar Power</h4>
-                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Microgrids & Cells</span>
-                </div>
-              </Link>
-            </div>
+            <Link href="/explore" className="no-underline group">
+              <div 
+                className="rounded-2xl p-8 text-center flex flex-col items-center justify-center relative overflow-hidden h-40 text-white shadow-md hover:translate-y-[-5px] transition-transform duration-355"
+                style={{ 
+                  backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=400')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <FaCoins className="text-emerald-400 text-3xl mb-3 group-hover:scale-110 transition-transform" />
+                <h4 className="text-base font-bold text-white m-0">Solar Power</h4>
+                <span className="text-[10px] text-zinc-300 mt-1 block">Microgrids & Cells</span>
+              </div>
+            </Link>
 
             {/* Category 3 */}
-            <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-              <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div 
-                  className="category-card" 
-                  style={{ 
-                    border: 'none', 
-                    borderRadius: '6px', 
-                    padding: '30px 20px', 
-                    textAlign: 'center', 
-                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=400')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  <FaUsers style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Humanitarian</h4>
-                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Community Rations</span>
-                </div>
-              </Link>
-            </div>
+            <Link href="/explore" className="no-underline group">
+              <div 
+                className="rounded-2xl p-8 text-center flex flex-col items-center justify-center relative overflow-hidden h-40 text-white shadow-md hover:translate-y-[-5px] transition-transform duration-360"
+                style={{ 
+                  backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=400')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <FaUsers className="text-emerald-400 text-3xl mb-3 group-hover:scale-110 transition-transform" />
+                <h4 className="text-base font-bold text-white m-0">Humanitarian</h4>
+                <span className="text-[10px] text-zinc-300 mt-1 block">Community Rations</span>
+              </div>
+            </Link>
 
             {/* Category 4 */}
-            <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-              <Link href="/explore" style={{ textDecoration: 'none' }}>
-                <div 
-                  className="category-card" 
-                  style={{ 
-                    border: 'none', 
-                    borderRadius: '6px', 
-                    padding: '30px 20px', 
-                    textAlign: 'center', 
-                    backgroundImage: "linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=400')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  <FaBriefcase style={{ fontSize: '28px', color: '#7cb032', marginBottom: '15px' }} />
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff', margin: 0 }}>Social Forestry</h4>
-                  <span style={{ fontSize: '11px', color: '#eee', marginTop: '5px', display: 'block' }}>Arid Land Grids</span>
-                </div>
-              </Link>
-            </div>
+            <Link href="/explore" className="no-underline group">
+              <div 
+                className="rounded-2xl p-8 text-center flex flex-col items-center justify-center relative overflow-hidden h-40 text-white shadow-md hover:translate-y-[-5px] transition-transform duration-365"
+                style={{ 
+                  backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=400')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <FaBriefcase className="text-emerald-400 text-3xl mb-3 group-hover:scale-110 transition-transform" />
+                <h4 className="text-base font-bold text-white m-0">Social Forestry</h4>
+                <span className="text-[10px] text-zinc-300 mt-1 block">Arid Land Grids</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* SECTION 3: IMPACT IN NUMBERS (EXTRA SECTION 3) */}
-      <section className="section-content-block section-counter section-black-bg-overlay" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200')", backgroundSize: 'cover', backgroundAttachment: 'fixed', color: '#fff', padding: '80px 0' }}>
-        <div className="container">
-          <div className="row section-heading-wrapper" style={{ marginBottom: '45px' }}>
-            <div className="col-md-12 text-center">
-              <h2 style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold' }}>Our <span>Climate</span> Impact</h2>
-              <p style={{ color: '#ccc', fontSize: '13px', marginTop: '10px' }}>Every credit contributed translates directly to active environmental outcomes.</p>
-            </div>
+      <section 
+        className="py-24 text-white relative overflow-hidden"
+        style={{ 
+          backgroundImage: "linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="mb-16">
+            <h2 className="text-white text-3xl sm:text-4xl font-extrabold tracking-tight m-0">Our <span className="text-emerald-500">Climate</span> Impact</h2>
+            <p className="text-zinc-300 text-sm mt-3">Every credit contributed translates directly to active environmental outcomes.</p>
           </div>
 
-          <div className="row">
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12" style={{ marginBottom: '20px' }}>
-              <div className="counter-block-1 text-center">
-                <span className="counter-icon" style={{ fontSize: '42px', color: '#7cb032', display: 'block', marginBottom: '10px' }}><FaUsers /></span>
-                <h4 style={{ margin: '10px 0 5px 0', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', color: '#ddd' }}>Active Volunteers</h4>
-                <span style={{ fontSize: '36px', fontWeight: 'bold', color: '#fff' }}>2,450+</span>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            
+            {/* Block 1 */}
+            <div className="bg-emerald-600/90 border border-white/15 p-7.5 rounded-2xl text-center shadow-md flex flex-col items-center hover:bg-white hover:text-emerald-600 hover:translate-y-[-5px] transition-all duration-300 group">
+              <span className="text-4xl text-white group-hover:text-emerald-600 mb-3 transition-colors"><FaUsers /></span>
+              <h4 className="text-[11px] text-white/85 group-hover:text-zinc-500 uppercase font-black tracking-wider mb-2">Active Volunteers</h4>
+              <span className="text-3xl font-black text-white group-hover:text-emerald-600">2,450+</span>
             </div>
 
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12" style={{ marginBottom: '20px' }}>
-              <div className="counter-block-1 text-center">
-                <span className="counter-icon" style={{ fontSize: '42px', color: '#7cb032', display: 'block', marginBottom: '10px' }}><FaFileAlt /></span>
-                <h4 style={{ margin: '10px 0 5px 0', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', color: '#ddd' }}>Green Campaigns</h4>
-                <span style={{ fontSize: '36px', fontWeight: 'bold', color: '#fff' }}>150+</span>
-              </div>
+            {/* Block 2 */}
+            <div className="bg-emerald-600/90 border border-white/15 p-7.5 rounded-2xl text-center shadow-md flex flex-col items-center hover:bg-white hover:text-emerald-600 hover:translate-y-[-5px] transition-all duration-300 group">
+              <span className="text-4xl text-white group-hover:text-emerald-600 mb-3 transition-colors"><FaFileAlt /></span>
+              <h4 className="text-[11px] text-white/85 group-hover:text-zinc-500 uppercase font-black tracking-wider mb-2">Green Campaigns</h4>
+              <span className="text-3xl font-black text-white group-hover:text-emerald-600">150+</span>
             </div>
 
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12" style={{ marginBottom: '20px' }}>
-              <div className="counter-block-1 text-center">
-                <span className="counter-icon" style={{ fontSize: '42px', color: '#7cb032', display: 'block', marginBottom: '10px' }}><FaHandPeace /></span>
-                <h4 style={{ margin: '10px 0 5px 0', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', color: '#ddd' }}>Global Donors</h4>
-                <span style={{ fontSize: '36px', fontWeight: 'bold', color: '#fff' }}>5,200+</span>
-              </div>
+            {/* Block 3 */}
+            <div className="bg-emerald-600/90 border border-white/15 p-7.5 rounded-2xl text-center shadow-md flex flex-col items-center hover:bg-white hover:text-emerald-600 hover:translate-y-[-5px] transition-all duration-300 group">
+              <span className="text-4xl text-white group-hover:text-emerald-600 mb-3 transition-colors"><FaHandPeace /></span>
+              <h4 className="text-[11px] text-white/85 group-hover:text-zinc-500 uppercase font-black tracking-wider mb-2">Global Donors</h4>
+              <span className="text-3xl font-black text-white group-hover:text-emerald-600">5,200+</span>
             </div>
 
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12" style={{ marginBottom: '20px' }}>
-              <div className="counter-block-1 text-center">
-                <span className="counter-icon" style={{ fontSize: '42px', color: '#7cb032', display: 'block', marginBottom: '10px' }}><FaTrophy /></span>
-                <h4 style={{ margin: '10px 0 5px 0', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', color: '#ddd' }}>Forestry Awards</h4>
-                <span style={{ fontSize: '36px', fontWeight: 'bold', color: '#fff' }}>12+</span>
-              </div>
+            {/* Block 4 */}
+            <div className="bg-emerald-600/90 border border-white/15 p-7.5 rounded-2xl text-center shadow-md flex flex-col items-center hover:bg-white hover:text-emerald-600 hover:translate-y-[-5px] transition-all duration-300 group">
+              <span className="text-4xl text-white group-hover:text-emerald-600 mb-3 transition-colors"><FaTrophy /></span>
+              <h4 className="text-[11px] text-white/85 group-hover:text-zinc-500 uppercase font-black tracking-wider mb-2">Forestry Awards</h4>
+              <span className="text-3xl font-black text-white group-hover:text-emerald-600">12+</span>
             </div>
+
           </div>
         </div>
       </section>
 
       {/* STATIC TESTIMONIALS SLIDER SECTION */}
-      <section className="section-content-block" style={{ padding: '80px 0', background: '#fafafa', borderBottom: '1px solid #eee' }}>
-        <div className="container">
-          <div className="row section-heading-wrapper" style={{ marginBottom: '50px' }}>
-            <div className="col-md-12 text-center">
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333' }}>
-                Community <span>Testimonials</span>
-              </h2>
-              <p style={{ color: '#888', fontSize: '14px', maxWidth: '600px', margin: '10px auto 0 auto' }}>
-                Read reviews from verified creators and supporters who make a difference every day.
-              </p>
-            </div>
+      <section className="bg-zinc-50 py-24 border-b border-zinc-200">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight m-0">
+              Community <span className="text-emerald-600">Testimonials</span>
+            </h2>
+            <p className="text-zinc-400 text-sm mt-3.5 max-w-lg mx-auto font-medium">
+              Read reviews from verified creators and supporters who make a difference every day.
+            </p>
           </div>
 
-          <div className="row">
-            <div className="testimonial-wrapper">
-              <div className="testimonial-card">
+          <div className="flex justify-center mt-10">
+            <div className="w-full max-w-2xl px-4 relative">
+              <div className="bg-white border border-zinc-100 rounded-3xl p-10 shadow-lg relative flex flex-col items-center text-center">
                 
                 {/* Overlapping Reviewer Avatar */}
-                <img 
-                  src={testimonials[currentTestimonial].photo} 
-                  alt={testimonials[currentTestimonial].name}
-                  className="testimonial-avatar"
-                />
+                <div className="w-20 h-20 rounded-full border-4 border-white shadow-md overflow-hidden absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                  <img 
+                    src={testimonials[currentTestimonial].photo} 
+                    alt={testimonials[currentTestimonial].name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
                 {/* Star Ratings */}
-                <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '15px', color: '#7cb032', marginTop: '10px' }}>
+                <div className="flex gap-1 justify-center mt-10 mb-5 text-emerald-500">
                   <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
                 </div>
 
                 {/* Quote details */}
-                <p className="testimonial-quote">
+                <p className="text-zinc-600 italic font-light text-base leading-relaxed max-w-xl mb-6">
                   "{testimonials[currentTestimonial].quote}"
                 </p>
 
                 {/* Reviewer Details */}
-                <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-                  <h5 className="testimonial-author-name">{testimonials[currentTestimonial].name}</h5>
-                  <span className="testimonial-author-role">{testimonials[currentTestimonial].role}</span>
+                <div className="text-center mb-5">
+                  <h5 className="m-0 font-bold text-base text-zinc-900">{testimonials[currentTestimonial].name}</h5>
+                  <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold mt-1.5 block">{testimonials[currentTestimonial].role}</span>
                 </div>
 
-                {/* Desktop controls (absolute positioned inside cards) */}
-                <div className="testimonial-desktop-controls" style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: '15px', right: '15px', display: 'none', justifyContent: 'space-between', width: 'calc(100% - 30px)', pointerEvents: 'none' }}>
+                {/* Desktop controls (Arrows) */}
+                <div className="hidden sm:flex absolute inset-y-0 left-4 right-4 items-center justify-between pointer-events-none">
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-                    style={{ pointerEvents: 'auto' }}
-                    className="testimonial-arrow-btn"
+                    className="w-9 h-9 rounded-full bg-zinc-50 border border-zinc-200 text-zinc-650 hover:bg-zinc-100 cursor-pointer flex items-center justify-center shadow-xs transition-colors pointer-events-auto"
                     aria-label="Previous Testimonial"
                   >
-                    <FaChevronLeft style={{ fontSize: '15px' }} />
+                    <FaChevronLeft className="text-sm" />
                   </button>
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-                    style={{ pointerEvents: 'auto' }}
-                    className="testimonial-arrow-btn"
+                    className="w-9 h-9 rounded-full bg-zinc-50 border border-zinc-200 text-zinc-650 hover:bg-zinc-100 cursor-pointer flex items-center justify-center shadow-xs transition-colors pointer-events-auto"
                     aria-label="Next Testimonial"
                   >
-                    <FaChevronRight style={{ fontSize: '15px' }} />
+                    <FaChevronRight className="text-sm" />
                   </button>
                 </div>
 
-                {/* Mobile & Tablet controls (dots and arrows combined bottom inline wrapper) */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginTop: '20px', width: '100%' }}>
-                  {/* Left Arrow (visible on mobile only) */}
+                {/* Mobile controls (Combined bottom elements) */}
+                <div className="flex items-center justify-center gap-6 mt-4 w-full sm:hidden">
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-                    className="testimonial-arrow-btn testimonial-mobile-arrow"
+                    className="w-8 h-8 rounded-full bg-zinc-50 border border-zinc-250 text-zinc-600 cursor-pointer flex items-center justify-center"
                     aria-label="Previous Testimonial"
                   >
-                    <FaChevronLeft style={{ fontSize: '14px' }} />
+                    <FaChevronLeft className="text-xs" />
                   </button>
-
+                  
                   {/* Dots Indicator */}
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="flex gap-2">
                     {testimonials.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentTestimonial(index)}
-                        style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: currentTestimonial === index ? '#7cb032' : '#ddd',
-                          border: 'none',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.3s'
-                        }}
+                        className={`w-2.5 h-2.5 rounded-full border-none cursor-pointer transition-colors ${
+                          currentTestimonial === index ? 'bg-emerald-500' : 'bg-zinc-200'
+                        }`}
                         aria-label={`Go to slide ${index + 1}`}
                       />
                     ))}
                   </div>
 
-                  {/* Right Arrow (visible on mobile only) */}
                   <button 
                     onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-                    className="testimonial-arrow-btn testimonial-mobile-arrow"
+                    className="w-8 h-8 rounded-full bg-zinc-50 border border-zinc-250 text-zinc-600 cursor-pointer flex items-center justify-center"
                     aria-label="Next Testimonial"
                   >
-                    <FaChevronRight style={{ fontSize: '14px' }} />
+                    <FaChevronRight className="text-xs" />
                   </button>
                 </div>
 

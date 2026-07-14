@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { 
@@ -20,7 +20,9 @@ import {
   FaFolderOpen,
   FaUserPlus,
   FaSignInAlt,
-  FaGithub
+  FaGithub,
+  FaBars,
+  FaTimes
 } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
@@ -36,6 +38,7 @@ interface NotificationItem {
 export default function Navbar() {
   const { user, logout, refreshProfile } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -47,8 +50,6 @@ export default function Navbar() {
   useEffect(() => {
     setImageError(false);
   }, [user]);
-
-  const githubRepoUrl = 'https://github.com/CoderGUY47/tree-funding';
 
   const fetchNotifications = async () => {
     if (!user) return;
@@ -105,315 +106,259 @@ export default function Navbar() {
   };
 
   return (
-    <header className="main-header clearfix" data-sticky_header="true">
-      <section className="header-wrapper navgiation-wrapper">
-        
-        {/* TOP SOCIAL & INFO BAR */}
-        <div className="main-top-header clearfix">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-6 col-md-6 col-sm-12 text-left hidden-sm hidden-xs">
-                <div className="top-bar-social" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <a href="https://github.com/CoderGUY47" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>
-                  <a href="https://x.com/CoderGUY47" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X"><FaXTwitter /></a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF /></a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
-                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FaYoutube /></a>
-                </div>
-              </div>  
-              
-              <div className="col-lg-6 col-md-6 text-right hidden-sm hidden-xs">
-                <div className="top-bar-link">
-                  {user ? (
-                    <span style={{ color: '#ccc', marginRight: '15px', fontSize: '12px' }}>
-                      <FaUserAlt style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
-                      Logged in: <strong>{user.email}</strong> ({user.role})
-                    </span>
-                  ) : (
-                    <>
-                      <a href="">Email</a>
-                      <a href="">Community</a>
-                      <a href="">Support</a>
-                    </>
-                  )}
-                </div>
+    <header className="w-full bg-white border-b border-zinc-100 font-sans z-40 relative">
+      
+      {/* TOP SOCIAL & INFO BAR */}
+      <div className="bg-zinc-900 text-zinc-300 py-2.5 text-xs">
+        <div className="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+          <div className="flex gap-4 items-center">
+            <a href="https://github.com/CoderGUY47" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors" aria-label="GitHub"><FaGithub className="text-sm" /></a>
+            <a href="https://x.com/CoderGUY47" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors" aria-label="Twitter / X"><FaXTwitter className="text-sm" /></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors" aria-label="Facebook"><FaFacebookF className="text-sm" /></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors" aria-label="Instagram"><FaInstagram className="text-sm" /></a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors" aria-label="YouTube"><FaYoutube className="text-sm" /></a>
+          </div>
+          <div>
+            {user ? (
+              <span className="flex items-center gap-1.5 text-zinc-400">
+                <FaUserAlt className="text-zinc-500" />
+                Logged in: <strong className="text-zinc-200">{user.email}</strong> ({user.role})
+              </span>
+            ) : (
+              <div className="flex gap-4 font-semibold">
+                <a href="/login" className="hover:text-emerald-500 transition-colors">Email Support</a>
+                <span>|</span>
+                <a href="/explore" className="hover:text-emerald-500 transition-colors">Community</a>
               </div>
-            </div>   
+            )}
           </div>
         </div>
+      </div>
 
-        {/* LOGO & ADDRESS BOXES */}
-        <div className="header-top">
-          <div className="container">
-            <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-              <div className="col-md-4 col-sm-12 header-col-logo">
-                <div className="header-logo logo" style={{ display: 'flex', alignItems: 'center', height: '52px' }}>
-                  <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-                    <FaTree style={{ color: '#7cb032', fontSize: '32px' }} />
-                    <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#333', letterSpacing: '-0.5px' }}>
-                      Tree<span style={{ color: '#7cb032' }}>Fund</span>
-                    </span>
-                  </a>
-                </div>
+      {/* LOGO & ADDRESS BOXES */}
+      <div className="py-6 border-b border-zinc-50">
+        <div className="container mx-auto px-4 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-4">
+          
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
+            <FaTree className="text-emerald-600 text-3xl" />
+            <span className="text-2xl font-black text-zinc-900 tracking-tight">
+              Tree<span className="text-emerald-600">Fund</span>
+            </span>
+          </a>
+
+          {/* Contact Details (Hidden on small viewports) */}
+          <div className="hidden md:flex items-center gap-8 text-left">
+            
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shrink-0">
+                <FaPhoneAlt />
               </div>
-              <div className="col-md-8 hidden-xs">
-                <div className="row">
-                  <div className="col-md-4 col-sm-4 info-separotor">
-                    <div className="header-icon-box" style={{ display: 'flex', alignItems: 'center' }}>
-                      <div className="icon-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FaPhoneAlt />
-                      </div>
-                      <div className="text" style={{ marginLeft: '10px' }}>
-                        <span className="head-heading">Get In Touch</span>                                                
-                        <span className="head-content">example@gmail.com</span>
-                      </div>
-                    </div>   
-                  </div>
-
-                  <div className="col-md-4 col-sm-4 info-separotor">
-                    <div className="header-icon-box" style={{ display: 'flex', alignItems: 'center' }}>
-                      <div className="icon-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FaHome />
-                      </div>
-                      <div className="text" style={{ marginLeft: '10px' }}>
-                        <span className="head-heading">Office Address</span>                                                
-                        <span className="head-content">Sylhet, Bangladesh</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-4 col-sm-4 info-separotor">
-                    <div className="header-icon-box" style={{ display: 'flex', alignItems: 'center' }}>
-                      <div className="icon-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FaRegClock />
-                      </div>
-                      <div className="text" style={{ marginLeft: '10px' }}>
-                        <span className="head-heading">Opening Hour</span>                                                
-                        <span className="head-content">10.00 - 18.00 UTC+06</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <p className="text-[10px] text-zinc-400 uppercase font-black tracking-wider m-0">Get In Touch</p>
+                <p className="text-xs font-bold text-zinc-700 m-0 mt-0.5">example@gmail.com</p>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* NAVIGATION MENUS */}
-        <div className="navbar navbar-default">			
-          <div className="container clearfix">
-            <div className="navbar-header">
-              <button 
-                type="button" 
-                className="navbar-toggle" 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                style={{ background: '#7cb032', borderColor: '#7cb032' }}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shrink-0">
+                <FaHome />
+              </div>
+              <div>
+                <p className="text-[10px] text-zinc-400 uppercase font-black tracking-wider m-0">Office Address</p>
+                <p className="text-xs font-bold text-zinc-700 m-0 mt-0.5">Sylhet, Bangladesh</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shrink-0">
+                <FaRegClock />
+              </div>
+              <div>
+                <p className="text-[10px] text-zinc-400 uppercase font-black tracking-wider m-0">Opening Hour</p>
+                <p className="text-xs font-bold text-zinc-700 m-0 mt-0.5">10.00 - 18.00 UTC+06</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* NAVIGATION BAR (EMERALD BACKGROUND) */}
+      <nav className="bg-emerald-600 text-white shadow-sm">
+        <div className="container mx-auto px-4 max-w-6xl flex justify-between items-center relative">
+          
+          {/* Mobile hamburger button */}
+          <div className="flex md:hidden py-3">
+            <button 
+              type="button" 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="bg-emerald-700 text-white border-none p-2 rounded-lg cursor-pointer"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+            </button>
+          </div>
+
+          {/* Main Desktop Links */}
+          <div className={`absolute md:relative top-full left-0 right-0 bg-emerald-700 md:bg-transparent flex-col md:flex-row flex md:items-center gap-0 md:gap-1.5 transition-all duration-200 z-30 ${mobileMenuOpen ? 'flex' : 'hidden md:flex'}`}>
+            <a 
+              href="/" 
+              className={`px-5 py-4 font-bold text-xs uppercase tracking-wide no-underline flex items-center gap-2 hover:bg-emerald-700 transition-colors ${
+                pathname === '/' ? 'bg-emerald-800 text-white' : 'text-emerald-50'
+              }`}
+            >
+              <FaHome /> Home
+            </a>
+            <a 
+              href="/explore" 
+              className={`px-5 py-4 font-bold text-xs uppercase tracking-wide no-underline flex items-center gap-2 hover:bg-emerald-700 transition-colors ${
+                pathname === '/explore' ? 'bg-emerald-800 text-white' : 'text-emerald-50'
+              }`}
+            >
+              <FaCompass /> Explore Campaigns
+            </a>
+            <a 
+              href="https://github.com/CoderGUY47/tree-funding" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-4 font-bold text-xs uppercase tracking-wide no-underline flex items-center gap-2 hover:bg-emerald-700 text-emerald-50 transition-colors"
+            >
+              <FaGithub /> Join as Developer
+            </a>
+            
+            {user && (
+              <a 
+                href="/dashboard" 
+                className={`px-5 py-4 font-bold text-xs uppercase tracking-wide no-underline flex items-center gap-2 hover:bg-emerald-700 transition-colors ${
+                  pathname.startsWith('/dashboard') ? 'bg-emerald-800 text-white' : 'text-emerald-50'
+                }`}
               >
-                <span className="icon-bar" style={{ background: '#fff' }}></span>
-                <span className="icon-bar" style={{ background: '#fff' }}></span>
-                <span className="icon-bar" style={{ background: '#fff' }}></span>
-              </button>
-            </div>
+                <FaFolderOpen /> Dashboard
+              </a>
+            )}
+          </div>
 
-            <div className={`navbar-collapse my-navbar-menu pull-left ${mobileMenuOpen ? 'in' : ''}`}>
-              <ul className="nav navbar-nav">
-                <li style={pathname === '/' ? { background: '#7cb032' } : undefined}>
-                  <a href="/" className={pathname === '/' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaHome style={{ color: pathname === '/' ? '#000000' : 'inherit' }} /> HOME
-                  </a>
-                </li>
-                <li style={pathname === '/explore' ? { background: '#7cb032' } : undefined}>
-                  <a href="/explore" className={pathname === '/explore' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/explore' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaCompass style={{ color: pathname === '/explore' ? '#000000' : 'inherit' }} /> EXPLORE CAMPAIGNS
-                  </a>
-                </li>
-                <li style={pathname === '/developer' ? { background: '#7cb032' } : undefined}>
-                  <a href="/developer" className={pathname === '/developer' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/developer' ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
-                    <FaGithub style={{ color: pathname === '/developer' ? '#000000' : 'inherit' }} /> JOIN AS DEVELOPER
-                  </a>
-                </li>
+          {/* Logged in Badges & Profile (Right side) */}
+          <div className="flex items-center gap-4 py-3 shrink-0">
+            {user ? (
+              <div className="flex items-center gap-3.5">
                 
-                {user ? (
-                  <>
-                    <li style={pathname.startsWith('/dashboard') ? { background: '#7cb032' } : undefined}>
-                      <a href="/dashboard" className={pathname.startsWith('/dashboard') ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname.startsWith('/dashboard') ? '#000000' : 'var(--nav-link-color, #ffffff)' }}>
-                        <FaFolderOpen style={{ color: pathname.startsWith('/dashboard') ? '#000000' : 'inherit' }} /> DASHBOARD
-                      </a>
-                    </li>
-                    {/* On Mobile only: show Avatar and Logout inside menu */}
-                    <li className="visible-xs hidden-sm hidden-md hidden-lg" style={{ display: 'flex', alignItems: 'center', padding: '10px 15px', gap: '10px' }}>
-                      {user.photoUrl && 
-                       user.photoUrl !== 'null' && 
-                       user.photoUrl !== 'undefined' && 
-                       user.photoUrl.trim() !== '' && 
-                       (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
-                       !imageError ? (
-                        <img 
-                          src={user.photoUrl} 
-                          alt="Avatar" 
-                          onError={() => setImageError(true)}
-                          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
-                        />
-                      ) : (
-                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '12px' }}>
-                          {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-                        </div>
-                      )}
-                      <span style={{ color: '#fff', fontSize: '13px' }}>{user.email}</span>
-                    </li>
-                    <li className="visible-xs hidden-sm hidden-md hidden-lg" style={{ cursor: 'pointer' }}>
-                      <a onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: 'var(--nav-link-color, #ffffff)' }}>
-                        <FaSignOutAlt /> LOGOUT
-                      </a>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li style={{ background: '#7cb032' }}>
-                      <a href="/login" className={pathname === '/login' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#ffffff', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                        <FaSignInAlt style={{ color: '#ffffff' }} /> LOGIN
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/register" className={pathname === '/register' ? 'link-active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', color: pathname === '/register' ? '#7cb032' : 'var(--nav-link-color, #ffffff)' }}>
-                        <FaUserPlus /> REGISTER
-                      </a>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
+                {/* Credits Badge */}
+                <div className="bg-emerald-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm border border-emerald-700/50">
+                  <FaCoins className="text-amber-400" />
+                  <span>{user.credits} Credits</span>
+                </div>
 
-            {/* ACTION ITEMS (CREDITS, NOTIFICATIONS) */}
-            <div className="navbar-header pull-right hidden-xs" style={{ display: 'flex', alignItems: 'center', height: '60px' }}>
-              {user && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  {/* Credits Badge */}
-                  <span className="btn btn-theme" style={{ cursor: 'default', background: '#2e3033', color: '#fff', border: 'none', pointerEvents: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <FaCoins style={{ color: '#7cb032' }} />
-                    {user.credits} Credits
-                  </span>
-
-                  {/* Notifications Icon & Pop-up */}
-                  <div className="relative" ref={notificationsRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <button
-                      onClick={() => setNotificationsOpen(!notificationsOpen)}
-                      style={{ background: 'none', border: 'none', color: '#fff', fontSize: '18px', cursor: 'pointer', position: 'relative', outline: 'none' }}
-                      aria-label="Notifications"
-                    >
-                      <FaBell style={{ display: 'block' }} />
-                      {unreadCount > 0 && (
-                        <span style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#7cb032', color: '#fff', fontSize: '9px', borderRadius: '50%', width: '15px', height: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                          {unreadCount}
-                        </span>
-                      )}
-                    </button>
-
-                    {notificationsOpen && (
-                      <div className="notification-popup-container" style={{ position: 'absolute', right: 0, top: '35px', width: '320px', background: '#fff', border: '1px solid #ddd', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 1000, overflow: 'hidden' }}>
-                        <div style={{ padding: '10px 15px', borderBottom: '1px solid #ffffff', background: '#fcfcfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <strong style={{ fontSize: '12px', color: '#333' }}>Alert Notifications</strong>
-                          {unreadCount > 0 && (
-                            <button onClick={handleMarkAllAsRead} style={{ background: 'none', border: 'none', color: '#7cb032', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>
-                              Mark all read
-                            </button>
-                          )}
-                        </div>
-                        <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
-                          {notifications.length === 0 ? (
-                            <div style={{ padding: '20px', textAlign: 'center', fontSize: '11px', color: '#777' }}>
-                              No notifications.
-                            </div>
-                          ) : (
-                            notifications.map((notif) => (
-                              <div 
-                                key={notif._id}
-                                onClick={() => { if (!notif.read) handleMarkAsRead(notif._id); }}
-                                style={{ padding: '10px 15px', borderBottom: '1px solid #f5f5f5', background: notif.read ? '#fff' : '#f9fff0', cursor: 'pointer', textAlign: 'left' }}
-                              >
-                                <a href={notif.actionRoute} onClick={() => setNotificationsOpen(false)} style={{ textDecoration: 'none', color: '#444', display: 'block' }}>
-                                  <p style={{ fontSize: '11px', margin: 0, lineHeight: '1.4', fontWeight: notif.read ? 'normal' : 'bold' }}>
-                                    {notif.message}
-                                  </p>
-                                  <span style={{ fontSize: '9px', color: '#999', display: 'block', marginTop: '4px' }}>
-                                    {new Date(notif.time).toLocaleString()}
-                                  </span>
-                                </a>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
+                {/* Notifications Popover */}
+                <div className="relative flex items-center" ref={notificationsRef}>
+                  <button
+                    onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    className="bg-transparent border-none text-white hover:text-emerald-200 text-lg cursor-pointer relative p-1 outline-none"
+                    aria-label="Notifications"
+                  >
+                    <FaBell />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-amber-500 text-zinc-950 font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
+                        {unreadCount}
+                      </span>
                     )}
-                  </div>
+                  </button>
 
-                  {/* Profile Avatar */}
-                  {user.photoUrl && 
-                   user.photoUrl !== 'null' && 
-                   user.photoUrl !== 'undefined' && 
-                   user.photoUrl.trim() !== '' && 
-                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
-                   !imageError ? (
-                    <img 
-                      src={user.photoUrl} 
-                      alt="Avatar" 
-                      onError={() => setImageError(true)}
-                      style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
-                    />
-                  ) : (
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  {/* Dropdown popup */}
+                  {notificationsOpen && (
+                    <div className="absolute right-0 top-10 w-80 bg-white border border-zinc-150 rounded-2xl shadow-xl z-50 overflow-hidden text-zinc-800 text-left">
+                      <div className="px-4 py-3 border-b border-zinc-100 bg-zinc-50 flex justify-between items-center">
+                        <strong className="text-xs text-zinc-800 uppercase font-black tracking-wide">Alert Notifications</strong>
+                        {unreadCount > 0 && (
+                          <button 
+                            onClick={handleMarkAllAsRead} 
+                            className="bg-transparent border-none text-[10px] font-black text-emerald-600 hover:text-emerald-700 cursor-pointer"
+                          >
+                            Mark all read
+                          </button>
+                        )}
+                      </div>
+                      <div className="max-h-60 overflow-y-auto">
+                        {notifications.length === 0 ? (
+                          <div className="p-8 text-center text-xs text-zinc-400 font-medium">
+                            No notifications to display.
+                          </div>
+                        ) : (
+                          notifications.map((notif) => (
+                            <div 
+                              key={notif._id}
+                              onClick={() => { if (!notif.read) handleMarkAsRead(notif._id); }}
+                              className={`p-3.5 border-b border-zinc-50 cursor-pointer hover:bg-zinc-50 transition-colors ${
+                                notif.read ? 'bg-white' : 'bg-emerald-50/40'
+                              }`}
+                            >
+                              <a href={notif.actionRoute} onClick={() => setNotificationsOpen(false)} className="no-underline text-zinc-700 block">
+                                <p className={`text-xs m-0 leading-relaxed ${notif.read ? 'font-normal' : 'font-bold text-zinc-900'}`}>
+                                  {notif.message}
+                                </p>
+                                <span className="text-[9px] text-zinc-400 block mt-1">
+                                  {new Date(notif.time).toLocaleString()}
+                                </span>
+                              </a>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
                   )}
-
-                  {/* Logout Button */}
-                  <button 
-                    onClick={logout}
-                    className="btn btn-theme"
-                    style={{ 
-                      background: '#7cb032', 
-                      color: '#ffffff', 
-                      border: 'none', 
-                      height: '36px', 
-                      padding: '0 15px', 
-                      borderRadius: '4px', 
-                      fontSize: '12px', 
-                      fontWeight: 'bold', 
-                      textTransform: 'uppercase',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <FaSignOutAlt /> LOGOUT
-                  </button>
                 </div>
-              )}
-              {!user && (
-                <a 
-                  className="btn btn-theme" 
-                  href="/login" 
-                  style={{ 
-                    display: 'inline-flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    margin: 0, 
-                    height: '44px', 
-                    padding: '0 20px',
-                    borderRadius: '4px',
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase' 
-                  }}
-                >
-                  DONATE NOW
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
 
-      </section>
+                {/* Profile Avatar */}
+                {user.photoUrl && 
+                 user.photoUrl !== 'null' && 
+                 user.photoUrl !== 'undefined' && 
+                 user.photoUrl.trim() !== '' && 
+                 (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
+                 !imageError ? (
+                  <img 
+                    src={user.photoUrl} 
+                    alt="Avatar" 
+                    onError={() => setImageError(true)}
+                    className="w-8 h-8 rounded-full object-cover border-2 border-emerald-400 shrink-0"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold text-xs shrink-0 border border-emerald-700">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
+                )}
+
+                {/* Logout Button */}
+                <button 
+                  onClick={logout}
+                  className="h-8 px-3.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wide border-none cursor-pointer flex items-center gap-1.5 transition-colors"
+                >
+                  <FaSignOutAlt /> <span className="hidden sm:inline">Logout</span>
+                </button>
+
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <a 
+                  href="/login" 
+                  className="h-8 px-4 rounded-lg bg-emerald-850 hover:bg-emerald-900 text-white font-bold text-xs uppercase tracking-wide no-underline flex items-center justify-center gap-1.5 transition-colors border border-emerald-800/30"
+                >
+                  <FaSignInAlt /> Login
+                </a>
+                <a 
+                  href="/register" 
+                  className="h-8 px-4 rounded-lg bg-white hover:bg-zinc-100 text-emerald-600 font-bold text-xs uppercase tracking-wide no-underline flex items-center justify-center gap-1.5 transition-colors border-none"
+                >
+                  <FaUserPlus /> Register
+                </a>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </nav>
+
     </header>
   );
 }

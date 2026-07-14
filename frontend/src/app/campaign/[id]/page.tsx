@@ -19,8 +19,12 @@ import {
   FaCoins, 
   FaRegUserCircle, 
   FaEnvelope, 
-  FaExclamationTriangle 
+  FaExclamationTriangle,
+  FaArrowLeft
 } from 'react-icons/fa';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface Campaign {
   _id: string;
@@ -144,11 +148,11 @@ export default function CampaignDetails() {
 
   if (loading) {
     return (
-      <div>
+      <div className="bg-zinc-50 min-h-screen flex flex-col font-sans">
         <Navbar />
-        <div className="container text-center" style={{ padding: '120px 0' }}>
+        <div className="container mx-auto px-4 max-w-6xl py-32 text-center flex-grow flex flex-col justify-center">
           <div className="h-12 w-12 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '15px', color: '#888' }}>Loading campaign details...</p>
+          <p className="mt-4 text-zinc-500 text-sm font-bold">Loading campaign details...</p>
         </div>
         <Footer />
       </div>
@@ -157,15 +161,17 @@ export default function CampaignDetails() {
 
   if (error || !campaign) {
     return (
-      <div>
+      <div className="bg-zinc-50 min-h-screen flex flex-col font-sans">
         <Navbar />
-        <div className="container text-center" style={{ padding: '80px 0' }}>
-          <div className="alert alert-danger" style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <h4 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <div className="container mx-auto px-4 max-w-lg py-32 flex-grow flex items-center justify-center">
+          <div className="bg-red-50 border border-red-200 text-red-700 p-6 rounded-2xl text-center w-full shadow-sm">
+            <h4 className="flex items-center justify-center gap-2 font-black text-base uppercase mb-2">
               <FaExclamationTriangle /> Error Loading Campaign
             </h4>
-            <p>{error || 'The requested campaign could not be found.'}</p>
-            <Link href="/explore" className="btn btn-sm btn-danger" style={{ marginTop: '15px' }}>Back to Explore</Link>
+            <p className="text-xs leading-relaxed mb-4">{error || 'The requested campaign could not be found.'}</p>
+            <Link href="/explore" className="inline-flex h-9 px-4 items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold uppercase no-underline transition-colors">
+              Back to Explore
+            </Link>
           </div>
         </div>
         <Footer />
@@ -177,101 +183,91 @@ export default function CampaignDetails() {
   const daysLeft = Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
 
   return (
-    <div>
+    <div className="bg-zinc-50 min-h-screen flex flex-col font-sans">
       <Navbar />
 
       {/* PAGE HEADER */}
       <section 
-        className="page-header" 
+        className="relative py-20 text-white text-center bg-cover bg-center shrink-0" 
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55)), url('/images/home_1_slider_1.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          padding: '80px 0',
-          color: '#fff'
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55)), url('/images/home_1_slider_1.jpg')`
         }}
       >
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12 text-center">
-              <h3 style={{ color: '#fff', fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                {campaign.title}
-              </h3>
-              <p className="page-breadcrumb" style={{ fontSize: '12px', color: '#ccc', marginTop: '10px' }}>
-                <Link href="/" style={{ color: '#ccc' }}>Home</Link> / <Link href="/explore" style={{ color: '#ccc' }}>Causes</Link> / Single Cause
-              </p>
-            </div>
-          </div>
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h3 className="text-white text-3xl font-black uppercase tracking-tight m-0 truncate">
+            {campaign.title}
+          </h3>
+          <p className="text-xs text-zinc-300 mt-2 font-medium">
+            <Link href="/" className="text-zinc-300 hover:text-white no-underline">Home</Link> / <Link href="/explore" className="text-zinc-300 hover:text-white no-underline">Causes</Link> / Single Cause
+          </p>
         </div>
       </section>
 
       {/* MAIN SINGLE CAUSE CONTENT */}
-      <section className="section-content-block">
-        <div className="container">
-          <div className="row">
+      <section className="py-16 flex-grow">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-left">
             
             {/* LEFT COLUMN: Main Post Details */}
-            <div className="col-md-8 col-sm-12">
-              <article className="post single-post-inner" style={{ background: '#fff', border: '1px solid #eee', padding: '0 0 30px 0', borderRadius: '4px', overflow: 'hidden' }}>
+            <div className="lg:col-span-8 flex flex-col gap-8">
+              <article className="bg-white border border-zinc-150 rounded-2xl overflow-hidden shadow-sm">
                 
                 {/* Banner Image */}
-                <div className="post-inner-featured-content" style={{ height: '420px', overflow: 'hidden' }}>
-                  <img src={campaign.imageUrl} alt={campaign.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div className="h-96 w-full bg-zinc-100 overflow-hidden">
+                  <img src={campaign.imageUrl} alt={campaign.title} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Statistics Box */}
-                <div className="cause-info-container" style={{ background: '#fcfcfc', borderBottom: '1px solid #eee', borderTop: '1px solid #eee', padding: '20px 0', margin: '0' }}>
-                  <div className="row">
-                    <div className="col-md-3 col-sm-6 text-center causes-info-block" style={{ borderRight: '1px solid #eee' }}>
-                      <FaFlag style={{ color: '#7cb032', fontSize: '22px' }} />
-                      <br /><span style={{ fontSize: '12px', color: '#666' }}>Goal</span>
-                      <br /><strong style={{ fontSize: '16px', color: '#333' }}>{campaign.fundingGoal} cr</strong>
-                    </div>
-                    <div className="col-md-3 col-sm-6 text-center causes-info-block" style={{ borderRight: '1px solid #eee' }}>
-                      <FaHeart style={{ color: '#7cb032', fontSize: '22px' }} />
-                      <br /><span style={{ fontSize: '12px', color: '#666' }}>Raised</span>
-                      <br /><strong style={{ fontSize: '16px', color: '#333' }}>{campaign.amountRaised} cr</strong>
-                    </div>
-                    <div className="col-md-3 col-sm-6 text-center causes-info-block" style={{ borderRight: '1px solid #eee' }}>
-                      <FaRegChartBar style={{ color: '#7cb032', fontSize: '22px' }} />
-                      <br /><span style={{ fontSize: '12px', color: '#666' }}>Progress</span>
-                      <br /><strong style={{ fontSize: '16px', color: '#333' }}>{progressPercentage}%</strong>
-                    </div>
-                    <div className="col-md-3 col-sm-6 text-center causes-info-block" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <a className="btn btn-theme text-uppercase" href="#pledge-form" style={{ padding: '8px 18px', fontSize: '11px' }}>Donate Now</a>
-                    </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 border-t border-b border-zinc-100 bg-zinc-50 py-5">
+                  <div className="text-center border-r border-zinc-150 py-2">
+                    <FaFlag className="text-emerald-500 text-lg mx-auto mb-1" />
+                    <span className="text-[10px] text-zinc-450 uppercase font-black tracking-wider block">Goal Target</span>
+                    <strong className="text-sm font-black text-zinc-800 block mt-0.5">{campaign.fundingGoal} cr</strong>
+                  </div>
+                  <div className="text-center border-r border-zinc-150 py-2">
+                    <FaHeart className="text-emerald-500 text-lg mx-auto mb-1" />
+                    <span className="text-[10px] text-zinc-450 uppercase font-black tracking-wider block">Raised Amount</span>
+                    <strong className="text-sm font-black text-zinc-800 block mt-0.5">{campaign.amountRaised} cr</strong>
+                  </div>
+                  <div className="text-center border-r border-zinc-150 py-2">
+                    <FaRegChartBar className="text-emerald-500 text-lg mx-auto mb-1" />
+                    <span className="text-[10px] text-zinc-450 uppercase font-black tracking-wider block">Progress Percent</span>
+                    <strong className="text-sm font-black text-zinc-800 block mt-0.5">{progressPercentage}%</strong>
+                  </div>
+                  <div className="text-center flex items-center justify-center px-4 py-2">
+                    <a className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider text-center no-underline transition-colors" href="#pledge-form">Donate Now</a>
                   </div>
                 </div>
 
                 {/* Story and Text */}
-                <div style={{ padding: '30px' }}>
-                  <div className="single-post-inner-title" style={{ marginBottom: '20px' }}>
-                    <h2 style={{ margin: '0 0 10px 0', fontSize: '26px', fontWeight: 'bold' }}>{campaign.title}</h2>
-                    <p className="single-post-meta" style={{ fontSize: '11px', color: '#999', display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <FaUser /> Launched by: <strong>{campaign.creatorName}</strong>
+                <div className="p-8">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-black text-zinc-900 leading-snug m-0">{campaign.title}</h2>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3.5 text-xs text-zinc-400 font-medium">
+                      <span className="flex items-center gap-1">
+                        <FaUser className="text-emerald-500 shrink-0" /> Launched by: <strong className="text-zinc-700">{campaign.creatorName}</strong>
                       </span>
                       <span>|</span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <FaTag /> Category: <strong>{campaign.category}</strong>
+                      <span className="flex items-center gap-1">
+                        <FaTag className="text-emerald-500 shrink-0" /> Category: <strong className="text-zinc-700">{campaign.category}</strong>
                       </span>
                       <span>|</span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <FaCalendarAlt /> Deadline: <strong>{new Date(campaign.deadline).toLocaleDateString()}</strong>
+                      <span className="flex items-center gap-1">
+                        <FaCalendarAlt className="text-emerald-500 shrink-0" /> Deadline: <strong className="text-zinc-700">{new Date(campaign.deadline).toLocaleDateString()}</strong>
                       </span>
-                    </p>
+                    </div>
                   </div>
 
-                  <div className="single-post-inner-content" style={{ fontSize: '13px', lineHeight: '1.8', color: '#555', whiteSpace: 'pre-wrap' }}>
-                    <p>{campaign.story}</p>
+                  <div className="text-sm text-zinc-650 leading-relaxed white-space-pre-wrap">
+                    {campaign.story}
                   </div>
 
                   {/* Reward Pledge details */}
-                  <div style={{ marginTop: '35px', padding: '20px', background: '#f7fdf0', border: '1px solid #e1f2cc', borderRadius: '4px' }}>
-                    <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: 'bold', color: '#7cb032', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div className="mt-8 p-5 bg-emerald-50/50 border border-emerald-100 rounded-xl">
+                    <h4 className="text-xs font-black text-emerald-700 uppercase tracking-wider flex items-center gap-1.5 m-0 mb-2">
                       <FaGift /> Creator's Promised Reward
                     </h4>
-                    <p style={{ fontSize: '12px', color: '#555', margin: 0, lineHeight: '1.6' }}>
+                    <p className="text-xs text-zinc-600 m-0 leading-relaxed">
                       {campaign.rewardInfo || 'No specific reward has been specified for this campaign.'}
                     </p>
                   </div>
@@ -280,43 +276,49 @@ export default function CampaignDetails() {
               </article>
 
               {/* PLEDGE CONTRIBUTION FORM */}
-              <div id="pledge-form" style={{ marginTop: '40px', background: '#fff', border: '1px solid #eee', padding: '30px', borderRadius: '4px' }}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '20px', fontWeight: 'bold' }}>Make a <span>Pledge</span></h3>
-                <hr style={{ display: 'inline-block', margin: '5px 0 20px 0', width: '50px', borderColor: '#7cb032', borderWidth: '2px' }} />
+              <div id="pledge-form" className="bg-white border border-zinc-150 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-lg font-black text-zinc-900 m-0">Make a <span className="text-emerald-600">Pledge Contribution</span></h3>
+                <hr className="w-12 border-t-2 border-emerald-500 m-0 mt-2 mb-6" />
                 
                 {contribSuccess && (
-                  <div className="alert alert-success" style={{ fontSize: '12px' }}>{contribSuccess}</div>
+                  <div className="bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs font-bold mb-4">
+                    {contribSuccess}
+                  </div>
                 )}
                 {contribError && (
-                  <div className="alert alert-danger" style={{ fontSize: '12px' }}>{contribError}</div>
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs font-bold mb-4">
+                    {contribError}
+                  </div>
                 )}
 
-                <form onSubmit={handleContribute} className="row">
-                  <div className="col-md-6 form-group">
-                    <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#555' }}>Credits Amount to Donate</label>
-                    <input
-                      type="number"
-                      required
-                      min={campaign.minimumContribution}
-                      placeholder={`Min pledge: ${campaign.minimumContribution} credits`}
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value !== '' ? Number(e.target.value) : '')}
-                      className="form-control"
-                      style={{ padding: '10px', height: '40px', fontSize: '13px' }}
-                    />
+                <form onSubmit={handleContribute} className="flex flex-col gap-4 max-w-md">
+                  <div className="flex flex-col gap-1.5 text-left">
+                    <label className="text-xs font-bold text-zinc-700">Credits Amount to Pledge</label>
+                    <div className="relative">
+                      <Input
+                        type="number"
+                        required
+                        min={campaign.minimumContribution}
+                        placeholder={`Min pledge: ${campaign.minimumContribution} credits`}
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value !== '' ? Number(e.target.value) : '')}
+                        className="h-11 rounded-xl border border-zinc-250 px-4 text-sm focus-visible:ring-emerald-500 pr-10"
+                      />
+                      <FaCoins className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
+                    </div>
                   </div>
-                  <div className="col-md-12 form-group" style={{ marginTop: '15px' }}>
-                    <button
+                  
+                  <div className="flex items-center gap-4 mt-2">
+                    <Button
                       type="submit"
                       disabled={contributing || campaign.status !== 'approved'}
-                      className="btn btn-theme text-uppercase"
-                      style={{ padding: '10px 30px', fontSize: '12px' }}
+                      className="h-11 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 rounded-xl border-none cursor-pointer flex items-center justify-center gap-1.5 transition-colors disabled:opacity-60"
                     >
-                      {contributing ? 'Processing...' : 'Confirm Pledge Contribution'}
-                    </button>
+                      {contributing ? 'Processing...' : 'Confirm Pledge'}
+                    </Button>
                     {user && user.credits < (amount || 0) && (
-                      <span style={{ marginLeft: '15px', color: 'red', fontSize: '11px', fontWeight: 'bold' }}>
-                        Insufficient credits! Please visit your dashboard to top up.
+                      <span className="text-[11px] text-red-600 font-bold leading-normal">
+                        ⚠️ Insufficient credits! Please visit your dashboard to top up.
                       </span>
                     )}
                   </div>
@@ -325,85 +327,92 @@ export default function CampaignDetails() {
             </div>
 
             {/* RIGHT COLUMN: Sidebar stats / Actions */}
-            <div className="col-md-4 col-sm-12">
-              <div className="sidebar" style={{ background: '#fff', border: '1px solid #eee', padding: '25px', borderRadius: '4px' }}>
-                
-                {/* Stats widget */}
-                <div style={{ marginBottom: '30px' }}>
-                  <h4 style={{ fontSize: '16px', fontWeight: 'bold', borderBottom: '2px solid #7cb032', paddingBottom: '5px', margin: '0 0 15px 0' }}>Campaign Details</h4>
-                  
-                  <ul className="list-unstyled" style={{ fontSize: '12px', color: '#555', lineHeight: '2.2', paddingLeft: 0 }}>
-                    <li style={{ borderBottom: '1px solid #f9f9f9', padding: '5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaRegCalendarCheck style={{ color: '#7cb032' }} /> Days Remaining: <strong>{daysLeft} days</strong>
+            <div className="lg:col-span-4 flex flex-col gap-6">
+              
+              {/* Campaign details card */}
+              <Card className="bg-white border border-zinc-150 rounded-2xl shadow-sm p-6">
+                <CardHeader className="p-0 pb-4 border-b border-zinc-100 text-left">
+                  <CardTitle className="text-sm font-extrabold text-zinc-800 uppercase tracking-wider m-0">
+                    Campaign Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 pt-4 text-left">
+                  <ul className="list-none p-0 m-0 space-y-4 text-xs font-semibold text-zinc-650">
+                    <li className="flex items-center gap-2 border-b border-zinc-50 pb-2">
+                      <FaRegCalendarCheck className="text-emerald-500 text-sm shrink-0" /> 
+                      <span>Days Remaining: <strong className="text-zinc-900">{daysLeft} days</strong></span>
                     </li>
-                    <li style={{ borderBottom: '1px solid #f9f9f9', padding: '5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaCoins style={{ color: '#7cb032' }} /> Min Pledge: <strong>{campaign.minimumContribution} credits</strong>
+                    <li className="flex items-center gap-2 border-b border-zinc-50 pb-2">
+                      <FaCoins className="text-emerald-500 text-sm shrink-0" /> 
+                      <span>Min Pledge: <strong className="text-zinc-900">{campaign.minimumContribution} credits</strong></span>
                     </li>
-                    <li style={{ borderBottom: '1px solid #f9f9f9', padding: '5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaRegUserCircle style={{ color: '#7cb032' }} /> Creator: <strong>{campaign.creatorName}</strong>
+                    <li className="flex items-center gap-2 border-b border-zinc-50 pb-2">
+                      <FaRegUserCircle className="text-emerald-500 text-sm shrink-0" /> 
+                      <span>Creator: <strong className="text-zinc-900">{campaign.creatorName}</strong></span>
                     </li>
-                    <li style={{ borderBottom: '1px solid #f9f9f9', padding: '5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaEnvelope style={{ color: '#7cb032' }} /> Contact Email: <strong>{campaign.creatorEmail}</strong>
+                    <li className="flex items-center gap-2 pb-1">
+                      <FaEnvelope className="text-emerald-500 text-sm shrink-0" /> 
+                      <span className="truncate">Contact Email: <strong className="text-zinc-900 truncate">{campaign.creatorEmail}</strong></span>
                     </li>
                   </ul>
-                </div>
+                </CardContent>
+              </Card>
 
-                {/* Flag widget */}
-                <div style={{ padding: '20px 0 0 0', borderTop: '1px solid #eee' }}>
-                  <h4 style={{ fontSize: '15px', fontWeight: 'bold', margin: '0 0 10px 0', color: '#aa3333', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <FaExclamationTriangle /> Report Campaign
-                  </h4>
-                  <p style={{ fontSize: '11px', color: '#777', lineHeight: '1.5', marginBottom: '15px' }}>
-                    If you believe this campaign violates terms of service, is fraudulent, or contains copied content, report it to the admin team immediately.
+              {/* Flag report card */}
+              <Card className="bg-white border border-zinc-155 rounded-2xl shadow-sm p-6">
+                <CardHeader className="p-0 pb-3 border-b border-zinc-100 text-left">
+                  <CardTitle className="text-sm font-extrabold text-red-700 uppercase tracking-wider flex items-center gap-1.5 m-0">
+                    <FaExclamationTriangle /> Flag Campaign
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 pt-4 text-left">
+                  <p className="text-[11px] text-zinc-450 leading-relaxed m-0 mb-4">
+                    If you believe this campaign violates terms of service, contains fraudulent details, or has copied content, report it to the admin team immediately.
                   </p>
                   
                   {!reportModalOpen ? (
-                    <button
+                    <Button
                       onClick={() => setReportModalOpen(true)}
-                      className="btn btn-danger btn-xs"
-                      style={{ padding: '5px 12px', fontSize: '10px', background: '#d9534f', borderColor: '#d43f3a' }}
+                      className="h-8 bg-red-500 hover:bg-red-600 text-white font-bold text-xs uppercase tracking-wide border-none px-4 rounded-lg cursor-pointer transition-colors"
                     >
-                      Flag this campaign
-                    </button>
+                      Report Campaign
+                    </Button>
                   ) : (
-                    <form onSubmit={handleReport} style={{ background: '#fff3f3', padding: '15px', borderRadius: '4px', border: '1px solid #ebccd1' }}>
-                      {reportSuccess && <div className="alert alert-success" style={{ fontSize: '10px', padding: '5px 10px' }}>{reportSuccess}</div>}
-                      {reportError && <div className="alert alert-danger" style={{ fontSize: '10px', padding: '5px 10px' }}>{reportError}</div>}
+                    <form onSubmit={handleReport} className="bg-red-50/50 p-4 rounded-xl border border-red-100 flex flex-col gap-3">
+                      {reportSuccess && <div className="bg-emerald-50 border border-emerald-250 text-emerald-700 px-3 py-2 rounded-lg text-[10px] font-bold">{reportSuccess}</div>}
+                      {reportError && <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-[10px] font-bold">{reportError}</div>}
                       
-                      <div className="form-group">
+                      <div className="flex flex-col gap-1">
                         <textarea
                           required
                           rows={3}
                           placeholder="Reason for flag (mandatory)..."
                           value={reason}
                           onChange={(e) => setReason(e.target.value)}
-                          className="form-control"
-                          style={{ fontSize: '11px', padding: '6px 8px' }}
+                          className="w-full bg-white border border-zinc-250 rounded-lg p-2.5 text-xs text-zinc-800 focus:outline-none focus:border-red-500 resize-none"
                         />
                       </div>
-                      <div style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
-                        <button
-                          type="submit"
-                          disabled={reporting}
-                          className="btn btn-danger btn-xs"
-                          style={{ padding: '4px 10px', fontSize: '10px' }}
-                        >
-                          {reporting ? 'Submitting...' : 'Submit Report'}
-                        </button>
+                      <div className="flex gap-2 justify-end">
                         <button
                           type="button"
                           onClick={() => setReportModalOpen(false)}
-                          className="btn btn-default btn-xs"
-                          style={{ padding: '4px 10px', fontSize: '10px' }}
+                          className="h-7 px-3 rounded-md bg-zinc-100 hover:bg-zinc-200 text-[10px] font-bold text-zinc-700 border-none cursor-pointer"
                         >
                           Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={reporting}
+                          className="h-7 px-3 rounded-md bg-red-500 hover:bg-red-600 text-[10px] font-bold text-white border-none cursor-pointer disabled:opacity-60"
+                        >
+                          {reporting ? 'Submitting...' : 'Submit Report'}
                         </button>
                       </div>
                     </form>
                   )}
-                </div>
+                </CardContent>
+              </Card>
 
-              </div>
             </div>
 
           </div>
