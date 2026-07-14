@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaAward, FaLayers, FaEye, FaCheck, FaTimes, FaEnvelope } from 'react-icons/fa';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface Campaign {
   _id: string;
@@ -44,24 +44,24 @@ export default function CreatorHome() {
   const dummyCampaigns: Campaign[] = [
     {
       _id: 'dummy_camp_1',
-      title: 'Support Stray Children & Local Orphanages',
+      title: 'Restoring Comfort: Shelter and Care for Old Age Homes',
       fundingGoal: 15000,
       amountRaised: 4200,
       deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
       _id: 'dummy_camp_2',
-      title: 'Feed the Hungry: Community Food Shelter',
+      title: 'Hunger Relief: Food Distribution Campaign',
       fundingGoal: 8000,
       amountRaised: 6000,
       deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
       _id: 'dummy_camp_3',
-      title: 'Care and Support for Shelterless Elderly',
-      fundingGoal: 12000,
-      amountRaised: 8900,
-      deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString()
+      title: 'Eco-Revival: Reforesting and Greenifying the Old School Grounds',
+      fundingGoal: 10000,
+      amountRaised: 2500,
+      deadline: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000).toISOString()
     }
   ];
 
@@ -69,7 +69,7 @@ export default function CreatorHome() {
     {
       _id: 'dummy_review_1',
       campaignId: 'dummy_camp_2',
-      campaignTitle: 'Feed the Hungry: Community Food Shelter',
+      campaignTitle: 'Hunger Relief: Food Distribution Campaign',
       contributionAmount: 100,
       supporterName: 'S.M. Hasan',
       supporterEmail: 'supporter@treefunding.com',
@@ -115,7 +115,7 @@ export default function CreatorHome() {
       setStats({
         totalCampaigns: dummyCampaigns.length,
         activeCampaigns: dummyCampaigns.filter((c: Campaign) => new Date(c.deadline) > new Date()).length,
-        totalRaised: dummyCampaigns.reduce((sum: number, c: Campaign) => sum + c.amountRaised, 0)
+        totalRaised: dummyCampaigns.reduce((sum: number, c: Campaign) => sum + c.amountRaised, 0);
       });
       setContributions(dummyContributions);
     } finally {
@@ -131,7 +131,6 @@ export default function CreatorHome() {
 
   const handleApprove = async (id: string) => {
     if (id.startsWith('dummy_')) {
-      // Offline fallback handling
       setContributions(prev => prev.filter(c => c._id !== id));
       setSelectedContribution(null);
       setStats(prev => ({ ...prev, totalRaised: prev.totalRaised + 100 }));
@@ -170,6 +169,15 @@ export default function CreatorHome() {
       setProcessingId('');
     }
   };
+
+  const getPieData = () => {
+    return campaigns.map(c => ({
+      name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
+      value: c.amountRaised
+    }));
+  };
+
+  const COLORS = ['#7cb032', '#0284c7', '#d97706', '#ef4444'];
 
   if (loading) {
     return (
@@ -234,30 +242,69 @@ export default function CreatorHome() {
 
       {/* Chart Section */}
       {campaigns.length > 0 && (
-        <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', marginBottom: '40px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            <FaAward style={{ color: '#7cb032' }} /> Campaign Funding Progress (Credits)
-          </h3>
-          <div style={{ width: '100%', height: 260 }}>
-            <ResponsiveContainer>
-              <BarChart data={campaigns.map(c => ({
-                name: c.title.length > 18 ? c.title.substring(0, 18) + '...' : c.title,
-                Goal: c.fundingGoal,
-                Raised: c.amountRaised
-              }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2eb" />
-                <XAxis dataKey="name" stroke="#656b60" fontSize={11} tickLine={false} />
-                <YAxis stroke="#656b60" fontSize={11} tickLine={false} />
-                <Tooltip 
-                  contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
-                  cursor={{ fill: '#fcfdfa' }}
-                />
-                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                <Bar dataKey="Goal" fill="#e2e8f0" radius={[6, 6, 0, 0]} barSize={25} />
-                <Bar dataKey="Raised" fill="#7cb032" radius={[6, 6, 0, 0]} barSize={25} />
-              </BarChart>
-            </ResponsiveContainer>
+        <div className="row" style={{ marginBottom: '35px' }}>
+          
+          {/* Bar Chart */}
+          <div className="col-md-7" style={{ marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <FaAward style={{ color: '#7cb032' }} /> Campaign Funding Progress (Credits)
+              </h3>
+              <div style={{ width: '100%', height: 280 }}>
+                <ResponsiveContainer>
+                  <BarChart data={campaigns.map(c => ({
+                    name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
+                    Goal: c.fundingGoal,
+                    Raised: c.amountRaised
+                  }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2eb" />
+                    <XAxis dataKey="name" stroke="#656b60" fontSize={11} tickLine={false} />
+                    <YAxis stroke="#656b60" fontSize={11} tickLine={false} />
+                    <Tooltip 
+                      contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
+                      cursor={{ fill: '#fcfdfa' }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                    <Bar dataKey="Goal" fill="#e2e8f0" radius={[6, 6, 0, 0]} barSize={25} />
+                    <Bar dataKey="Raised" fill="#7cb032" radius={[6, 6, 0, 0]} barSize={25} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
+
+          {/* Pie Chart */}
+          <div className="col-md-5" style={{ marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <FaAward style={{ color: '#0284c7' }} /> Campaigns Funding Share
+              </h3>
+              <div style={{ width: '100%', height: 280, position: 'relative' }}>
+                <ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      data={getPieData()}
+                      cx="50%"
+                      cy="45%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {getPieData().map((entry: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', bottom: 10 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
         </div>
       )}
 

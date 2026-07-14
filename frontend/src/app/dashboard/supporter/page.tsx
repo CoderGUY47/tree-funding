@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import { FaHeart, FaHourglassHalf, FaCheckCircle, FaLeaf, FaUser, FaCoins } from 'react-icons/fa';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
 interface Contribution {
   _id: string;
@@ -30,7 +30,7 @@ export default function SupporterHome() {
   const dummyContributions: Contribution[] = [
     {
       _id: 'dummy_cont_1',
-      campaignTitle: 'Support Stray Children & Local Orphanages',
+      campaignTitle: 'Restoring Comfort: Shelter and Care for Old Age Homes',
       contributionAmount: 150,
       creatorName: 'Green Creator',
       status: 'approved',
@@ -38,7 +38,7 @@ export default function SupporterHome() {
     },
     {
       _id: 'dummy_cont_2',
-      campaignTitle: 'Feed the Hungry: Community Food Shelter',
+      campaignTitle: 'Hunger Relief: Food Distribution Campaign',
       contributionAmount: 100,
       creatorName: 'Green Creator',
       status: 'pending',
@@ -46,10 +46,10 @@ export default function SupporterHome() {
     },
     {
       _id: 'dummy_cont_3',
-      campaignTitle: 'Care and Support for Shelterless Elderly',
-      contributionAmount: 50,
+      campaignTitle: 'Eco-Revival: Reforesting and Greenifying the Old School Grounds',
+      contributionAmount: 120,
       creatorName: 'Green Creator',
-      status: 'rejected',
+      status: 'approved',
       date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
     }
   ];
@@ -111,6 +111,24 @@ export default function SupporterHome() {
   }, []);
 
   const approvedContributions = contributions.filter(c => c.status === 'approved');
+
+  const getPieData = () => {
+    const grouped = approvedContributions.reduce((acc: any[], curr) => {
+      const titleLower = curr.campaignTitle.toLowerCase();
+      const category = titleLower.includes('old age') || titleLower.includes('elderly') || titleLower.includes('people') ? 'Humanitarian' : 
+                       titleLower.includes('food') || titleLower.includes('hunger') || titleLower.includes('hungry') ? 'Social Care' : 'Reforestation';
+      const existing = acc.find(item => item.name === category);
+      if (existing) {
+        existing.value += curr.contributionAmount;
+      } else {
+        acc.push({ name: category, value: curr.contributionAmount });
+      }
+      return acc;
+    }, []);
+    return grouped;
+  };
+
+  const COLORS = ['#7cb032', '#0284c7', '#d97706', '#ef4444'];
 
   if (loading) {
     return (
@@ -178,27 +196,66 @@ export default function SupporterHome() {
 
       {/* Chart Section */}
       {approvedContributions.length > 0 && (
-        <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', marginBottom: '40px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            <FaCoins style={{ color: '#7cb032' }} /> Contribution Distribution (Credits)
-          </h3>
-          <div style={{ width: '100%', height: 260 }}>
-            <ResponsiveContainer>
-              <BarChart data={approvedContributions.map(c => ({
-                name: c.campaignTitle.length > 18 ? c.campaignTitle.substring(0, 18) + '...' : c.campaignTitle,
-                Amount: c.contributionAmount
-              }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2eb" />
-                <XAxis dataKey="name" stroke="#656b60" fontSize={11} tickLine={false} />
-                <YAxis stroke="#656b60" fontSize={11} tickLine={false} />
-                <Tooltip 
-                  contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
-                  cursor={{ fill: '#fcfdfa' }}
-                />
-                <Bar dataKey="Amount" fill="#7cb032" radius={[6, 6, 0, 0]} barSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
+        <div className="row" style={{ marginBottom: '35px' }}>
+          
+          {/* Bar Chart */}
+          <div className="col-md-7" style={{ marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <FaCoins style={{ color: '#7cb032' }} /> Contribution Distribution (Credits)
+              </h3>
+              <div style={{ width: '100%', height: 280 }}>
+                <ResponsiveContainer>
+                  <BarChart data={approvedContributions.map(c => ({
+                    name: c.campaignTitle.length > 18 ? c.campaignTitle.substring(0, 18) + '...' : c.campaignTitle,
+                    Amount: c.contributionAmount
+                  }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2eb" />
+                    <XAxis dataKey="name" stroke="#656b60" fontSize={11} tickLine={false} />
+                    <YAxis stroke="#656b60" fontSize={11} tickLine={false} />
+                    <Tooltip 
+                      contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
+                      cursor={{ fill: '#fcfdfa' }}
+                    />
+                    <Bar dataKey="Amount" fill="#7cb032" radius={[6, 6, 0, 0]} barSize={40} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
+
+          {/* Pie Chart */}
+          <div className="col-md-5" style={{ marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <FaCoins style={{ color: '#0284c7' }} /> Contributions by Category
+              </h3>
+              <div style={{ width: '100%', height: 280, position: 'relative' }}>
+                <ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      data={getPieData()}
+                      cx="50%"
+                      cy="45%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {getPieData().map((entry: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', bottom: 10 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
         </div>
       )}
 
