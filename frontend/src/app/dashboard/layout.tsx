@@ -38,7 +38,6 @@ export default function DashboardLayout({
     setImageError(false);
   }, [user]);
 
-  // Redirect to login if user session is not found
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
@@ -49,9 +48,9 @@ export default function DashboardLayout({
     return (
       <div>
         <Navbar />
-        <div className="container text-center" style={{ padding: '120px 0' }}>
+        <div className="container text-center py-32">
           <div className="h-12 w-12 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '15px', color: '#888' }}>Checking credentials...</p>
+          <p className="mt-4 text-zinc-500 text-sm">Checking credentials...</p>
         </div>
         <Footer />
       </div>
@@ -62,7 +61,6 @@ export default function DashboardLayout({
     return null;
   }
 
-  // Generate sidebar navigation options based on User Role using react-icons
   const getSidebarLinks = () => {
     switch (user.role) {
       case 'Supporter':
@@ -105,8 +103,8 @@ export default function DashboardLayout({
       <Navbar />
 
       {/* PAGE HEADER */}
-      <section 
-        className="page-header" 
+      <section
+        className="page-header"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55)), url('/images/home_1_slider_1.jpg')`,
           backgroundSize: 'cover',
@@ -118,11 +116,11 @@ export default function DashboardLayout({
         <div className="container">
           <div className="row">
             <div className="col-sm-12 text-center">
-              <h3 style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', textTransform: 'uppercase' }}>
+              <h3 className="text-white text-3xl font-bold uppercase">
                 Dashboard Workspace
               </h3>
-              <p className="page-breadcrumb" style={{ fontSize: '11px', color: '#ccc', marginTop: '10px' }}>
-                <Link href="/" style={{ color: '#ccc' }}>Home</Link> / Dashboard
+              <p className="text-xs text-zinc-300 mt-2">
+                <Link href="/" className="text-zinc-300 hover:text-white no-underline">Home</Link> / Dashboard
               </p>
             </div>
           </div>
@@ -130,78 +128,62 @@ export default function DashboardLayout({
       </section>
 
       {/* MAIN WORKSPACE COLUMNS */}
-      <section className="section-content-block" style={{ background: '#fdfdfd' }}>
+      <section className="section-content-block bg-zinc-50">
         <div className="container">
           <div className="row">
-            
+
             {/* SIDEBAR NAVIGATION COLUMN */}
-            <div className="col-md-3 col-sm-12" style={{ marginBottom: '30px' }}>
-              <div style={{ background: '#fff', border: '1px solid #eee', padding: '20px', borderRadius: '4px' }}>
-                
+            <div className="col-md-3 col-sm-12 mb-8">
+              <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
+
                 {/* Profile Card */}
-                <div style={{ borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {user.photoUrl && 
-                   user.photoUrl !== 'null' && 
-                   user.photoUrl !== 'undefined' && 
-                   user.photoUrl.trim() !== '' && 
-                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
+                <div className="flex items-center gap-3 border-b border-zinc-100 pb-4 mb-5">
+                  {user.photoUrl &&
+                   user.photoUrl !== 'null' &&
+                   user.photoUrl !== 'undefined' &&
+                   user.photoUrl.trim() !== '' &&
+                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) &&
                    !imageError ? (
-                    <img 
-                      src={user.photoUrl} 
-                      alt="Profile" 
+                    <img
+                      src={user.photoUrl}
+                      alt="Profile"
                       onError={() => setImageError(true)}
-                      style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7cb032' }}
+                      className="w-11 h-11 rounded-full object-cover border-2 border-emerald-500 shrink-0"
                     />
                   ) : (
-                    <div style={{ width: '45px', height: '45px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '16px' }}>
+                    <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-base shrink-0">
                       {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                   )}
                   <div>
-                    <h5 style={{ margin: 0, fontWeight: 'bold', fontSize: '14px', color: '#333' }}>{user.name}</h5>
-                    <span style={{ fontSize: '9px', fontWeight: 'bold', color: '#7cb032', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '3px' }}>
+                    <h5 className="m-0 font-bold text-sm text-zinc-800">{user.name}</h5>
+                    <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1 mt-1">
                       {user.role === 'Admin' ? <FaShieldAlt /> : <FaBriefcase />} {user.role}
                     </span>
                   </div>
                 </div>
 
-                {/* Sidebar Navigation list */}
-                <h4 style={{ fontSize: '14px', color: '#1e211c', textTransform: 'uppercase', fontWeight: 'bold', margin: '0 0 15px 0', borderBottom: '1px solid #eef2eb', paddingBottom: '8px', letterSpacing: '0.5px' }}>Workspace Menus</h4>
-                <ul className="list-unstyled" style={{ margin: 0, padding: 0 }}>
+                {/* Sidebar Navigation label */}
+                <h4 className="text-xs text-zinc-700 uppercase font-bold mb-3 border-b border-zinc-100 pb-2 tracking-widest">
+                  Workspace Menus
+                </h4>
+
+                <ul className="list-none m-0 p-0 space-y-1">
                   {links.map((link) => {
                     const isActive = pathname === link.path;
                     return (
-                      <li key={link.path} style={{ margin: '8px 0' }}>
-                        <Link 
+                      <li key={link.path}>
+                        <Link
                           href={link.path}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            padding: '12px 18px',
-                            borderRadius: '8px',
-                            fontSize: '15px',
-                            fontWeight: 'bold',
-                            color: isActive ? '#fff' : '#1e211c',
-                            background: isActive ? '#7cb032' : 'transparent',
-                            textDecoration: 'none',
-                            transition: 'all 0.2s',
-                            border: isActive ? 'none' : '1px solid transparent'
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!isActive) {
-                              e.currentTarget.style.background = '#f5f7f3';
-                              e.currentTarget.style.borderColor = '#eef2eb';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isActive) {
-                              e.currentTarget.style.background = 'transparent';
-                              e.currentTarget.style.borderColor = 'transparent';
-                            }
-                          }}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold no-underline transition-all duration-200 ${
+                            isActive
+                              ? 'bg-emerald-500 text-white'
+                              : 'text-zinc-800 hover:bg-zinc-50 hover:border hover:border-zinc-200'
+                          }`}
                         >
-                          <span style={{ display: 'inline-flex', fontSize: '16px', color: isActive ? '#fff' : '#7cb032' }}>{link.icon}</span>
+                          <span className={`text-base inline-flex ${isActive ? 'text-white' : 'text-emerald-500'}`}>
+                            {link.icon}
+                          </span>
                           {link.label}
                         </Link>
                       </li>
@@ -214,7 +196,7 @@ export default function DashboardLayout({
 
             {/* MAIN CONTENT AREA */}
             <div className="col-md-9 col-sm-12">
-              <div style={{ background: '#fff', border: '1px solid #eee', padding: '30px', borderRadius: '4px', minHeight: '400px' }}>
+              <div className="bg-white border border-zinc-200 p-8 rounded-xl shadow-sm min-h-96">
                 {children}
               </div>
             </div>

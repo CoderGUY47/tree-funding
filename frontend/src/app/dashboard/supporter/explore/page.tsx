@@ -21,13 +21,12 @@ interface Campaign {
 }
 
 export default function SupporterExplore() {
-  const { user, refreshUser } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Modal inspection & contribution states
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [contributionAmount, setContributionAmount] = useState('');
   const [contributing, setContributing] = useState(false);
@@ -132,12 +131,10 @@ export default function SupporterExplore() {
       setErrorMsg('Please enter a valid credit amount.');
       return;
     }
-
     if (amount < selectedCampaign.minimumContribution) {
       setErrorMsg(`Minimum contribution for this cause is ${selectedCampaign.minimumContribution} credits.`);
       return;
     }
-
     if (user.credits < amount) {
       setErrorMsg(`Insufficient credits balance. You only have ${user.credits} credits remaining.`);
       return;
@@ -149,32 +146,19 @@ export default function SupporterExplore() {
 
     try {
       if (selectedCampaign._id.startsWith('fallback_')) {
-        // Offline preview mock submission success
         setSuccessMsg(`Pledge contribution of ${amount} credits successful!`);
         selectedCampaign.amountRaised += amount;
-        
-        // Subtract mock credits from local state
         user.credits -= amount;
-        
-        setTimeout(() => {
-          setSelectedCampaign(null);
-        }, 2000);
+        setTimeout(() => { setSelectedCampaign(null); }, 2000);
       } else {
-        // Live server API call
         await api.post('/contributions', {
           campaignId: selectedCampaign._id,
           contributionAmount: amount
         });
-
         setSuccessMsg(`Pledge contribution of ${amount} credits was successfully created and sent for review!`);
         selectedCampaign.amountRaised += amount;
-
-        // Refresh user context credits
-        refreshUser();
-
-        setTimeout(() => {
-          setSelectedCampaign(null);
-        }, 2500);
+        refreshProfile();
+        setTimeout(() => { setSelectedCampaign(null); }, 2500);
       }
     } catch (err: any) {
       setErrorMsg(err.response?.data?.message || 'Failed to place pledge contribution.');
@@ -184,161 +168,117 @@ export default function SupporterExplore() {
   };
 
   const filteredCampaigns = campaigns.filter((c) => {
-    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           c.story.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || c.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
-    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
-      
+    <div className="text-left bg-white p-2">
+
       {/* Title */}
-      <div style={{ marginBottom: '35px', borderBottom: '1px solid #eef2eb', paddingBottom: '20px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight">
           Explore Campaigns
         </h2>
-        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Browse all approved causes and contribute credits directly from your workspace dashboard.
         </p>
       </div>
 
       {/* SEARCH BAR & CATEGORIES */}
-      <div className="row" style={{ marginBottom: '35px', gap: '15px' }}>
-        <div className="col-md-5" style={{ marginBottom: '15px' }}>
-          <div style={{ position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="Search campaigns by keyword..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 18px',
-                borderRadius: '8px',
-                border: '1px solid #dcdfd8',
-                fontSize: '14px',
-                outline: 'none',
-                color: '#1e211c'
-              }}
-            />
-            <FaSearch style={{ position: 'absolute', right: '15px', top: '16px', color: '#656b60' }} />
-          </div>
+      <div className="flex flex-col sm:flex-row gap-4 mb-9">
+        <div className="flex-1 relative">
+          <input
+            type="text"
+            placeholder="Search campaigns by keyword..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 outline-none focus:border-emerald-500 bg-white"
+          />
+          <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 text-sm" />
         </div>
-
-        <div className="col-md-7 text-right" style={{ marginBottom: '15px' }}>
-          <div style={{ display: 'inline-flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                style={{
-                  padding: '8px 16px',
-                  fontSize: '12px',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  borderRadius: '6px',
-                  border: '1px solid #dcdfd8',
-                  background: selectedCategory === cat ? '#7cb032' : '#ffffff',
-                  color: selectedCategory === cat ? '#ffffff' : '#1e211c',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-2 items-center">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 text-xs font-bold uppercase rounded-lg border transition-all cursor-pointer ${
+                selectedCategory === cat
+                  ? 'bg-emerald-500 text-white border-emerald-500'
+                  : 'bg-white text-zinc-800 border-zinc-200 hover:bg-zinc-50'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* CAMPAIGN GRID */}
       {loading ? (
-        <div style={{ display: 'flex', height: '240px', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="flex h-60 items-center justify-center">
           <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
         </div>
       ) : filteredCampaigns.length === 0 ? (
-        <div style={{ padding: '60px 20px', border: '2px dashed #eef2eb', borderRadius: '12px', textAlign: 'center', background: '#fcfdfa' }}>
-          <FaSearch style={{ fontSize: '42px', color: '#656b60', display: 'block', margin: '0 auto 15px' }} />
-          <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e211c', margin: '0 0 5px 0' }}>No campaigns found</h4>
-          <p style={{ fontSize: '13px', color: '#656b60', margin: 0 }}>Try searching for a different keyword or category.</p>
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-2xl text-center bg-zinc-50">
+          <FaSearch className="text-4xl text-zinc-400 mx-auto mb-4" />
+          <h4 className="text-base font-bold text-zinc-900 m-0 mb-1">No campaigns found</h4>
+          <p className="text-sm text-zinc-500 m-0">Try searching for a different keyword or category.</p>
         </div>
       ) : (
-        <div className="row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
           {filteredCampaigns.map((camp) => {
             const progressPercent = Math.min(100, Math.round((camp.amountRaised / camp.fundingGoal) * 100));
             const daysRemaining = Math.max(0, Math.ceil((new Date(camp.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
-            
             return (
-              <div key={camp._id} className="col-md-6 col-lg-6 col-sm-12" style={{ marginBottom: '30px' }}>
-                <div style={{ border: '1px solid #eef2eb', background: '#ffffff', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  
-                  {/* Category Tag Overlay image */}
-                  <div style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f5f7f3' }}>
-                    <img 
-                      src={camp.imageUrl} 
-                      alt={camp.title} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    />
-                    <span style={{ position: 'absolute', top: '15px', left: '15px', background: '#7cb032', color: '#ffffff', fontSize: '10px', fontWeight: 'bold', padding: '4px 10px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      {camp.category}
+              <div key={camp._id} className="border border-zinc-100 bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col h-full hover:shadow-md transition-shadow duration-200">
+
+                {/* Image */}
+                <div className="h-48 relative overflow-hidden bg-zinc-100">
+                  <img src={camp.imageUrl} alt={camp.title} className="w-full h-full object-cover" />
+                  <span className="absolute top-3 left-3 bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">
+                    {camp.category}
+                  </span>
+                </div>
+
+                {/* Progress */}
+                <div className="px-5 py-4 border-b border-zinc-100">
+                  <div className="flex justify-between items-center text-xs font-bold text-zinc-500 mb-2">
+                    <span>GOAL: <strong className="text-zinc-900">{camp.fundingGoal} cr</strong></span>
+                    <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[11px]">{progressPercent}%</span>
+                    <span>RAISED: <strong className="text-emerald-500">{camp.amountRaised} cr</strong></span>
+                  </div>
+                  <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${progressPercent}%` }} />
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="p-5 flex flex-col flex-grow">
+                  <h4 className="text-base font-bold text-zinc-900 mb-2 leading-snug line-clamp-2">
+                    {camp.title}
+                  </h4>
+                  <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 mb-5">
+                    {camp.story}
+                  </p>
+                  <div className="flex justify-between text-xs text-zinc-500 mb-5 mt-auto">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <FaUser className="text-emerald-500" /> {camp.creatorName}
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <FaClock className="text-emerald-500" /> {daysRemaining} days left
                     </span>
                   </div>
-
-                  {/* Fund Raised info */}
-                  <div style={{ padding: '20px', borderBottom: '1px solid #eef2eb' }}>
-                    <div style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', color: '#656b60' }}>
-                      <span>GOAL: <strong style={{ color: '#1e211c' }}>{camp.fundingGoal} cr</strong></span>
-                      <span style={{ background: '#eaf4db', color: '#56801b', padding: '2px 8px', borderRadius: '10px', fontSize: '11px' }}>{progressPercent}%</span>
-                      <span>RAISED: <strong style={{ color: '#7cb032' }}>{camp.amountRaised} cr</strong></span>
-                    </div>
-                    {/* Progress Bar */}
-                    <div style={{ height: '8px', marginTop: '12px', background: '#eef2eb', borderRadius: '10px', overflow: 'hidden' }}>
-                      <div style={{ width: `${progressPercent}%`, height: '100%', background: '#7cb032', borderRadius: '10px' }} />
-                    </div>
-                  </div>
-
-                  {/* Details */}
-                  <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <h4 style={{ fontSize: '17px', fontWeight: 'bold', color: '#1e211c', margin: '0 0 10px 0', lineHeight: '1.4', height: '48px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                      {camp.title}
-                    </h4>
-                    
-                    <p style={{ fontSize: '13px', color: '#656b60', lineHeight: '1.6', height: '58px', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', margin: '0 0 20px 0' }}>
-                      {camp.story}
-                    </p>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#656b60', marginBottom: '20px', marginTop: 'auto' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '500' }}>
-                        <FaUser style={{ color: '#7cb032' }} /> {camp.creatorName}
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '500' }}>
-                        <FaClock style={{ color: '#7cb032' }} /> {daysRemaining} days left
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => handleOpenDetails(camp)}
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        background: '#7cb032',
-                        color: '#ffffff',
-                        border: 'none',
-                        borderRadius: '8px',
-                        fontSize: '13px',
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase',
-                        cursor: 'pointer',
-                        transition: 'background 0.2s',
-                        letterSpacing: '0.5px'
-                      }}
-                    >
-                      View Details & Contribute
-                    </button>
-                  </div>
-
+                  <button
+                    onClick={() => handleOpenDetails(camp)}
+                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer border-none transition-colors"
+                  >
+                    View Details & Contribute
+                  </button>
                 </div>
+
               </div>
             );
           })}
@@ -347,17 +287,17 @@ export default function SupporterExplore() {
 
       {/* POPUP DETAILS AND CONTRIBUTION MODAL */}
       {selectedCampaign && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#ffffff', borderRadius: '12px', width: '100%', maxWidth: '550px', padding: '30px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', overflowY: 'auto', maxHeight: '90vh' }}>
-            
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eef2eb', paddingBottom: '15px', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontWeight: 'bold', color: '#1e211c', fontSize: '18px', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
-                Campaign workspace
+            <div className="flex justify-between items-center border-b border-zinc-100 pb-4 mb-5">
+              <h3 className="m-0 font-bold text-zinc-900 text-lg uppercase tracking-tight">
+                Campaign Workspace
               </h3>
-              <button 
-                onClick={() => setSelectedCampaign(null)} 
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#888' }}
+              <button
+                onClick={() => setSelectedCampaign(null)}
+                className="bg-transparent border-none cursor-pointer text-xl text-zinc-400 hover:text-zinc-700 transition-colors leading-none"
               >
                 &times;
               </button>
@@ -365,70 +305,70 @@ export default function SupporterExplore() {
 
             {/* Success Alert */}
             {successMsg && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#eaf4db', border: '1px solid #c9e2a3', color: '#56801b', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '15px' }}>
-                <FaCheckCircle style={{ fontSize: '16px', flexShrink: 0 }} />
+              <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm mb-4">
+                <FaCheckCircle className="text-base shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
 
             {/* Error Alert */}
             {errorMsg && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fde8e8', border: '1px solid #f8b4b4', color: '#c81e1e', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '15px' }}>
-                <FaExclamationCircle style={{ fontSize: '16px', flexShrink: 0 }} />
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm mb-4">
+                <FaExclamationCircle className="text-base shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {/* Details Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', textAlign: 'left', marginBottom: '25px' }}>
+            <div className="flex flex-col gap-4 text-left mb-6">
               <div>
-                <span style={{ fontSize: '10px', background: '#eaf4db', color: '#56801b', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
                   {selectedCampaign.category}
                 </span>
-                <h4 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e211c', margin: '8px 0 0 0', lineHeight: '1.4' }}>
+                <h4 className="text-xl font-bold text-zinc-900 mt-2 leading-snug">
                   {selectedCampaign.title}
                 </h4>
               </div>
 
-              <p style={{ fontSize: '14px', color: '#656b60', lineHeight: '1.6', margin: 0 }}>
+              <p className="text-sm text-zinc-500 leading-relaxed m-0">
                 {selectedCampaign.story}
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', background: '#fcfdfa', padding: '15px', borderRadius: '8px', border: '1px solid #eef2eb' }}>
+              <div className="grid grid-cols-2 gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                 <div>
-                  <span style={{ fontSize: '11px', color: '#656b60', display: 'block', fontWeight: 'bold', textTransform: 'uppercase' }}>Creator Name</span>
-                  <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>{selectedCampaign.creatorName}</span>
+                  <span className="text-[10px] text-zinc-500 block font-bold uppercase tracking-wide mb-0.5">Creator Name</span>
+                  <span className="text-sm font-bold text-zinc-900">{selectedCampaign.creatorName}</span>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: '#656b60', display: 'block', fontWeight: 'bold', textTransform: 'uppercase' }}>Funding Goal</span>
-                  <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>{selectedCampaign.fundingGoal} Credits</span>
+                  <span className="text-[10px] text-zinc-500 block font-bold uppercase tracking-wide mb-0.5">Funding Goal</span>
+                  <span className="text-sm font-bold text-zinc-900">{selectedCampaign.fundingGoal} Credits</span>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: '#656b60', display: 'block', fontWeight: 'bold', textTransform: 'uppercase' }}>Amount Raised</span>
-                  <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#7cb032' }}>{selectedCampaign.amountRaised} Credits</span>
+                  <span className="text-[10px] text-zinc-500 block font-bold uppercase tracking-wide mb-0.5">Amount Raised</span>
+                  <span className="text-sm font-bold text-emerald-600">{selectedCampaign.amountRaised} Credits</span>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: '#656b60', display: 'block', fontWeight: 'bold', textTransform: 'uppercase' }}>Min Contribution</span>
-                  <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>{selectedCampaign.minimumContribution} cr</span>
+                  <span className="text-[10px] text-zinc-500 block font-bold uppercase tracking-wide mb-0.5">Min Contribution</span>
+                  <span className="text-sm font-bold text-zinc-900">{selectedCampaign.minimumContribution} cr</span>
                 </div>
               </div>
 
               <div>
-                <span style={{ fontSize: '11px', color: '#656b60', display: 'block', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '4px' }}>Reward Information</span>
-                <p style={{ fontSize: '13px', color: '#1e211c', margin: 0, fontWeight: '500' }}>{selectedCampaign.rewardInfo}</p>
+                <span className="text-[10px] text-zinc-500 block font-bold uppercase tracking-wide mb-1">Reward Information</span>
+                <p className="text-sm text-zinc-800 m-0 font-medium">{selectedCampaign.rewardInfo}</p>
               </div>
             </div>
 
             {/* CONTRIBUTION FORM */}
-            <form onSubmit={handleContributionSubmit} style={{ borderTop: '1px solid #eef2eb', paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e211c' }}>Pledge Contribution Credits</label>
-                  <span style={{ fontSize: '12px', color: '#656b60', fontWeight: '500' }}>
-                    Your Balance: <strong style={{ color: '#7cb032' }}>{user?.credits || 0} cr</strong>
+            <form onSubmit={handleContributionSubmit} className="border-t border-zinc-100 pt-5 flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-zinc-900">Pledge Contribution Credits</label>
+                  <span className="text-xs text-zinc-500 font-medium">
+                    Your Balance: <strong className="text-emerald-600">{user?.credits || 0} cr</strong>
                   </span>
                 </div>
-                <div style={{ position: 'relative' }}>
+                <div className="relative">
                   <input
                     type="number"
                     min={selectedCampaign.minimumContribution}
@@ -436,53 +376,24 @@ export default function SupporterExplore() {
                     value={contributionAmount}
                     onChange={(e) => setContributionAmount(e.target.value)}
                     required
-                    style={{
-                      width: '100%',
-                      padding: '12px 15px',
-                      borderRadius: '8px',
-                      border: '1px solid #dcdfd8',
-                      fontSize: '14px',
-                      outline: 'none',
-                      color: '#1e211c'
-                    }}
+                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 outline-none focus:border-emerald-500 bg-white"
                   />
-                  <FaCoins style={{ position: 'absolute', right: '15px', top: '16px', color: '#7cb032' }} />
+                  <FaCoins className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+              <div className="flex gap-3 mt-2">
                 <button
                   type="button"
                   onClick={() => setSelectedCampaign(null)}
-                  style={{
-                    width: '35%',
-                    background: '#f5f7f3',
-                    border: '1px solid #dcdfd8',
-                    borderRadius: '8px',
-                    padding: '12px 0',
-                    fontSize: '13px',
-                    fontWeight: 'bold',
-                    color: '#1e211c',
-                    cursor: 'pointer'
-                  }}
+                  className="w-2/5 bg-zinc-100 border border-zinc-200 rounded-xl py-3 text-sm font-bold text-zinc-800 cursor-pointer hover:bg-zinc-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={contributing || successMsg !== ''}
-                  style={{
-                    width: '65%',
-                    background: '#7cb032',
-                    border: 'none',
-                    color: '#ffffff',
-                    borderRadius: '8px',
-                    padding: '12px 0',
-                    fontSize: '13px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    opacity: (contributing || successMsg !== '') ? 0.6 : 1
-                  }}
+                  className="w-3/5 bg-emerald-500 hover:bg-emerald-600 border-none text-white rounded-xl py-3 text-sm font-bold cursor-pointer transition-colors disabled:opacity-60"
                 >
                   {contributing ? 'Processing...' : 'Pledge Contribution'}
                 </button>

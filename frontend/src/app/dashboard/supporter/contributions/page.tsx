@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
-import { useAuth } from '@/context/AuthContext';
-import { ArrowLeft, ArrowRight, ListTodo, AlertCircle, FaHeart, FaUser, FaRegClock, FaCoins } from 'react-icons/fa';
 
 interface Contribution {
   _id: string;
@@ -17,8 +15,7 @@ interface Contribution {
 export default function MyContributions() {
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // Pagination State
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limit] = useState(5);
@@ -26,7 +23,7 @@ export default function MyContributions() {
   const dummyContributions: Contribution[] = [
     {
       _id: 'dummy_cont_1',
-      campaignTitle: 'Support Stray Children & Local Orphanages',
+      campaignTitle: 'Restoring Comfort: Shelter and Care for Old Age Homes',
       contributionAmount: 150,
       creatorName: 'Green Creator',
       status: 'approved',
@@ -34,7 +31,7 @@ export default function MyContributions() {
     },
     {
       _id: 'dummy_cont_2',
-      campaignTitle: 'Feed the Hungry: Community Food Shelter',
+      campaignTitle: 'Hunger Relief: Food Distribution Campaign',
       contributionAmount: 100,
       creatorName: 'Green Creator',
       status: 'pending',
@@ -42,34 +39,57 @@ export default function MyContributions() {
     },
     {
       _id: 'dummy_cont_3',
-      campaignTitle: 'Care and Support for Shelterless Elderly',
-      contributionAmount: 50,
+      campaignTitle: 'Eco-Revival: Reforesting and Greenifying the Old School Grounds',
+      contributionAmount: 120,
+      creatorName: 'Green Creator',
+      status: 'approved',
+      date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      _id: 'dummy_cont_4',
+      campaignTitle: 'Companion and Medical Aid for Abandoned Old People',
+      contributionAmount: 80,
       creatorName: 'Green Creator',
       status: 'rejected',
-      date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+      date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      _id: 'dummy_cont_5',
+      campaignTitle: 'Reforest the Coastal Mangroves of Sundarbans',
+      contributionAmount: 200,
+      creatorName: 'Green Creator',
+      status: 'pending',
+      date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
     }
   ];
 
   const fetchContributions = async (page: number) => {
     setLoading(true);
     try {
-      const res = await api.get(`/contributions/supporter?page=${page}&limit=${limit}`);
-      const serverConts = res.data.contributions;
-      if (serverConts && serverConts.length > 0) {
-        setContributions(serverConts);
-        setTotalPages(res.data.totalPages || 1);
-        setCurrentPage(res.data.currentPage || 1);
-      } else {
-        // Fall back to dummy contributions so dashboard is always populated
-        setContributions(dummyContributions);
-        setTotalPages(1);
-        setCurrentPage(1);
-      }
+      const res = await api.get(`/contributions/supporter?limit=100`);
+      const serverConts = res.data.contributions || [];
+      const merged = [...serverConts];
+      dummyContributions.forEach(dummy => {
+        if (!merged.some(c => c.campaignTitle === dummy.campaignTitle)) {
+          merged.push(dummy);
+        }
+      });
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedItems = merged.slice(startIndex, endIndex);
+
+      setContributions(paginatedItems);
+      setTotalPages(Math.ceil(merged.length / limit) || 1);
+      setCurrentPage(page);
     } catch (err) {
       console.error('Error fetching contributions, using dummy fallbacks:', err);
-      setContributions(dummyContributions);
-      setTotalPages(1);
-      setCurrentPage(1);
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedItems = dummyContributions.slice(startIndex, endIndex);
+      setContributions(paginatedItems);
+      setTotalPages(Math.ceil(dummyContributions.length / limit) || 1);
+      setCurrentPage(page);
     } finally {
       setLoading(false);
     }
@@ -83,52 +103,19 @@ export default function MyContributions() {
     switch (status) {
       case 'approved':
         return (
-          <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            background: '#eaf4db',
-            color: '#56801b',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            border: '1px solid #c9e2a3'
-          }}>
+          <span className="inline-flex items-center bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase border border-emerald-100">
             Approved
           </span>
         );
       case 'rejected':
         return (
-          <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            background: '#fde8e8',
-            color: '#c81e1e',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            border: '1px solid #f8b4b4'
-          }}>
+          <span className="inline-flex items-center bg-red-50 text-red-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase border border-red-200">
             Rejected
           </span>
         );
       default:
         return (
-          <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            background: '#fef3c7',
-            color: '#d97706',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            border: '1px solid #fcd34d'
-          }}>
+          <span className="inline-flex items-center bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase border border-amber-200">
             Pending
           </span>
         );
@@ -136,54 +123,49 @@ export default function MyContributions() {
   };
 
   return (
-    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
-      
+    <div className="text-left bg-white p-2">
+
       {/* Title */}
-      <div style={{ marginBottom: '35px', borderBottom: '1px solid #f2f5f0', paddingBottom: '20px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight">
           My Contributions
         </h2>
-        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Track all your crowdfunding donations, pledges, and their approval statuses.
         </p>
       </div>
 
       {loading ? (
-        <div style={{ display: 'flex', height: '240px', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="flex h-60 items-center justify-center">
           <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-          
-          <div style={{ overflowX: 'auto', border: '1px solid #eef2eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', background: '#ffffff' }}>
+        <div className="flex flex-col gap-6">
+
+          <div className="overflow-x-auto border border-zinc-100 rounded-2xl shadow-sm">
+            <table className="w-full border-collapse bg-white">
               <thead>
-                <tr style={{ background: '#fcfdfa', borderBottom: '1px solid #eef2eb' }}>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Campaign Title</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Credits Contributed</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Creator</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Date</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Status</th>
+                <tr className="bg-zinc-50 border-b border-zinc-100">
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Campaign Title</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Credits Contributed</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Creator</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Date</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {contributions.map((c, index) => (
-                  <tr 
-                    key={c._id} 
-                    style={{ 
-                      borderBottom: index === contributions.length - 1 ? 'none' : '1px solid #eef2eb',
-                      transition: 'background 0.2s',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fcfdfa'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                {contributions.map((c) => (
+                  <tr
+                    key={c._id}
+                    className="border-b border-zinc-100 last:border-b-0 hover:bg-zinc-50 transition-colors duration-150"
                   >
-                    <td style={{ padding: '20px', fontSize: '16px', fontWeight: 'bold', color: '#1e211c' }}>{c.campaignTitle}</td>
-                    <td style={{ padding: '20px', fontSize: '15px', fontWeight: 'bold', color: '#7cb032' }}>{c.contributionAmount} cr</td>
-                    <td style={{ padding: '20px', fontSize: '14px', color: '#1e211c', fontWeight: '500' }}>{c.creatorName}</td>
-                    <td style={{ padding: '20px', fontSize: '13px', color: '#656b60', fontWeight: '500' }}>
+                    <td className="px-5 py-5 text-base font-bold text-zinc-900">{c.campaignTitle}</td>
+                    <td className="px-5 py-5 text-sm font-bold text-emerald-600">{c.contributionAmount} cr</td>
+                    <td className="px-5 py-5 text-sm text-zinc-700 font-medium">{c.creatorName}</td>
+                    <td className="px-5 py-5 text-sm text-zinc-500 font-medium">
                       {new Date(c.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                     </td>
-                    <td style={{ padding: '20px' }}>{getStatusBadge(c.status)}</td>
+                    <td className="px-5 py-5">{getStatusBadge(c.status)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -192,52 +174,30 @@ export default function MyContributions() {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #eef2eb', paddingTop: '20px' }}>
-              <span style={{ fontSize: '13px', color: '#656b60', fontWeight: '500' }}>
-                Page <span style={{ fontWeight: 'bold', color: '#1e211c' }}>{currentPage}</span> of{' '}
-                <span style={{ fontWeight: 'bold', color: '#1e211c' }}>{totalPages}</span>
+            <div className="flex items-center justify-between border-t border-zinc-100 pt-5">
+              <span className="text-sm text-zinc-500 font-medium">
+                Page <strong className="text-zinc-900">{currentPage}</strong> of{' '}
+                <strong className="text-zinc-900">{totalPages}</strong>
               </span>
-              
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div className="flex gap-2.5">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                  style={{
-                    borderRadius: '8px',
-                    border: '1px solid #dcdfd8',
-                    background: '#ffffff',
-                    padding: '8px 16px',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    color: '#1e211c',
-                    cursor: 'pointer',
-                    opacity: currentPage === 1 ? 0.5 : 1,
-                    transition: 'all 0.2s'
-                  }}
+                  className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-xs font-bold text-zinc-800 cursor-pointer hover:bg-zinc-50 transition-colors disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
-                  style={{
-                    borderRadius: '8px',
-                    border: '1px solid #dcdfd8',
-                    background: '#ffffff',
-                    padding: '8px 16px',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    color: '#1e211c',
-                    cursor: 'pointer',
-                    opacity: currentPage === totalPages ? 0.5 : 1,
-                    transition: 'all 0.2s'
-                  }}
+                  className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-xs font-bold text-zinc-800 cursor-pointer hover:bg-zinc-50 transition-colors disabled:opacity-50"
                 >
                   Next
                 </button>
               </div>
             </div>
           )}
+
         </div>
       )}
     </div>
