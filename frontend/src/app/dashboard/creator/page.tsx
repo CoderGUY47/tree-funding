@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
-import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaAward, FaLayers, FaEye, FaCheck, FaTimes, FaEnvelope } from 'react-icons/fa';
+import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaAward, FaLayerGroup, FaEye, FaCheck, FaTimes, FaEnvelope } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface Campaign {
@@ -30,11 +30,8 @@ export default function CreatorHome() {
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState('');
-  
-  // Modal inspect state
   const [selectedContribution, setSelectedContribution] = useState<Contribution | null>(null);
 
-  // States count
   const [stats, setStats] = useState({
     totalCampaigns: 0,
     activeCampaigns: 0,
@@ -79,28 +76,21 @@ export default function CreatorHome() {
 
   const fetchData = async () => {
     try {
-      // Fetch all campaigns created by user
       const campaignsRes = await api.get('/campaigns?status=all');
       const userCampaigns = campaignsRes.data.campaigns.filter((c: any) => c.creatorEmail === user?.email);
-      
+
       let currentCampaigns = userCampaigns;
       if (!currentCampaigns || currentCampaigns.length === 0) {
         currentCampaigns = dummyCampaigns;
       }
       setCampaigns(currentCampaigns);
 
-      // Calculate stats
       const totalCount = currentCampaigns.length;
       const activeCount = currentCampaigns.filter((c: Campaign) => new Date(c.deadline) > new Date()).length;
       const sumRaised = currentCampaigns.reduce((sum: number, c: Campaign) => sum + c.amountRaised, 0);
-      
-      setStats({
-        totalCampaigns: totalCount,
-        activeCampaigns: activeCount,
-        totalRaised: sumRaised
-      });
 
-      // Fetch pending contributions for creator's campaigns
+      setStats({ totalCampaigns: totalCount, activeCampaigns: activeCount, totalRaised: sumRaised });
+
       const contributionsRes = await api.get('/contributions/creator?status=pending');
       const serverContributions = contributionsRes.data.contributions;
       if (serverContributions && serverContributions.length > 0) {
@@ -108,14 +98,13 @@ export default function CreatorHome() {
       } else {
         setContributions(dummyContributions);
       }
-
     } catch (err) {
       console.error('Error fetching creator dashboard data, using fallback dummy:', err);
       setCampaigns(dummyCampaigns);
       setStats({
         totalCampaigns: dummyCampaigns.length,
         activeCampaigns: dummyCampaigns.filter((c: Campaign) => new Date(c.deadline) > new Date()).length,
-        totalRaised: dummyCampaigns.reduce((sum: number, c: Campaign) => sum + c.amountRaised, 0);
+        totalRaised: dummyCampaigns.reduce((sum: number, c: Campaign) => sum + c.amountRaised, 0)
       });
       setContributions(dummyContributions);
     } finally {
@@ -124,9 +113,7 @@ export default function CreatorHome() {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchData();
-    }
+    if (user) fetchData();
   }, [user]);
 
   const handleApprove = async (id: string) => {
@@ -136,7 +123,6 @@ export default function CreatorHome() {
       setStats(prev => ({ ...prev, totalRaised: prev.totalRaised + 100 }));
       return;
     }
-
     setProcessingId(id);
     try {
       await api.patch(`/contributions/${id}/approve`);
@@ -156,7 +142,6 @@ export default function CreatorHome() {
       setSelectedContribution(null);
       return;
     }
-
     setProcessingId(id);
     try {
       await api.patch(`/contributions/${id}/reject`);
@@ -170,97 +155,93 @@ export default function CreatorHome() {
     }
   };
 
-  const getPieData = () => {
-    return campaigns.map(c => ({
+  const getPieData = () =>
+    campaigns.map(c => ({
       name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
       value: c.amountRaised
     }));
-  };
 
   const COLORS = ['#7cb032', '#0284c7', '#d97706', '#ef4444'];
 
   if (loading) {
     return (
-      <div className="text-center" style={{ padding: '60px 0' }}>
+      <div className="text-center py-16">
         <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-        <p style={{ marginTop: '10px', color: '#656b60', fontSize: '13px', fontWeight: 'bold' }}>Loading statistics...</p>
+        <p className="mt-3 text-zinc-500 text-sm font-bold">Loading statistics...</p>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
-      
+    <div className="text-left bg-white p-2">
+
       {/* Title */}
-      <div style={{ marginBottom: '35px', borderBottom: '1px solid #eef2eb', paddingBottom: '20px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight">
           Creator Dashboard
         </h2>
-        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Manage campaigns, review backers contributions, and withdraw earnings.
         </p>
       </div>
 
       {/* Creator Stats */}
-      <div className="row" style={{ marginBottom: '35px' }}>
-        <div className="col-md-4 col-sm-6" style={{ marginBottom: '20px' }}>
-          <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-            <div style={{ background: '#7cb032', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-              <FaClipboardList />
-            </div>
-            <div>
-              <p style={{ fontSize: '26px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>{stats.totalCampaigns}</p>
-              <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Total Campaigns</p>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-9">
+        <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+          <div className="bg-emerald-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+            <FaClipboardList />
+          </div>
+          <div>
+            <p className="text-3xl font-extrabold text-zinc-900 m-0 leading-none">{stats.totalCampaigns}</p>
+            <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Total Campaigns</p>
           </div>
         </div>
 
-        <div className="col-md-4 col-sm-6" style={{ marginBottom: '20px' }}>
-          <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-            <div style={{ background: '#d97706', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-              <FaHourglassHalf />
-            </div>
-            <div>
-              <p style={{ fontSize: '26px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>{stats.activeCampaigns}</p>
-              <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Active Campaigns</p>
-            </div>
+        <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+          <div className="bg-amber-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+            <FaHourglassHalf />
+          </div>
+          <div>
+            <p className="text-3xl font-extrabold text-zinc-900 m-0 leading-none">{stats.activeCampaigns}</p>
+            <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Active Campaigns</p>
           </div>
         </div>
 
-        <div className="col-md-4 col-sm-6" style={{ marginBottom: '20px' }}>
-          <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-            <div style={{ background: '#7cb032', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-              <FaCheckCircle />
-            </div>
-            <div>
-              <p style={{ fontSize: '26px', fontWeight: '800', color: '#7cb032', margin: 0, lineHeight: '1.2' }}>{stats.totalRaised} cr</p>
-              <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Total Raised Credits</p>
-            </div>
+        <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+          <div className="bg-emerald-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+            <FaCheckCircle />
+          </div>
+          <div>
+            <p className="text-3xl font-extrabold text-emerald-600 m-0 leading-none">{stats.totalRaised} cr</p>
+            <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Total Raised Credits</p>
           </div>
         </div>
       </div>
 
       {/* Chart Section */}
       {campaigns.length > 0 && (
-        <div className="row" style={{ marginBottom: '35px' }}>
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-9">
+
           {/* Bar Chart */}
-          <div className="col-md-7" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                <FaAward style={{ color: '#7cb032' }} /> Campaign Funding Progress (Credits)
+          <div className="lg:col-span-7">
+            <div className="bg-white border border-zinc-100 rounded-2xl p-6 h-[380px] shadow-sm">
+              <h3 className="text-sm font-bold text-zinc-900 mb-5 flex items-center gap-2 uppercase tracking-wider">
+                <FaAward className="text-emerald-500" /> Campaign Funding Progress (Credits)
               </h3>
-              <div style={{ width: '100%', height: 280 }}>
+              <div className="w-full h-[280px]">
                 <ResponsiveContainer>
-                  <BarChart data={campaigns.map(c => ({
-                    name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
-                    Goal: c.fundingGoal,
-                    Raised: c.amountRaised
-                  }))} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                  <BarChart
+                    data={campaigns.map(c => ({
+                      name: c.title.length > 15 ? c.title.substring(0, 15) + '...' : c.title,
+                      Goal: c.fundingGoal,
+                      Raised: c.amountRaised
+                    }))}
+                    margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2eb" />
                     <XAxis dataKey="name" stroke="#656b60" fontSize={11} tickLine={false} />
                     <YAxis stroke="#656b60" fontSize={11} tickLine={false} />
-                    <Tooltip 
+                    <Tooltip
                       contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
                       cursor={{ fill: '#fcfdfa' }}
                     />
@@ -274,12 +255,12 @@ export default function CreatorHome() {
           </div>
 
           {/* Pie Chart */}
-          <div className="col-md-5" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '12px', padding: '25px', height: '380px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                <FaAward style={{ color: '#0284c7' }} /> Campaigns Funding Share
+          <div className="lg:col-span-5">
+            <div className="bg-white border border-zinc-100 rounded-2xl p-6 h-[380px] shadow-sm">
+              <h3 className="text-sm font-bold text-zinc-900 mb-5 flex items-center gap-2 uppercase tracking-wider">
+                <FaAward className="text-sky-500" /> Campaigns Funding Share
               </h3>
-              <div style={{ width: '100%', height: 280, position: 'relative' }}>
+              <div className="w-full h-[280px] relative">
                 <ResponsiveContainer>
                   <PieChart>
                     <Pie
@@ -295,10 +276,10 @@ export default function CreatorHome() {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip 
+                    <Tooltip
                       contentStyle={{ background: '#ffffff', border: '1px solid #eef2eb', borderRadius: '8px', fontSize: '12px', color: '#1e211c' }}
                     />
-                    <Legend wrapperStyle={{ fontSize: '11px', bottom: 10 }} />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -309,63 +290,45 @@ export default function CreatorHome() {
       )}
 
       {/* Pending Contributions to review */}
-      <div style={{ marginTop: '10px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          <FaLayers style={{ color: '#7cb032' }} /> Contributions to Review
+      <div className="mt-3">
+        <h3 className="text-lg font-bold text-zinc-900 mb-5 flex items-center gap-2 uppercase tracking-wider">
+          <FaLayerGroup className="text-emerald-500" /> Contributions to Review
         </h3>
 
         {contributions.length === 0 ? (
-          <div style={{ padding: '40px', border: '2px dashed #eef2eb', background: '#fcfdfa', borderRadius: '12px', textAlign: 'center', color: '#656b60', fontSize: '14px', fontWeight: '500' }}>
+          <div className="p-10 border-2 border-dashed border-zinc-200 bg-zinc-50 rounded-2xl text-center text-zinc-500 text-sm font-medium">
             No pending contributions to review at this moment.
           </div>
         ) : (
-          <div style={{ overflowX: 'auto', border: '1px solid #eef2eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', background: '#ffffff' }}>
+          <div className="overflow-x-auto border border-zinc-100 rounded-2xl shadow-sm">
+            <table className="w-full border-collapse bg-white">
               <thead>
-                <tr style={{ background: '#fcfdfa', borderBottom: '1px solid #eef2eb' }}>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Supporter</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Campaign Title</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Amount Pledged</th>
-                  <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'center', letterSpacing: '0.5px' }}>Actions</th>
+                <tr className="bg-zinc-50 border-b border-zinc-100">
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Supporter</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Campaign Title</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Amount Pledged</th>
+                  <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {contributions.map((c, index) => (
-                  <tr 
+                {contributions.map((c) => (
+                  <tr
                     key={c._id}
-                    style={{ 
-                      borderBottom: index === contributions.length - 1 ? 'none' : '1px solid #eef2eb',
-                      transition: 'background 0.2s',
-                      verticalAlign: 'middle'
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fcfdfa'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                    className="border-b border-zinc-100 last:border-b-0 hover:bg-zinc-50 transition-colors duration-150 align-middle"
                   >
-                    <td style={{ padding: '20px' }}>
-                      <p style={{ fontSize: '15px', fontWeight: 'bold', color: '#1e211c', margin: 0 }}>{c.supporterName}</p>
-                      <p style={{ fontSize: '12px', color: '#656b60', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: '4px' }}><FaEnvelope /> {c.supporterEmail}</p>
+                    <td className="px-5 py-5">
+                      <p className="text-base font-bold text-zinc-900 m-0">{c.supporterName}</p>
+                      <p className="text-xs text-zinc-500 m-0 mt-1 flex items-center gap-1"><FaEnvelope /> {c.supporterEmail}</p>
                     </td>
-                    <td style={{ padding: '20px', fontSize: '15px', fontWeight: 'bold', color: '#1e211c', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.campaignTitle}>
+                    <td className="px-5 py-5 text-base font-bold text-zinc-900 max-w-[240px] overflow-hidden text-ellipsis whitespace-nowrap" title={c.campaignTitle}>
                       {c.campaignTitle}
                     </td>
-                    <td style={{ padding: '20px', fontSize: '15px', fontWeight: 'bold', color: '#7cb032' }}>{c.contributionAmount} cr</td>
-                    <td style={{ padding: '20px', textAlign: 'center' }}>
-                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                    <td className="px-5 py-5 text-base font-bold text-emerald-600">{c.contributionAmount} cr</td>
+                    <td className="px-5 py-5 text-center">
+                      <div className="flex gap-2 justify-center">
                         <button
                           onClick={() => setSelectedContribution(c)}
-                          style={{
-                            padding: '6px 12px',
-                            fontSize: '13px',
-                            background: '#f5f7f3',
-                            border: '1px solid #dcdfd8',
-                            color: '#1e211c',
-                            borderRadius: '6px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                          }}
+                          className="px-3 py-1.5 text-xs bg-zinc-100 border border-zinc-200 text-zinc-800 rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-zinc-200 transition-colors"
                           title="View Details"
                         >
                           <FaEye /> View
@@ -373,38 +336,14 @@ export default function CreatorHome() {
                         <button
                           onClick={() => handleApprove(c._id)}
                           disabled={processingId !== ''}
-                          style={{
-                            padding: '6px 12px',
-                            fontSize: '13px',
-                            background: '#7cb032',
-                            color: '#ffffff',
-                            border: 'none',
-                            borderRadius: '6px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                          }}
+                          className="px-3 py-1.5 text-xs bg-emerald-500 text-white rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-emerald-600 transition-colors border-none disabled:opacity-60"
                         >
                           <FaCheck /> Approve
                         </button>
                         <button
                           onClick={() => handleReject(c._id)}
                           disabled={processingId !== ''}
-                          style={{
-                            padding: '6px 12px',
-                            fontSize: '13px',
-                            background: '#ef4444',
-                            color: '#ffffff',
-                            border: 'none',
-                            borderRadius: '6px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                          }}
+                          className="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg inline-flex items-center gap-1 font-bold cursor-pointer hover:bg-red-600 transition-colors border-none disabled:opacity-60"
                         >
                           <FaTimes /> Reject
                         </button>
@@ -420,51 +359,51 @@ export default function CreatorHome() {
 
       {/* Contribution Inspect Modal */}
       {selectedContribution && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#ffffff', borderRadius: '12px', width: '100%', maxWidth: '450px', padding: '30px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e211c', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FaAward style={{ color: '#7cb032' }} /> Contribution Details
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl">
+            <h3 className="text-lg font-bold text-zinc-900 mb-5 flex items-center gap-2">
+              <FaAward className="text-emerald-500" /> Contribution Details
             </h3>
-            
-            <div style={{ borderTop: '1px solid #eef2eb', borderBottom: '1px solid #eef2eb', padding: '15px 0', display: 'flex', flexDirection: 'column', gap: '15px', textAlign: 'left', marginBottom: '20px' }}>
+
+            <div className="border-t border-b border-zinc-100 py-4 flex flex-col gap-4 text-left mb-5">
               <div>
-                <span style={{ fontSize: '12px', color: '#656b60', display: 'block', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Campaign Name</span>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e211c' }}>{selectedContribution.campaignTitle}</span>
+                <span className="text-xs text-zinc-500 block mb-1 font-bold uppercase tracking-wide">Campaign Name</span>
+                <span className="text-base font-bold text-zinc-900">{selectedContribution.campaignTitle}</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <span style={{ fontSize: '12px', color: '#656b60', display: 'block', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Supporter Name</span>
-                  <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e211c' }}>{selectedContribution.supporterName}</span>
+                  <span className="text-xs text-zinc-500 block mb-1 font-bold uppercase tracking-wide">Supporter Name</span>
+                  <span className="text-sm font-bold text-zinc-900">{selectedContribution.supporterName}</span>
                 </div>
                 <div>
-                  <span style={{ fontSize: '12px', color: '#656b60', display: 'block', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Supporter Email</span>
-                  <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e211c' }}>{selectedContribution.supporterEmail}</span>
+                  <span className="text-xs text-zinc-500 block mb-1 font-bold uppercase tracking-wide">Supporter Email</span>
+                  <span className="text-sm font-bold text-zinc-900">{selectedContribution.supporterEmail}</span>
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '12px', color: '#656b60', display: 'block', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Credits Contributed</span>
-                <span style={{ fontSize: '18px', fontWeight: '800', color: '#7cb032' }}>{selectedContribution.contributionAmount} Credits</span>
+                <span className="text-xs text-zinc-500 block mb-1 font-bold uppercase tracking-wide">Credits Contributed</span>
+                <span className="text-xl font-extrabold text-emerald-600">{selectedContribution.contributionAmount} Credits</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="flex gap-3">
               <button
                 onClick={() => handleReject(selectedContribution._id)}
                 disabled={processingId !== ''}
-                style={{ width: '33%', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 0', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white border-none rounded-xl py-3 text-xs font-bold cursor-pointer transition-colors disabled:opacity-60"
               >
                 Reject
               </button>
               <button
                 onClick={() => handleApprove(selectedContribution._id)}
                 disabled={processingId !== ''}
-                style={{ width: '33%', background: '#7cb032', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 0', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white border-none rounded-xl py-3 text-xs font-bold cursor-pointer transition-colors disabled:opacity-60"
               >
                 Approve
               </button>
               <button
                 onClick={() => setSelectedContribution(null)}
-                style={{ width: '34%', background: '#f5f7f3', border: '1px solid #dcdfd8', borderRadius: '8px', padding: '10px 0', fontSize: '12px', fontWeight: 'bold', color: '#1e211c', cursor: 'pointer' }}
+                className="flex-1 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 rounded-xl py-3 text-xs font-bold text-zinc-800 cursor-pointer transition-colors"
               >
                 Close
               </button>

@@ -42,79 +42,71 @@ export default function AdminHome() {
 
   if (loading) {
     return (
-      <div className="text-center" style={{ padding: '60px 0' }}>
+      <div className="text-center py-16">
         <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-        <p style={{ marginTop: '10px', color: '#656b60', fontSize: '13px', fontWeight: 'bold' }}>Loading statistics...</p>
+        <p className="mt-3 text-zinc-500 text-sm font-bold">Loading statistics...</p>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
-      
+    <div className="text-left bg-white p-2">
+
       {/* Title */}
-      <div style={{ marginBottom: '35px', borderBottom: '1px solid #eef2eb', paddingBottom: '20px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight">
           Admin Console
         </h2>
-        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review system growth, available credits volume, and transaction processing.
         </p>
       </div>
 
       {/* Admin Stats Grid */}
       {stats && (
-        <div className="row" style={{ marginBottom: '35px' }}>
-          
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-9">
+
           {/* Supporters */}
-          <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <div style={{ background: '#7cb032', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                <FaUsers />
-              </div>
-              <div>
-                <p style={{ fontSize: '26px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>{stats.supporters}</p>
-                <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Total Supporters</p>
-              </div>
+          <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="bg-emerald-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+              <FaUsers />
+            </div>
+            <div>
+              <p className="text-3xl font-extrabold text-zinc-900 m-0 leading-none">{stats.supporters}</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Total Supporters</p>
             </div>
           </div>
 
           {/* Creators */}
-          <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <div style={{ background: '#0284c7', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                <FaUserCheck />
-              </div>
-              <div>
-                <p style={{ fontSize: '26px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>{stats.creators}</p>
-                <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Total Creators</p>
-              </div>
+          <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="bg-sky-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+              <FaUserCheck />
+            </div>
+            <div>
+              <p className="text-3xl font-extrabold text-zinc-900 m-0 leading-none">{stats.creators}</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Total Creators</p>
             </div>
           </div>
 
           {/* Credits Volume */}
-          <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <div style={{ background: '#eab308', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                <FaCoins />
-              </div>
-              <div>
-                <p style={{ fontSize: '24px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>{stats.totalCredits} cr</p>
-                <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Available Credits</p>
-              </div>
+          <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="bg-amber-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+              <FaCoins />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-zinc-900 m-0 leading-none">{stats.totalCredits} cr</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Available Credits</p>
             </div>
           </div>
 
-          {/* Total Payments Processed */}
-          <div className="col-md-3 col-sm-6" style={{ marginBottom: '20px' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #eef2eb', padding: '25px 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-              <div style={{ background: '#7cb032', color: '#fff', borderRadius: '8px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                <FaUniversity />
-              </div>
-              <div>
-                <p style={{ fontSize: '24px', fontWeight: '800', color: '#1e211c', margin: 0, lineHeight: '1.2' }}>${stats.totalPaymentsProcessed.toFixed(2)}</p>
-                <p style={{ fontSize: '11px', color: '#656b60', textTransform: 'uppercase', fontWeight: 'bold', margin: '4px 0 0 0', letterSpacing: '0.5px' }}>Stripe Volume</p>
-              </div>
+          {/* Total Payments */}
+          <div className="bg-white border border-zinc-100 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="bg-emerald-500 text-white rounded-xl w-12 h-12 flex items-center justify-center text-xl shrink-0">
+              <FaUniversity />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-zinc-900 m-0 leading-none">${stats.totalPaymentsProcessed.toFixed(2)}</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold m-0 mt-1.5 tracking-wider">Stripe Volume</p>
             </div>
           </div>
 
@@ -122,22 +114,10 @@ export default function AdminHome() {
       )}
 
       {/* Security alert for admins */}
-      <div style={{ 
-        background: '#fef3c7', 
-        borderLeft: '4px solid #d97706', 
-        padding: '20px', 
-        borderRadius: '12px', 
-        color: '#92400e', 
-        fontSize: '13px', 
-        lineHeight: '1.6', 
-        maxWidth: '700px',
-        display: 'flex',
-        gap: '15px',
-        alignItems: 'flex-start'
-      }}>
-        <FaShieldAlt style={{ fontSize: '24px', flexShrink: 0, color: '#d97706', marginTop: '3px' }} />
+      <div className="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-2xl text-amber-900 text-sm leading-relaxed max-w-2xl flex gap-4 items-start">
+        <FaShieldAlt className="text-2xl text-amber-500 shrink-0 mt-0.5" />
         <div>
-          <strong style={{ fontSize: '14px', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Security Clearance Authorization</strong>
+          <strong className="text-sm block mb-1.5 uppercase tracking-wide">Security Clearance Authorization</strong>
           You have access to User Role modification, Campaign Suspensions, Creator Payout confirmations, and Supporter report moderations. Ensure thorough validations before processing transactions.
         </div>
       </div>
