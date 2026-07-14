@@ -20,7 +20,8 @@ import {
   FaUsers, 
   FaFlag, 
   FaShieldAlt,
-  FaUser
+  FaUser,
+  FaCompass
 } from 'react-icons/fa';
 
 export default function DashboardLayout({
@@ -67,27 +68,29 @@ export default function DashboardLayout({
       case 'Supporter':
         return [
           { path: '/dashboard', label: 'Home Dashboard', icon: <FaTachometerAlt /> },
+          { path: '/explore', label: 'Explore Campaigns', icon: <FaCompass /> },
           { path: '/dashboard/supporter/contributions', label: 'My Contributions', icon: <FaHeart /> },
-          { path: '/dashboard/supporter/purchase', label: 'Purchase Credits', icon: <FaCoins /> },
+          { path: '/dashboard/supporter/purchase', label: 'Purchase Credit', icon: <FaCoins /> },
           { path: '/dashboard/supporter/payments', label: 'Payment History', icon: <FaHistory /> },
           { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       case 'Creator':
         return [
           { path: '/dashboard', label: 'Home Dashboard', icon: <FaTachometerAlt /> },
-          { path: '/dashboard/creator/add-campaign', label: 'Create Campaign', icon: <FaPlus /> },
+          { path: '/dashboard/creator/add-campaign', label: 'Add New Campaign', icon: <FaPlus /> },
           { path: '/dashboard/creator/my-campaigns', label: 'My Campaigns', icon: <FaBriefcase /> },
+          { path: '/dashboard/creator/withdrawals', label: 'Withdrawals', icon: <FaCreditCard /> },
           { path: '/dashboard/creator/payments', label: 'Payment History', icon: <FaHistory /> },
-          { path: '/dashboard/creator/withdrawals', label: 'Request Payout', icon: <FaCreditCard /> },
           { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       case 'Admin':
         return [
           { path: '/dashboard', label: 'Home Dashboard', icon: <FaTachometerAlt /> },
-          { path: '/dashboard/admin/approvals', label: 'Pending Approvals', icon: <FaCheckSquare /> },
-          { path: '/dashboard/admin/withdrawals', label: 'Withdrawal Requests', icon: <FaUniversity /> },
           { path: '/dashboard/admin/users', label: 'Manage Users', icon: <FaUsers /> },
-          { path: '/dashboard/admin/reports', label: 'Flagged Campaigns', icon: <FaFlag /> },
+          { path: '/dashboard/admin/approvals', label: 'Campaign Approvals', icon: <FaCheckSquare /> },
+          { path: '/dashboard/admin/campaigns', label: 'Manage Campaigns', icon: <FaTasks /> },
+          { path: '/dashboard/admin/withdrawals', label: 'Withdrawal Requests', icon: <FaUniversity /> },
+          { path: '/dashboard/admin/reports', label: 'Reports', icon: <FaFlag /> },
           { path: '/dashboard/profile', label: 'Profile Settings', icon: <FaUser /> },
         ];
       default:
