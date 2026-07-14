@@ -102,7 +102,7 @@ export default function SupporterPayments() {
                   </td>
                   <td style={{ padding: '20px', fontSize: '16px', fontWeight: 'bold', color: '#7cb032' }}>+{pay.credits} credits</td>
                   <td style={{ padding: '20px', fontSize: '15px', fontWeight: 'bold', color: '#1e211c' }}>${pay.amount}.00</td>
-                  <td style={{ padding: '20px', fontSize: '13px', fontFamily: 'monospace', color: '#656b60' }}>
+                  <td style={{ padding: '20px', fontSize: '13px', color: '#656b60' }}>
                     {pay.paymentIntentId}
                   </td>
                   <td style={{ padding: '20px' }}>

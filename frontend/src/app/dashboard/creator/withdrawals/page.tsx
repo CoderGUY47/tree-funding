@@ -155,7 +155,7 @@ export default function WithdrawEarnings() {
       {availableToWithdraw < 200 ? (
         <div style={{ textAlign: 'center', padding: '40px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
           <FaWallet style={{ fontSize: '32px', color: '#f0ad4e', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>Insufficient Payout Balance</h4>
+          <p style={{ fontSize: '16px', fontWeight: 'bold', color: '#d9534f', margin: '0 0 8px 0' }}>Insufficient credit</p>
           <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
             You need a minimum of 200 credits ($10.00 equivalent) to submit a withdrawal request.
           </p>
@@ -205,9 +205,12 @@ export default function WithdrawEarnings() {
               onChange={(e) => setPaymentSystem(e.target.value)}
               style={{ width: '100%', padding: '10px 15px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '13px', background: '#fff', height: '40px' }}
             >
-              <option value="Stripe">Stripe Card</option>
+              <option value="Stripe">Stripe</option>
+              <option value="Bkash">Bkash</option>
+              <option value="Rocket">Rocket</option>
+              <option value="Nagad">Nagad</option>
               <option value="Bank Transfer">Bank Wire Transfer</option>
-              <option value="PayPal">PayPal Invoice</option>
+              <option value="PayPal">PayPal</option>
             </select>
           </div>
 

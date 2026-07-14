@@ -118,7 +118,7 @@ export default function ProfilePage() {
                 <span style={{ color: '#888', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <FaIdBadge style={{ color: '#7cb032' }} /> ID Token
                 </span>
-                <span style={{ fontSize: '10px', color: '#999', fontFamily: 'monospace' }}>
+                <span style={{ fontSize: '10px', color: '#999', letterSpacing: '0.08em' }}>
                   {user.id.substring(0, 8)}...{user.id.substring(user.id.length - 8)}
                 </span>
               </div>

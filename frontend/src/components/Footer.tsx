@@ -46,7 +46,7 @@ export default function Footer() {
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                       <FaAngleDoubleRight style={{ marginRight: '6px', color: '#7cb032' }} />
-                      <a href="https://github.com/coderguy/tree-funding-client" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/CoderGUY47/tree-funding" target="_blank" rel="noopener noreferrer">
                         Github Repository
                       </a>
                     </li>

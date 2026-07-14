@@ -42,11 +42,28 @@ export default function Register() {
     setLoading(true);
     setError('');
 
+    // Client-side password strength check
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      setLoading(false);
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain at least one uppercase letter.');
+      setLoading(false);
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      setError('Password must contain at least one number.');
+      setLoading(false);
+      return;
+    }
+
     try {
       await register(name, email, password, role, photoUrl);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error occurred during registration.');
+      setError(err.message || err.response?.data?.message || 'Error occurred during registration.');
     } finally {
       setLoading(false);
     }
@@ -194,7 +211,7 @@ export default function Register() {
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Choose password (min 6 chars)"
+                          placeholder="Min 8 chars, 1 uppercase, 1 number"
                           style={{ height: '44px', borderRadius: '8px', border: '1px solid #dcdfd8', padding: '0 12px' }}
                         />
                       </div>

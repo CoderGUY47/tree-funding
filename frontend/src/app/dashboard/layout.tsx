@@ -136,31 +136,48 @@ export default function DashboardLayout({
             <div className="col-md-3 col-sm-12 mb-8">
               <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
 
-                {/* Profile Card */}
-                <div className="flex items-center gap-3 border-b border-zinc-100 pb-4 mb-5">
-                  {user.photoUrl &&
-                   user.photoUrl !== 'null' &&
-                   user.photoUrl !== 'undefined' &&
-                   user.photoUrl.trim() !== '' &&
-                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) &&
-                   !imageError ? (
-                    <img
-                      src={user.photoUrl}
-                      alt="Profile"
-                      onError={() => setImageError(true)}
-                      className="w-11 h-11 rounded-full object-cover border-2 border-emerald-500 shrink-0"
-                    />
-                  ) : (
-                    <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-base shrink-0">
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                {/* Profile Card: User Image | Available Credits */}
+                <div className="border-b border-zinc-100 pb-4 mb-5">
+
+                  {/* Row 1: Avatar + Credits */}
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    {/* User Image */}
+                    {user.photoUrl &&
+                     user.photoUrl !== 'null' &&
+                     user.photoUrl !== 'undefined' &&
+                     user.photoUrl.trim() !== '' &&
+                     (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) &&
+                     !imageError ? (
+                      <img
+                        src={user.photoUrl}
+                        alt="Profile"
+                        onError={() => setImageError(true)}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-emerald-500 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-base shrink-0">
+                        {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </div>
+                    )}
+
+                    {/* Available Credits */}
+                    <div className="flex flex-col items-end">
+                      <span className="text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Available Credits</span>
+                      <span className="flex items-center gap-1 text-emerald-600 font-extrabold text-base leading-none mt-0.5">
+                        <FaCoins className="text-emerald-500 text-xs" />
+                        {user.credits}
+                      </span>
                     </div>
-                  )}
+                  </div>
+
+                  {/* Row 2: User Name | User Role */}
                   <div>
                     <h5 className="m-0 font-bold text-sm text-zinc-800">{user.name}</h5>
                     <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1 mt-1">
                       {user.role === 'Admin' ? <FaShieldAlt /> : <FaBriefcase />} {user.role}
                     </span>
                   </div>
+
                 </div>
 
                 {/* Sidebar Navigation label */}

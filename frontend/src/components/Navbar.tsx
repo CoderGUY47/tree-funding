@@ -48,7 +48,7 @@ export default function Navbar() {
     setImageError(false);
   }, [user]);
 
-  const githubRepoUrl = 'https://github.com/coderguy/tree-funding-client';
+  const githubRepoUrl = 'https://github.com/CoderGUY47/tree-funding';
 
   const fetchNotifications = async () => {
     if (!user) return;

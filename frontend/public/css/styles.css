@@ -213,7 +213,7 @@ textarea {
 /* 01. GENERAL STYLING  */
 /***********************************************************************************************/
 body {
-  font: 16px/28px "Open Sans", sans-serif;
+  font: 16px/28px 'Outfit', sans-serif;
   color: #777777;
   font-style: normal;
   font-weight: 400;
@@ -236,7 +236,7 @@ a:focus {
   text-decoration: none;
 }
 blockquote {
-  font: "Open Sans", sans-serif;
+  font: 'Outfit', sans-serif;
   color: #333333;
 }
 h1,
@@ -283,7 +283,7 @@ h6 {
   margin-top: 12px;
 }
 p {
-  font: 16px/28px "Open Sans", sans-serif;
+  font: 16px/28px 'Outfit', sans-serif;
   color: #777777;
   font-style: normal;
   font-weight: 400;
@@ -493,7 +493,7 @@ blockquote {
   padding: 12px 26px 26px 42px;
   margin: 0 0 20px;
   font-size: 14px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   background: #ffffff;
   position: relative;
   border: 1px solid #cccccc;
@@ -611,7 +611,7 @@ ol li {
   color: #80b53f;
 }
 .section-heading-wrapper h4 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 18px;
   font-weight: 400;
   color: #888888;
@@ -1311,7 +1311,7 @@ header.one-page .navbar-nav > li > a span {
   margin-top: 36px;
   letter-spacing: 0em;
   position: relative;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 60px;
   line-height: 60px;
   font-weight: 800;
@@ -1333,7 +1333,7 @@ header.one-page .navbar-nav > li > a span {
   top: -15px;
 }
 #slider_1 .slider-content h3 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #ffffff;
   font-size: 24px;
   font-weight: 500;
@@ -1558,7 +1558,7 @@ header.one-page .navbar-nav > li > a span {
   width: 100%;
 }
 .banner-content h2 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 60px;
   line-height: 60px;
   font-weight: 800;
@@ -1571,7 +1571,7 @@ header.one-page .navbar-nav > li > a span {
   color: #80b53f;
 }
 .banner-content h3 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 500;
   font-size: 24px;
   line-height: 32px;
@@ -1608,7 +1608,7 @@ header.one-page .navbar-nav > li > a span {
   color: #ffffff;
 }
 .banner-content h2.offer-message {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 90px;
   line-height: 90px;
   font-weight: 700;
@@ -4076,7 +4076,7 @@ ul.pagination li:last-child {
   font-size: 32px;
   line-height: 42px;
   font-weight: 400;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #80b53f;
   text-transform: uppercase;
 }
@@ -5319,7 +5319,7 @@ footer p {
     line-height: 42px;
   }
   .section-banner .banner-content h2.offer-message {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 36px;
     line-height: 42px;
     font-weight: 700;
@@ -5634,7 +5634,7 @@ footer p {
     line-height: 42px;
   }
   .section-banner .banner-content h2.offer-message {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 36px;
     line-height: 42px;
     font-weight: 700;
