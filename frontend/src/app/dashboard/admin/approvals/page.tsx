@@ -79,85 +79,83 @@ export default function CampaignApprovals() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaCheckSquare style={{ color: '#7cb032' }} /> Campaign Approvals
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading flex items-center gap-2.5">
+          <FaCheckSquare className="text-primary" /> Campaign Approvals
+        </h2>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review new campaign submissions and decide to Approve or Reject them.
         </p>
       </div>
 
       {success && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaCheckCircle className="text-base shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaExclamationCircle className="text-base shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading pending campaigns...</p>
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : campaigns.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
-          <FaExclamationCircle style={{ fontSize: '32px', color: '#ccc', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>No Pending Campaigns</h4>
-          <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-[24px] text-center bg-zinc-50">
+          <FaExclamationCircle className="text-4xl text-zinc-400 mx-auto mb-4" />
+          <h4 className="text-base font-bold text-zinc-900 m-0 mb-1 font-heading">No Pending Campaigns</h4>
+          <p className="text-sm text-zinc-500 m-0 font-medium">
             When creators launch new campaigns, they will be listed here for approval.
           </p>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>Campaign Details</th>
-                <th style={{ fontWeight: 'bold' }}>Creator</th>
-                <th style={{ fontWeight: 'bold' }}>Target (Credits)</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Actions</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Campaign Details</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Creator</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Target (Credits)</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {campaigns.map((c) => (
-                <tr key={c._id} style={{ verticalAlign: 'middle' }}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <tr key={c._id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors last:border-b-0">
+                  <td className="px-5 py-5">
+                    <div className="flex items-center gap-3.5">
                       <img
                         src={c.imageUrl}
                         alt={c.title}
-                        style={{ width: '60px', height: '45px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd' }}
+                        className="w-16 h-12 object-cover rounded-xl border border-zinc-200 shrink-0"
                       />
-                      <div style={{ minWidth: 0, maxWidth: '200px' }}>
-                        <p style={{ margin: 0, fontWeight: 'bold', color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.title}>{c.title}</p>
-                        <span className="label label-success" style={{ textTransform: 'uppercase', fontSize: '8px', fontWeight: 'bold', marginTop: '3px', display: 'inline-block' }}>
+                      <div className="min-w-0 max-w-[240px]">
+                        <p className="m-0 font-bold text-zinc-900 truncate" title={c.title}>{c.title}</p>
+                        <span className="inline-block bg-primary/10 text-primary text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-wider mt-1.5">
                           {c.category}
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>{c.creatorName}</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#777' }}>{c.creatorEmail}</p>
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-800">
+                    <p className="m-0 leading-tight">{c.creatorName}</p>
+                    <p className="m-0 text-[10px] text-zinc-400 font-semibold mt-1">{c.creatorEmail}</p>
                   </td>
-                  <td style={{ fontWeight: 'bold', color: '#333' }}>{c.fundingGoal} Credits</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-900 font-numbers">{c.fundingGoal} cr</td>
+                  <td className="px-5 py-5 text-center">
+                    <div className="flex gap-2 justify-center">
                       <Link
                         href={`/campaign/${c._id}`}
-                        className="btn"
-                        style={{ padding: '5px 10px', fontSize: '12px', background: '#eee', color: '#555' }}
+                        className="h-9 px-3 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-zinc-650 flex items-center justify-center transition-colors no-underline text-sm"
                         title="View Details"
                       >
                         <FaEye />
@@ -165,16 +163,14 @@ export default function CampaignApprovals() {
                       <button
                         onClick={() => handleApprove(c._id)}
                         disabled={processingId !== ''}
-                        className="btn btn-theme"
-                        style={{ padding: '5px 12px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        className="h-9 px-4.5 rounded-xl bg-emerald-650 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border-none cursor-pointer disabled:opacity-50"
                       >
                         <FaCheck /> Approve
                       </button>
                       <button
                         onClick={() => handleReject(c._id)}
                         disabled={processingId !== ''}
-                        className="btn"
-                        style={{ padding: '5px 12px', fontSize: '12px', background: '#d9534f', color: '#fff', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        className="h-9 px-4.5 rounded-xl bg-red-500 hover:bg-red-650 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border-none cursor-pointer disabled:opacity-50"
                       >
                         <FaTimes /> Reject
                       </button>

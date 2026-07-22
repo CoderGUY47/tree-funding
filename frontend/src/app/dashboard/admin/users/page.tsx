@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
-import { FaUsers, FaTrashAlt, FaExclamationTriangle, FaExclamationCircle, FaCheckCircle, FaUndoAlt } from 'react-icons/fa';
+import { FaUsers, FaTrashAlt, FaExclamationTriangle, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa';
 
 interface UserRecord {
   _id: string;
@@ -78,54 +78,53 @@ export default function ManageUsers() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaUsers style={{ color: '#7cb032' }} /> Manage Users
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading flex items-center gap-2.5">
+          <FaUsers className="text-primary" /> Manage Users
+        </h2>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review user accounts, update security clearances, or delete profiles from the server.
         </p>
       </div>
 
       {success && !deleteUserId && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaCheckCircle className="text-base shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && !deleteUserId && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaExclamationCircle className="text-base shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading user profiles...</p>
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>User</th>
-                <th style={{ fontWeight: 'bold' }}>Email</th>
-                <th style={{ fontWeight: 'bold' }}>Credits</th>
-                <th style={{ fontWeight: 'bold' }}>Modify Role</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Delete</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">User</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Email</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Credits</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Modify Role</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Delete</th>
               </tr>
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u._id} style={{ verticalAlign: 'middle' }}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <tr key={u._id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors last:border-b-0">
+                  <td className="px-5 py-5">
+                    <div className="flex items-center gap-3">
                       {u.photoUrl && 
                        u.photoUrl !== 'null' && 
                        u.photoUrl !== 'undefined' && 
@@ -134,39 +133,38 @@ export default function ManageUsers() {
                         <img
                           src={u.photoUrl}
                           alt={u.name}
-                          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #ddd' }}
+                          className="w-9 h-9 rounded-full object-cover border border-zinc-200 shrink-0"
                         />
                       ) : (
-                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#7cb032', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '12px' }}>
+                        <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs shrink-0 border border-primary/20">
                           {u.name.charAt(0).toUpperCase()}
                         </div>
                       )}
-                      <span style={{ fontWeight: 'bold', color: '#333' }}>{u.name}</span>
+                      <span className="font-bold text-zinc-900">{u.name}</span>
                     </div>
                   </td>
-                  <td>{u.email}</td>
-                  <td style={{ fontWeight: 'bold', color: '#333' }}>{u.credits} Credits</td>
-                  <td>
+                  <td className="px-5 py-5 text-sm text-zinc-750 font-medium">{u.email}</td>
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-850 font-numbers">{u.credits} cr</td>
+                  <td className="px-5 py-5">
                     <select
                       value={u.role}
                       disabled={updatingId === u._id || u.email === currentUser?.email}
                       onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                      style={{ padding: '5px 10px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '12px', background: '#fff' }}
+                      className="px-3.5 py-2.5 border border-zinc-200 rounded-xl text-xs bg-white text-zinc-800 outline-none focus:border-primary font-bold cursor-pointer"
                     >
                       <option value="Supporter">Supporter</option>
                       <option value="Creator">Creator</option>
                       <option value="Admin">Admin</option>
                     </select>
                   </td>
-                  <td style={{ textAlign: 'center' }}>
+                  <td className="px-5 py-5 text-center">
                     <button
                       onClick={() => setDeleteUserId(u._id)}
                       disabled={u.email === currentUser?.email}
-                      className="btn"
-                      style={{ padding: '4px 8px', fontSize: '12px', background: '#d9534f', color: '#fff' }}
+                      className="w-8 h-8 rounded-xl bg-red-50 text-red-650 hover:bg-red-500 hover:text-white border border-red-100 flex items-center justify-center transition-all cursor-pointer disabled:opacity-40 mx-auto"
                       title="Remove User"
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt className="text-sm" />
                     </button>
                   </td>
                 </tr>
@@ -178,27 +176,25 @@ export default function ManageUsers() {
 
       {/* Delete User Modal */}
       {deleteUserId && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '4px', width: '100%', maxWidth: '400px', padding: '25px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', textAlign: 'center' }}>
-            
-            <div style={{ color: '#d9534f', fontSize: '40px', marginBottom: '15px' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="bg-white rounded-[24px] w-full max-w-sm p-8 shadow-2xl text-center animate-in zoom-in-95 duration-200">
+            <div className="text-red-500 text-4xl mb-4.5 flex justify-center">
               <FaExclamationTriangle />
             </div>
 
-            <h4 style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#333', fontSize: '16px' }}>
+            <h4 className="m-0 mb-2 font-bold text-zinc-900 text-base font-heading">
               Remove User Profile
             </h4>
 
-            <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6', marginBottom: '20px' }}>
+            <p className="text-xs text-zinc-500 leading-relaxed m-0 mb-6 font-semibold">
               Are you sure you want to permanently delete this user account? They will lose all database records and platform access.
             </p>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setDeleteUserId('')}
-                className="btn"
-                style={{ width: '50%', background: '#eee', color: '#555', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                className="w-1/2 bg-zinc-100 hover:bg-zinc-200 text-xs font-bold text-zinc-650 py-3 rounded-xl border-none cursor-pointer transition-colors"
               >
                 Cancel
               </button>
@@ -206,13 +202,11 @@ export default function ManageUsers() {
                 type="button"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
-                className="btn"
-                style={{ width: '50%', background: '#d9534f', color: '#fff', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                className="w-1/2 bg-red-500 hover:bg-red-650 text-xs font-bold text-white py-3 rounded-xl border-none cursor-pointer transition-colors"
               >
                 {deleting ? 'Removing...' : 'Delete Account'}
               </button>
             </div>
-
           </div>
         </div>
       )}

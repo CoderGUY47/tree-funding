@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs');
 const seedAdmin = async () => {
   const User = require('../models/User');
   try {
-    const adminEmail = 'admin@treefunding.com';
+    const adminEmail = 'admin@gmail.com';
     const existingAdmin = await User.findOne({ email: adminEmail });
     
     if (!existingAdmin) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('adminpassword123', salt);
+      const hashedPassword = await bcrypt.hash('treefund123', salt);
       
       const defaultAdmin = new User({
         name: 'System Administrator',

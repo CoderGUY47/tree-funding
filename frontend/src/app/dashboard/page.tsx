@@ -25,8 +25,8 @@ export default function DashboardRouter() {
   }, [user, loading, router]);
 
   return (
-    <div className="flex h-96 items-center justify-center bg-zinc-950">
-      <div className="h-10 w-10 rounded-full border-4 border-zinc-800 border-t-emerald-500 animate-spin" />
+    <div className="flex h-96 items-center justify-center bg-transparent">
+      <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
     </div>
   );
 }

@@ -137,12 +137,12 @@ export default function MyContributions() {
 
       {loading ? (
         <div className="flex h-60 items-center justify-center">
-          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : (
         <div className="flex flex-col gap-6">
 
-          <div className="overflow-x-auto border border-zinc-100 rounded-2xl shadow-sm">
+          <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
             <table className="w-full border-collapse bg-white">
               <thead>
                 <tr className="bg-zinc-50 border-b border-zinc-100">

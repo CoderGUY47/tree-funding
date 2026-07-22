@@ -5,14 +5,25 @@
 @custom-variant dark (&:is(.dark *));
 
 body, p, input, select, textarea, button, li, a, span, label, td, th {
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 }
 
 h1, h2, h3, h4, h5, h6, .logo span, .logo a {
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.font-numbers {
+  font-family: 'Space Grotesk', sans-serif !important;
 }
 
 @theme inline {
+  --color-primary: #5B5FEF;
+  --color-secondary: #7C3AED;
+  --color-accent: #00C2A8;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -46,13 +57,13 @@ h1, h2, h3, h4, h5, h6, .logo span, .logo a {
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 0.75rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 0.75rem;
+  --radius-4xl: 0.75rem;
 }
 
 :root {
@@ -79,7 +90,7 @@ h1, h2, h3, h4, h5, h6, .logo span, .logo a {
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);

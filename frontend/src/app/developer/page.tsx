@@ -1,17 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import PageBanner from '@/components/PageBanner';
+import { motion } from 'framer-motion';
 import { 
   FaGithub, 
-  FaLinkedinIn, 
   FaEnvelope, 
   FaCode, 
   FaGlobe, 
   FaUsers,
-  FaCheckCircle
+  FaCheckCircle,
+  FaServer,
+  FaShieldAlt,
+  FaLeaf,
+  FaChartLine
 } from 'react-icons/fa';
 
 export default function DeveloperProfile() {
@@ -111,245 +116,469 @@ export default function DeveloperProfile() {
     }
   ];
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100 } }
+  };
+
   return (
-    <div style={{ background: '#fcfdfa', minHeight: '100vh' }}>
+    <div className="bg-[#F8FAFC] min-h-screen flex flex-col font-sans">
       <Navbar />
 
-      {/* Unique Card Styles */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+      <PageBanner
+        title="Join As Developer"
+        bgImage="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Team' },
+          { label: 'Directory' },
+        ]}
+      />
 
-        .dev-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 30px;
-          margin-top: 40px;
-        }
-        .dev-card {
-          background: #ffffff;
-          border: 1px solid #eef2eb;
-          border-radius: 16px;
-          overflow: hidden;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-        }
-        .dev-card:hover {
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-          border-color: #7cb032;
-        }
-        .dev-image-wrapper {
-          position: relative;
-          width: 100%;
-          height: 240px;
-          overflow: hidden;
-          background: #f5f7f3;
-        }
-        .dev-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-        .dev-card:hover .dev-image {
-          transform: scale(1.08);
-        }
-        .dev-category-badge {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          background: rgba(18, 20, 15, 0.75);
-          backdrop-filter: blur(4px);
-          color: #7cb032;
-          font-size: 10px;
-          font-weight: bold;
-          text-transform: uppercase;
-          padding: 4px 12px;
-          border-radius: 20px;
-          letter-spacing: 0.5px;
-          z-index: 2;
-        }
-        .dev-info {
-          padding: 25px;
-          text-align: left;
-          position: relative;
-        }
-        .dev-name {
-          font-family: 'Outfit', sans-serif;
-          font-size: 20px;
-          font-weight: 800;
-          color: #0b0c0a;
-          margin: 0 0 5px 0;
-          text-transform: uppercase;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          letter-spacing: -0.3px;
-        }
-        .dev-role {
-          font-size: 12px;
-          color: #7cb032;
-          font-weight: bold;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin: 0 0 15px 0;
-        }
-        .dev-skills-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          margin-bottom: 20px;
-        }
-        .dev-skill-tag {
-          font-size: 10px;
-          background: #f5f7f3;
-          color: #656b60;
-          padding: 2px 8px;
-          border-radius: 4px;
-          font-weight: bold;
-        }
-        .dev-card-footer {
-          border-top: 1px solid #f2f5f0;
-          padding-top: 15px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .dev-contact-btn {
-          font-size: 12px;
-          color: #656b60;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          transition: color 0.2s;
-        }
-        .dev-contact-btn:hover {
-          color: #7cb032;
-        }
-        .dev-social-link {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          background: #f5f7f3;
-          color: #656b60;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          transition: all 0.2s;
-        }
-        .dev-social-link:hover {
-          background: #7cb032;
-          color: #ffffff;
-        }
-      ` }} />
-
-      {/* HEADER HERO SECTION */}
-      <section 
-        className="page-header" 
-        style={{
-          backgroundImage: `linear-gradient(rgba(18, 20, 15, 0.75), rgba(18, 20, 15, 0.85)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          padding: '120px 0 100px 0',
-          color: '#fff',
-          textAlign: 'center'
-        }}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12">
-              <span style={{ background: '#7cb032', color: '#000', padding: '6px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', display: 'inline-block', marginBottom: '15px' }}>
-                Engineering Directory
-              </span>
-              <h1 style={{ color: '#fff', fontSize: '42px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '-0.5px', margin: '0 0 10px 0' }}>
-                Join As Developer
-              </h1>
-              <p className="page-breadcrumb" style={{ fontSize: '13px', color: '#ccc', marginTop: '10px' }}>
-                <Link href="/" style={{ color: '#7cb032', fontWeight: 'bold' }}>Home</Link> / Team / Directory
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 10 CARDS GRID SECTION */}
-      <section className="section-content-block" style={{ padding: '80px 0 60px 0' }}>
-        <div className="container">
+      {/* BENTO GRID TEAM SECTION */}
+      <section className="py-20 flex-grow">
+        <div className="container mx-auto px-6 max-w-[1400px]">
           
-          <div className="row text-center">
-            <div className="col-sm-12">
-              <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e211c', textTransform: 'uppercase', marginBottom: '10px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-                <FaUsers style={{ color: '#7cb032' }} /> Meet the Engineering Team
-              </h2>
-              <p style={{ color: '#656b60', fontSize: '14px', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 50px auto' }}>
-                Discover the 10 engineers, security auditors, developers, and designers who collaborated to deploy the TreeFund crowdfunding platform.
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight m-0 font-heading flex items-center justify-center gap-2.5">
+              <FaUsers className="text-primary" /> Meet the Engineering Team
+            </h2>
+            <p className="text-zinc-500 text-sm mt-3.5 max-w-lg mx-auto font-semibold leading-relaxed">
+              Discover the engineers, compliance managers, and designers who deployed the TreeFund crowdfunding workspace.
+            </p>
           </div>
 
-          <div className="dev-grid">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="dev-card">
-                <div className="dev-image-wrapper">
-                  <span className="dev-category-badge">{member.category}</span>
-                  <img src={member.avatar} alt={member.name} className="dev-image" />
+          {/* Bento grid layout */}
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left"
+          >
+            
+            {/* Bento Card 1: Large Text Banner (About Team) */}
+            <motion.div 
+              variants={itemVariants}
+              className="lg:col-span-2 border border-zinc-200 bg-white p-8 rounded-[7px] flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-10 h-10 rounded-[7px] bg-primary/10 text-primary flex items-center justify-center text-lg">
+                  <FaCode />
                 </div>
-                
-                <div className="dev-info">
-                  <h4 className="dev-name">
-                    {member.name}
-                    {member.category === 'Director' && <FaCheckCircle style={{ color: '#7cb032', fontSize: '14px' }} />}
-                  </h4>
-                  <p className="dev-role">{member.role}</p>
-                  
-                  <div className="dev-skills-container">
-                    {member.skills.map((skill, sIdx) => (
-                      <span key={sIdx} className="dev-skill-tag">{skill}</span>
-                    ))}
-                  </div>
-                  
-                  <div className="dev-card-footer">
-                    <a href={`mailto:${member.email}`} className="dev-contact-btn">
-                      <FaEnvelope style={{ color: '#7cb032' }} /> Contact
-                    </a>
-                    <a href={member.github} target="_blank" rel="noopener noreferrer" className="dev-social-link" title="GitHub">
-                      <FaGithub />
-                    </a>
-                  </div>
+                <h3 className="text-2xl font-black text-zinc-900 font-heading m-0 uppercase tracking-tight">
+                  High-Impact Eco Engineering
+                </h3>
+                <p className="text-sm text-zinc-500 font-semibold leading-relaxed m-0">
+                  Our development team balances micro-planting campaign architecture, Stripe ledger allocations, and Better Auth authentication security layers. We build local-first sandbox testing environments for carbon credits and withdrawal audit pipelines.
+                </p>
+              </div>
+              <div className="flex gap-4 mt-6 border-t border-zinc-100 pt-5">
+                <div>
+                  <span className="text-2xl font-bold text-primary font-numbers">10</span>
+                  <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider block mt-1">Core Builders</span>
+                </div>
+                <div className="border-l border-zinc-200 pl-4">
+                  <span className="text-2xl font-bold text-primary font-numbers">99.8%</span>
+                  <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider block mt-1">Uptime Goal</span>
                 </div>
               </div>
-            ))}
-          </div>
+            </motion.div>
 
+            {/* Bento Card 2: Team Member - CODERGUY */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[0].category}
+                </span>
+                <img src={teamMembers[0].avatar} alt={teamMembers[0].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 flex items-center gap-1.5 font-heading">
+                    {teamMembers[0].name}
+                    <FaCheckCircle className="text-emerald-500 text-sm" />
+                  </h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[0].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[0].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[0].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[0].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 3: Team Member - Sarah Jenkins */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[1].category}
+                </span>
+                <img src={teamMembers[1].avatar} alt={teamMembers[1].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[1].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[1].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[1].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[1].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[1].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 4: Team Member - Marcus Chen */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[2].category}
+                </span>
+                <img src={teamMembers[2].avatar} alt={teamMembers[2].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[2].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[2].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[2].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[2].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[2].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 5: Text Block - Tech Stack & Architecture */}
+            <motion.div 
+              variants={itemVariants}
+              className="border border-zinc-200 bg-zinc-900 text-white p-6 rounded-[7px] flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow"
+            >
+              <div className="flex flex-col gap-3">
+                <div className="w-9 h-9 rounded-[7px] bg-white/10 text-white flex items-center justify-center text-sm">
+                  <FaServer />
+                </div>
+                <h4 className="text-sm font-bold uppercase tracking-wider m-0 text-primary">System Ledger Security</h4>
+                <p className="text-xs text-zinc-400 font-semibold leading-relaxed m-0">
+                  Transactions are logged sequentially in MongoDB using cryptographically linked credit values. This isolates client checkout operations from network payout errors.
+                </p>
+              </div>
+              <div className="text-[10px] text-zinc-500 font-black uppercase tracking-wider mt-4">
+                Architecture Standard
+              </div>
+            </motion.div>
+
+            {/* Bento Card 6: Team Member - Elena Rostova */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[3].category}
+                </span>
+                <img src={teamMembers[3].avatar} alt={teamMembers[3].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[3].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[3].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[3].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[3].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[3].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 7: Team Member - David Kross */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[4].category}
+                </span>
+                <img src={teamMembers[4].avatar} alt={teamMembers[4].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[4].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[4].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[4].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[4].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[4].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 8: Large Text Banner - DevOps & Quality Assurance Values */}
+            <motion.div 
+              variants={itemVariants}
+              className="lg:col-span-2 border border-zinc-200 bg-white p-8 rounded-[7px] flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-10 h-10 rounded-[7px] bg-primary/10 text-primary flex items-center justify-center text-lg">
+                  <FaShieldAlt />
+                </div>
+                <h3 className="text-2xl font-black text-zinc-900 font-heading m-0 uppercase tracking-tight">
+                  Security Compliance & Automated Testing
+                </h3>
+                <p className="text-sm text-zinc-500 font-semibold leading-relaxed m-0">
+                  Every deployment undergoes rigorous unit checks and schema validation. We verify authentication routes utilizing NextJS mock routes and protect against cross-site scripting vulnerabilities dynamically.
+                </p>
+              </div>
+              <div className="flex gap-4 mt-6 border-t border-zinc-100 pt-5">
+                <div>
+                  <span className="text-2xl font-bold text-primary font-numbers">95%</span>
+                  <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider block mt-1">Test Coverage</span>
+                </div>
+                <div className="border-l border-zinc-200 pl-4">
+                  <span className="text-2xl font-bold text-primary font-numbers">SOC2</span>
+                  <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider block mt-1">Compliance Target</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 9: Team Member - Aisha Rahman */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[5].category}
+                </span>
+                <img src={teamMembers[5].avatar} alt={teamMembers[5].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[5].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[5].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[5].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[5].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[5].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 10: Team Member - Kenji Sato */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[6].category}
+                </span>
+                <img src={teamMembers[6].avatar} alt={teamMembers[6].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[6].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[6].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[6].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[6].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[6].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 11: Team Member - Sophia Martinez */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[7].category}
+                </span>
+                <img src={teamMembers[7].avatar} alt={teamMembers[7].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[7].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[7].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[7].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[7].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[7].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 12: Text Block - Environmental Mission */}
+            <motion.div 
+              variants={itemVariants}
+              className="border border-zinc-200 bg-emerald-900 text-white p-6 rounded-[7px] flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow"
+            >
+              <div className="flex flex-col gap-3">
+                <div className="w-9 h-9 rounded-[7px] bg-white/10 text-white flex items-center justify-center text-sm">
+                  <FaLeaf />
+                </div>
+                <h4 className="text-sm font-bold uppercase tracking-wider m-0 text-emerald-400">Green Restoration</h4>
+                <p className="text-xs text-zinc-200 font-semibold leading-relaxed m-0">
+                  TreeFund channels funding into micro-planting projects, targeting regions like Sundarbans and deforested urban campuses to rebuild soil ecosystems.
+                </p>
+              </div>
+              <div className="text-[10px] text-emerald-450 font-black uppercase tracking-wider mt-4">
+                Climate Initiative
+              </div>
+            </motion.div>
+
+            {/* Bento Card 13: Team Member - Liam Gallagher */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[8].category}
+                </span>
+                <img src={teamMembers[8].avatar} alt={teamMembers[8].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[8].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[8].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[8].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[8].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[8].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 14: Team Member - Olivia Vance */}
+            <motion.div variants={itemVariants} className="border border-zinc-200 bg-white rounded-[7px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="h-52 relative overflow-hidden bg-zinc-50 shrink-0">
+                <span className="absolute top-4 right-4 bg-[#5B5FEF] text-white text-[9px] font-black px-3 py-1.5 rounded-[7px] uppercase tracking-wider z-10 shadow-sm">
+                  {teamMembers[9].category}
+                </span>
+                <img src={teamMembers[9].avatar} alt={teamMembers[9].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 m-0 mb-1.5 font-heading">{teamMembers[9].name}</h4>
+                  <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide m-0 mb-4">{teamMembers[9].role}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {teamMembers[9].skills.map((skill, idx) => (
+                      <span key={idx} className="text-[10px] bg-zinc-100 text-zinc-600 px-2 py-1 rounded-[7px] font-bold">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="border-t border-zinc-100 pt-4 flex justify-between items-center">
+                  <a href={`mailto:${teamMembers[9].email}`} className="text-xs sm:text-sm font-bold text-zinc-500 hover:text-primary transition-colors no-underline flex items-center gap-1.5">
+                    <FaEnvelope className="text-primary text-sm" /> Contact
+                  </a>
+                  <a href={teamMembers[9].github} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-[7px] bg-zinc-100 text-zinc-500 hover:bg-primary hover:text-white transition-all flex items-center justify-center text-xs" title="GitHub">
+                    <FaGithub />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+          </motion.div>
         </div>
       </section>
 
       {/* REPOSITORY CALL TO ACTION */}
-      <section style={{ padding: '40px 0 80px 0', background: '#fcfdfa' }}>
-        <div className="container text-center">
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #eef2eb',
-            borderRadius: '12px',
-            padding: '40px',
-            boxShadow: '0 4px 20px rgba(124, 176, 50, 0.02)',
-            maxWidth: '760px',
-            margin: '0 auto'
-          }}>
-            <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e211c', margin: '0 0 10px 0', textTransform: 'uppercase' }}>
+      <section className="py-16 bg-[#F8FAFC] border-t border-zinc-200">
+        <div className="container mx-auto px-6 max-w-2xl text-center">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="bg-white border border-zinc-200 rounded-[7px] p-10 shadow-xs"
+          >
+            <h3 className="text-base font-extrabold text-zinc-900 m-0 uppercase tracking-wider mb-2 font-heading">
               Explore the Project Source Code
             </h3>
-            <p style={{ color: '#656b60', fontSize: '14px', marginBottom: '25px' }}>
+            <p className="text-xs text-zinc-500 leading-relaxed m-0 mb-6 font-semibold">
               Access the frontend client and API server repositories on GitHub to see our codebase, database models, and deployment configurations.
             </p>
-            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div className="flex gap-4.5 justify-center flex-wrap">
               <a 
                 href={clientRepo} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="btn btn-theme text-uppercase"
-                style={{ padding: '12px 30px', fontSize: '12px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+                className="h-11 px-6 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 rounded-[7px] border-none no-underline transition-colors cursor-pointer"
               >
                 <FaCode /> Client Repository
               </a>
@@ -357,13 +586,12 @@ export default function DeveloperProfile() {
                 href={serverRepo} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="btn btn-pure-dark-bg text-uppercase"
-                style={{ padding: '12px 30px', fontSize: '12px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '8px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: '#1e211c', color: '#fff' }}
+                className="h-11 px-6 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 rounded-[7px] border-none no-underline transition-colors cursor-pointer"
               >
                 <FaGlobe /> Server Repository
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 

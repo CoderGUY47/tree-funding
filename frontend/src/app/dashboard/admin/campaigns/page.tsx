@@ -70,19 +70,19 @@ export default function ManageCampaigns() {
     switch (status) {
       case 'approved':
         return (
-          <span className="label label-success" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span className="inline-flex items-center bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-emerald-100">
             Approved
           </span>
         );
       case 'rejected':
         return (
-          <span className="label label-danger" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span className="inline-flex items-center bg-red-50 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-red-200">
             Rejected
           </span>
         );
       default:
         return (
-          <span className="label label-warning" style={{ textTransform: 'uppercase', fontSize: '9px', fontWeight: 'bold' }}>
+          <span className="inline-flex items-center bg-amber-50 text-amber-750 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-amber-100">
             Pending
           </span>
         );
@@ -90,85 +90,82 @@ export default function ManageCampaigns() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaFileAlt style={{ color: '#7cb032' }} /> Manage Campaigns
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading flex items-center gap-2.5">
+          <FaFileAlt className="text-primary" /> Manage Campaigns
+        </h2>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Monitor all campaigns created on the platform. Deleting a campaign initiates automatic backer refunds.
         </p>
       </div>
 
       {success && !deleteId && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaCheckCircle className="text-base shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && !deleteId && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaExclamationCircle className="text-base shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading campaigns directory...</p>
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : campaigns.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
-          <FaExclamationCircle style={{ fontSize: '32px', color: '#ccc', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>No Campaigns Found</h4>
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-[24px] text-center bg-zinc-50">
+          <FaExclamationCircle className="text-4xl text-zinc-400 mx-auto mb-4" />
+          <h4 className="text-base font-bold text-zinc-900 m-0 font-heading">No Campaigns Found</h4>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>Campaign Name</th>
-                <th style={{ fontWeight: 'bold' }}>Creator</th>
-                <th style={{ fontWeight: 'bold' }}>Goal / Raised</th>
-                <th style={{ fontWeight: 'bold' }}>Status</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Actions</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Campaign Name</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Creator</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Goal / Raised</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Status</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {campaigns.map((c) => (
-                <tr key={c._id} style={{ verticalAlign: 'middle' }}>
-                  <td style={{ fontWeight: 'bold', color: '#333', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.title}>
+                <tr key={c._id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors last:border-b-0">
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-900 max-w-[200px] truncate" title={c.title}>
                     {c.title}
                   </td>
-                  <td>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>{c.creatorName}</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#777' }}>{c.creatorEmail}</p>
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-800">
+                    <p className="m-0 leading-tight">{c.creatorName}</p>
+                    <p className="m-0 text-[10px] text-zinc-400 font-semibold mt-1">{c.creatorEmail}</p>
                   </td>
-                  <td>
-                    Goal: {c.fundingGoal} Credits / <span style={{ color: '#7cb032', fontWeight: 'bold' }}>{c.amountRaised} Credits</span>
+                  <td className="px-5 py-5 text-xs text-zinc-500">
+                    Goal: <strong className="text-zinc-800">{c.fundingGoal} cr</strong> / Raised: <strong className="text-primary font-bold">{c.amountRaised} cr</strong>
                   </td>
-                  <td>{getStatusLabel(c.status)}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+                  <td className="px-5 py-5">{getStatusLabel(c.status)}</td>
+                  <td className="px-5 py-5 text-center">
+                    <div className="flex gap-2 justify-center">
                       <Link
                         href={`/campaign/${c._id}`}
-                        className="btn"
-                        style={{ padding: '4px 8px', fontSize: '12px', background: '#eee', color: '#555' }}
+                        className="h-9 px-3 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-zinc-650 flex items-center justify-center transition-colors no-underline text-sm"
                         title="View Details"
                       >
                         <FaEye />
                       </Link>
                       <button
                         onClick={() => setDeleteId(c._id)}
-                        className="btn"
-                        style={{ padding: '4px 8px', fontSize: '12px', background: '#d9534f', color: '#fff' }}
+                        className="h-9 w-9 rounded-xl bg-red-50 text-red-650 hover:bg-red-500 hover:text-white border border-red-100 flex items-center justify-center transition-all cursor-pointer"
                         title="Delete & Refund"
                       >
-                        <FaTrashAlt />
+                        <FaTrashAlt className="text-sm" />
                       </button>
                     </div>
                   </td>
@@ -181,27 +178,25 @@ export default function ManageCampaigns() {
 
       {/* Delete Campaign Confirmation Modal */}
       {deleteId && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '4px', width: '100%', maxWidth: '400px', padding: '25px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', textAlign: 'center' }}>
-            
-            <div style={{ color: '#d9534f', fontSize: '40px', marginBottom: '15px' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="bg-white rounded-[24px] w-full max-w-sm p-8 shadow-2xl text-center animate-in zoom-in-95 duration-200">
+            <div className="text-red-500 text-4xl mb-4.5 flex justify-center">
               <FaUndoAlt />
             </div>
 
-            <h4 style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#333', fontSize: '16px' }}>
+            <h4 className="m-0 mb-2 font-bold text-zinc-900 text-base font-heading">
               Remove Campaign
             </h4>
 
-            <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6', marginBottom: '20px' }}>
+            <p className="text-xs text-zinc-500 leading-relaxed m-0 mb-6 font-semibold">
               Are you sure you want to delete this campaign? This action is irreversible. All approved supporter contributions will be refunded to their credit accounts.
             </p>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setDeleteId('')}
-                className="btn"
-                style={{ width: '50%', background: '#eee', color: '#555', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                className="w-1/2 bg-zinc-100 hover:bg-zinc-200 text-xs font-bold text-zinc-650 py-3 rounded-xl border-none cursor-pointer transition-colors"
               >
                 No, Keep it
               </button>
@@ -209,13 +204,11 @@ export default function ManageCampaigns() {
                 type="button"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
-                className="btn"
-                style={{ width: '50%', background: '#d9534f', color: '#fff', padding: '10px', fontSize: '12px', fontWeight: 'bold' }}
+                className="w-1/2 bg-red-500 hover:bg-red-650 text-xs font-bold text-white py-3 rounded-xl border-none cursor-pointer transition-colors"
               >
                 {deleting ? 'Refunding...' : 'Yes, Delete & Refund'}
               </button>
             </div>
-
           </div>
         </div>
       )}

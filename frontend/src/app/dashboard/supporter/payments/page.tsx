@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
-import { Card } from '@/components/ui/card';
 
 interface PaymentRecord {
   _id: string;
@@ -58,67 +57,61 @@ export default function SupporterPayments() {
   }, []);
 
   return (
-    <div style={{ textAlign: 'left', background: '#ffffff', padding: '10px' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title */}
-      <div style={{ marginBottom: '35px', borderBottom: '1px solid #eef2eb', paddingBottom: '20px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1e211c', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading">
           Payment History
         </h2>
-        <p style={{ fontSize: '14px', color: '#656b60', marginTop: '6px', fontWeight: '500' }}>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review all your processed Stripe credit packages checkout transactions.
         </p>
       </div>
 
       {loading ? (
-        <div style={{ display: 'flex', height: '240px', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : (
-        <div style={{ overflowX: 'auto', border: '1px solid #eef2eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', background: '#ffffff' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#fcfdfa', borderBottom: '1px solid #eef2eb' }}>
-                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Transaction Date</th>
-                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Credits Purchased</th>
-                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Amount Paid (USD)</th>
-                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Stripe Intent ID</th>
-                <th style={{ padding: '16px 20px', fontSize: '13px', textTransform: 'uppercase', color: '#656b60', fontWeight: 'bold', textAlign: 'left', letterSpacing: '0.5px' }}>Status</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Transaction Date</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Credits Purchased</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Amount Paid (USD)</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Stripe Intent ID</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody>
-              {payments.map((pay, index) => (
+              {payments.map((pay) => (
                 <tr 
                   key={pay._id} 
-                  style={{ 
-                    borderBottom: index === payments.length - 1 ? 'none' : '1px solid #eef2eb',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#fcfdfa'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                  className="border-b border-zinc-100 last:border-b-0 hover:bg-zinc-50 transition-colors duration-150"
                 >
-                  <td style={{ padding: '20px', fontSize: '14px', color: '#1e211c', fontWeight: '500' }}>
-                    {new Date(pay.createdAt).toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-900">
+                    {new Date(pay.createdAt).toLocaleDateString(undefined, { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </td>
-                  <td style={{ padding: '20px', fontSize: '16px', fontWeight: 'bold', color: '#7cb032' }}>+{pay.credits} credits</td>
-                  <td style={{ padding: '20px', fontSize: '15px', fontWeight: 'bold', color: '#1e211c' }}>${pay.amount}.00</td>
-                  <td style={{ padding: '20px', fontSize: '13px', color: '#656b60' }}>
+                  <td className="px-5 py-5 text-sm font-bold text-primary font-numbers">
+                    +{pay.credits} cr
+                  </td>
+                  <td className="px-5 py-5 text-sm font-bold text-emerald-600 font-numbers">
+                    ${pay.amount.toFixed(2)} USD
+                  </td>
+                  <td className="px-5 py-5 text-xs text-zinc-400 font-mono">
                     {pay.paymentIntentId}
                   </td>
-                  <td style={{ padding: '20px' }}>
-                    <span style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      background: '#eaf4db',
-                      color: '#56801b',
-                      padding: '4px 12px',
-                      borderRadius: '20px',
-                      fontSize: '11px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      border: '1px solid #c9e2a3'
-                    }}>
-                      Succeeded
+                  <td className="px-5 py-5">
+                    <span className="inline-flex items-center bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase border border-emerald-100">
+                      {pay.status}
                     </span>
                   </td>
                 </tr>

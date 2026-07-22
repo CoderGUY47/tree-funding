@@ -206,7 +206,7 @@ export default function SupporterExplore() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 text-xs font-bold uppercase rounded-lg border transition-all cursor-pointer ${
+              className={`px-4 py-2 text-xs font-bold uppercase rounded-xl border transition-all cursor-pointer ${
                 selectedCategory === cat
                   ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-zinc-800 border-zinc-200 hover:bg-zinc-50'
@@ -224,7 +224,7 @@ export default function SupporterExplore() {
           <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin" />
         </div>
       ) : filteredCampaigns.length === 0 ? (
-        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-2xl text-center bg-zinc-50">
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-xl text-center bg-zinc-50">
           <FaSearch className="text-4xl text-zinc-400 mx-auto mb-4" />
           <h4 className="text-base font-bold text-zinc-900 m-0 mb-1">No campaigns found</h4>
           <p className="text-sm text-zinc-500 m-0">Try searching for a different keyword or category.</p>
@@ -235,7 +235,7 @@ export default function SupporterExplore() {
             const progressPercent = Math.min(100, Math.round((camp.amountRaised / camp.fundingGoal) * 100));
             const daysRemaining = Math.max(0, Math.ceil((new Date(camp.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
             return (
-              <div key={camp._id} className="border border-zinc-100 bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col h-full hover:shadow-md transition-shadow duration-200">
+              <div key={camp._id} className="border border-zinc-100 bg-white rounded-xl overflow-hidden shadow-sm flex flex-col h-full hover:shadow-md transition-shadow duration-200">
 
                 {/* Image */}
                 <div className="h-48 relative overflow-hidden bg-zinc-100">
@@ -290,7 +290,7 @@ export default function SupporterExplore() {
       {/* POPUP DETAILS AND CONTRIBUTION MODAL */}
       {selectedCampaign && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+          <div className="bg-white rounded-xl w-full max-w-lg p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
 
             {/* Header */}
             <div className="flex justify-between items-center border-b border-zinc-100 pb-4 mb-5">

@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import PageBanner from '@/components/PageBanner';
 import { 
   FaTachometerAlt, 
   FaHeart, 
@@ -46,13 +48,10 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div>
-        <Navbar />
-        <div className="container text-center py-32">
-          <div className="h-12 w-12 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p className="mt-4 text-zinc-500 text-sm">Checking credentials...</p>
+      <div className="bg-[#F8FAFC] min-h-screen flex flex-col font-sans">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin mx-auto" />
         </div>
-        <Footer />
       </div>
     );
   }
@@ -99,48 +98,32 @@ export default function DashboardLayout({
   const links = getSidebarLinks();
 
   return (
-    <div>
+    <div className="bg-[#F8FAFC] min-h-screen flex flex-col font-sans">
       <Navbar />
 
-      {/* PAGE HEADER */}
-      <section
-        className="page-header"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55)), url('/images/home_1_slider_1.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          padding: '65px 0',
-          color: '#fff'
-        }}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12 text-center">
-              <h3 className="text-white text-3xl font-bold uppercase">
-                Dashboard Workspace
-              </h3>
-              <p className="text-xs text-zinc-300 mt-2">
-                <Link href="/" className="text-zinc-300 hover:text-white no-underline">Home</Link> / Dashboard
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageBanner
+        title="Dashboard Workspace"
+        bgImage="/images/home_1_slider_1.jpg"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Dashboard' },
+        ]}
+      />
 
       {/* MAIN WORKSPACE COLUMNS */}
-      <section className="section-content-block bg-zinc-50">
-        <div className="container">
-          <div className="row">
+      <section className="py-12 flex-grow bg-[#F8FAFC]">
+        <div className="container mx-auto px-6 max-w-[1400px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
             {/* SIDEBAR NAVIGATION COLUMN */}
-            <div className="col-md-3 col-sm-12 mb-8">
-              <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
+            <div className="lg:col-span-3">
+              <div className="bg-white border border-zinc-200 p-6 rounded-[24px] shadow-xs text-left">
 
                 {/* Profile Card: User Image | Available Credits */}
-                <div className="border-b border-zinc-100 pb-4 mb-5">
+                <div className="border-b border-zinc-150 pb-5 mb-5">
 
                   {/* Row 1: Avatar + Credits */}
-                  <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="flex items-center justify-between gap-3 mb-4">
                     {/* User Image */}
                     {user.photoUrl &&
                      user.photoUrl !== 'null' &&
@@ -152,19 +135,19 @@ export default function DashboardLayout({
                         src={user.photoUrl}
                         alt="Profile"
                         onError={() => setImageError(true)}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-emerald-500 shrink-0"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary shrink-0"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-base shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm shrink-0">
                         {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                       </div>
                     )}
 
                     {/* Available Credits */}
                     <div className="flex flex-col items-end">
-                      <span className="text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Available Credits</span>
-                      <span className="flex items-center gap-1 text-emerald-600 font-extrabold text-base leading-none mt-0.5">
-                        <FaCoins className="text-emerald-500 text-xs" />
+                      <span className="text-[9px] text-zinc-400 uppercase font-black tracking-wider">Credits Available</span>
+                      <span className="flex items-center gap-1 text-primary font-bold text-base leading-none mt-1 font-numbers">
+                        <FaCoins className="text-amber-500 text-xs" />
                         {user.credits}
                       </span>
                     </div>
@@ -172,8 +155,8 @@ export default function DashboardLayout({
 
                   {/* Row 2: User Name | User Role */}
                   <div>
-                    <h5 className="m-0 font-bold text-sm text-zinc-800">{user.name}</h5>
-                    <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1 mt-1">
+                    <h5 className="m-0 font-bold text-sm text-zinc-900 leading-tight">{user.name}</h5>
+                    <span className="text-[9px] font-bold text-primary uppercase tracking-widest flex items-center gap-1 mt-1.5">
                       {user.role === 'Admin' ? <FaShieldAlt /> : <FaBriefcase />} {user.role}
                     </span>
                   </div>
@@ -181,7 +164,7 @@ export default function DashboardLayout({
                 </div>
 
                 {/* Sidebar Navigation label */}
-                <h4 className="text-xs text-zinc-700 uppercase font-bold mb-3 border-b border-zinc-100 pb-2 tracking-widest">
+                <h4 className="text-[10px] text-zinc-400 uppercase font-black mb-3 border-b border-zinc-100 pb-2 tracking-widest">
                   Workspace Menus
                 </h4>
 
@@ -192,13 +175,13 @@ export default function DashboardLayout({
                       <li key={link.path}>
                         <Link
                           href={link.path}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold no-underline transition-all duration-200 ${
+                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold no-underline transition-all duration-200 ${
                             isActive
-                              ? 'bg-emerald-500 text-white'
-                              : 'text-zinc-800 hover:bg-zinc-50 hover:border hover:border-zinc-200'
+                              ? 'bg-primary text-white shadow-xs'
+                              : 'text-zinc-700 hover:bg-zinc-50'
                           }`}
                         >
-                          <span className={`text-base inline-flex ${isActive ? 'text-white' : 'text-emerald-500'}`}>
+                          <span className={`text-sm inline-flex ${isActive ? 'text-white' : 'text-primary'}`}>
                             {link.icon}
                           </span>
                           {link.label}
@@ -212,8 +195,8 @@ export default function DashboardLayout({
             </div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="col-md-9 col-sm-12">
-              <div className="bg-white border border-zinc-200 p-8 rounded-xl shadow-sm min-h-96">
+            <div className="lg:col-span-9 text-left">
+              <div className="bg-white border border-zinc-200 p-8 rounded-[24px] shadow-xs min-h-[480px]">
                 {children}
               </div>
             </div>

@@ -74,82 +74,81 @@ export default function ReportsPanel() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaFlag style={{ color: '#d9534f' }} /> Reports Panel
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading flex items-center gap-2.5">
+          <FaFlag className="text-red-500" /> Reports Panel
+        </h2>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review flagged campaigns submitted by supporters as suspicious or fraudulent.
         </p>
       </div>
 
       {success && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaCheckCircle className="text-base shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaExclamationCircle className="text-base shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading flagged reports...</p>
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : reports.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
-          <FaCheckCircle style={{ fontSize: '32px', color: '#7cb032', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>Clean Security History</h4>
-          <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>No campaigns have been flagged by supporters at this time.</p>
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-[24px] text-center bg-zinc-50">
+          <FaCheckCircle className="text-4xl text-emerald-555 mx-auto mb-4" />
+          <h4 className="text-base font-bold text-zinc-900 m-0 font-heading">Clean Security History</h4>
+          <p className="text-sm text-zinc-500 m-0 font-medium">No campaigns have been flagged by supporters at this time.</p>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>Flagged Campaign</th>
-                <th style={{ fontWeight: 'bold' }}>Reporter</th>
-                <th style={{ fontWeight: 'bold' }}>Reason for Flag</th>
-                <th style={{ fontWeight: 'bold' }}>Date</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Actions</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Flagged Campaign</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Reporter</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Reason for Flag</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Date</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {reports.map((r) => (
-                <tr key={r._id} style={{ verticalAlign: 'middle' }}>
-                  <td style={{ fontWeight: 'bold', color: '#333', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.campaignTitle}>
+                <tr key={r._id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors last:border-b-0">
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-900 max-w-[200px] truncate" title={r.campaignTitle}>
                     {r.campaignTitle}
                   </td>
-                  <td>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>{r.reporterName}</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#777' }}>{r.reporterEmail}</p>
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-800">
+                    <p className="m-0 leading-tight">{r.reporterName}</p>
+                    <p className="m-0 text-[10px] text-zinc-400 font-semibold mt-1">{r.reporterEmail}</p>
                   </td>
-                  <td style={{ maxWidth: '250px', wordBreak: 'break-word' }}>{r.reason}</td>
-                  <td>{new Date(r.createdAt).toLocaleDateString()}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+                  <td className="px-5 py-5 text-sm text-zinc-650 max-w-[240px] break-words">{r.reason}</td>
+                  <td className="px-5 py-5 text-xs text-zinc-500 font-bold">
+                    {new Date(r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </td>
+                  <td className="px-5 py-5 text-center">
+                    <div className="flex gap-2 justify-center">
                       <button
                         onClick={() => handleClearReport(r._id)}
                         disabled={processingId !== ''}
-                        className="btn btn-theme"
-                        style={{ padding: '5px 12px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        className="h-9 px-4.5 rounded-xl bg-emerald-650 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border-none cursor-pointer disabled:opacity-50"
                       >
                         <FaCheck /> Dismiss
                       </button>
                       <button
                         onClick={() => handleSuspendCampaign(r.campaignId, r._id)}
                         disabled={processingId !== ''}
-                        className="btn"
-                        style={{ padding: '5px 12px', fontSize: '12px', background: '#d9534f', color: '#fff', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        className="h-9 px-4.5 rounded-xl bg-red-500 hover:bg-red-650 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border-none cursor-pointer disabled:opacity-50"
                       >
                         <FaTrashAlt /> Suspend
                       </button>

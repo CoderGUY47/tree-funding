@@ -1,23 +1,30 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
-import { 
-  FaSignOutAlt, 
-  FaBell, 
-  FaCoins, 
-  FaUserAlt,
-  FaTree,
-  FaCompass,
+import {
+  FaSignOutAlt,
+  FaBell,
+  FaCoins,
   FaFolderOpen,
   FaGithub,
   FaBars,
   FaTimes,
   FaChevronDown,
-  FaUser
+  FaUser,
+  FaCompass,
+  FaFacebookF,
+  FaInstagram,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaRegClock,
+  FaSearch,
 } from 'react-icons/fa';
+import { FaXTwitter, FaLinkedinIn } from 'react-icons/fa6';
 
 interface NotificationItem {
   _id: string;
@@ -31,20 +38,24 @@ interface NotificationItem {
 export default function Navbar() {
   const { user, logout, refreshProfile } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [imageError, setImageError] = useState(false);
-  
+  const [scrolled, setScrolled] = useState(false);
+
   const notificationsRef = useRef<HTMLDivElement>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { setImageError(false); }, [user]);
+
   useEffect(() => {
-    setImageError(false);
-  }, [user]);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const fetchNotifications = async () => {
     if (!user) return;
@@ -52,9 +63,7 @@ export default function Navbar() {
       const res = await api.get('/notifications');
       setNotifications(res.data.notifications);
       setUnreadCount(res.data.notifications.filter((n: NotificationItem) => !n.read).length);
-    } catch (err) {
-      console.error('Error fetching notifications:', err);
-    }
+    } catch { /* noop */ }
   };
 
   useEffect(() => {
@@ -67,30 +76,20 @@ export default function Navbar() {
   }, [user]);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
-        setNotificationsOpen(false);
-      }
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
-        setProfileDropdownOpen(false);
-      }
+    function handleOutside(e: MouseEvent) {
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) setNotificationsOpen(false);
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target as Node)) setProfileDropdownOpen(false);
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
   const handleMarkAsRead = async (id: string) => {
     try {
       await api.patch(`/notifications/${id}`);
-      setNotifications(prev => 
-        prev.map(n => n._id === id ? { ...n, read: true } : n)
-      );
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (err) {
-      console.error('Error marking notification read:', err);
-    }
+    } catch { /* noop */ }
   };
 
   const handleMarkAllAsRead = async () => {
@@ -98,234 +97,280 @@ export default function Navbar() {
       await api.patch('/notifications/mark-all');
       setNotifications(prev => prev.map(n => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch (err) {
-      console.error('Error marking all notifications read:', err);
-    }
+    } catch { /* noop */ }
   };
 
+  const isNavLink = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href));
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-xs font-sans">
-      <div className="container mx-auto px-6 max-w-6xl h-20 flex justify-between items-center">
-        
-        {/* Left Side: Logo */}
-        <a href="/" className="flex items-center gap-2.5 no-underline shrink-0 group">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center transition-transform group-hover:scale-105">
-            <FaTree className="text-2xl" />
-          </div>
-          <span className="text-xl font-black text-zinc-900 tracking-tight">
-            Tree<span className="text-emerald-600">Fund</span>
-          </span>
-        </a>
+    <header className={`fixed top-0 left-0 right-0 z-50 w-full flex flex-col transition-all duration-300 ${scrolled ? 'shadow-lg' : ''}`}>
 
-        {/* Center: Main Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 font-semibold text-sm">
-          <a 
-            href="/" 
-            className={`no-underline transition-colors relative py-2 ${
-              pathname === '/' ? 'text-emerald-650' : 'text-zinc-550 hover:text-zinc-800'
-            }`}
-          >
-            Home
-            {pathname === '/' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
-            )}
-          </a>
-          <a 
-            href="/explore" 
-            className={`no-underline transition-colors relative py-2 flex items-center gap-1.5 ${
-              pathname === '/explore' ? 'text-emerald-650' : 'text-zinc-550 hover:text-zinc-800'
-            }`}
-          >
-            <FaCompass className="text-xs" /> Explore
-            {pathname === '/explore' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
-            )}
-          </a>
-          <a 
-            href="https://github.com/CoderGUY47/tree-funding" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-555 hover:text-zinc-800 no-underline transition-colors flex items-center gap-1.5"
-          >
-            <FaGithub className="text-xs" /> Join as Developer
-          </a>
-          
-          {user && (
-            <a 
-              href="/dashboard" 
-              className={`no-underline transition-colors relative py-2 flex items-center gap-1.5 ${
-                pathname.startsWith('/dashboard') ? 'text-emerald-650' : 'text-zinc-550 hover:text-zinc-800'
-              }`}
-            >
-              <FaFolderOpen className="text-xs" /> Dashboard
-              {pathname.startsWith('/dashboard') && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
-              )}
+      {/* ═══════════════════════════════════════════════════════════
+          TIER 1 — Thin top utility bar (email / phone / socials)
+      ═══════════════════════════════════════════════════════════ */}
+      <div className="w-full bg-zinc-800 border-b border-zinc-700">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10 h-9 flex items-center justify-between">
+          {/* Left: email + phone */}
+          <div className="flex items-center gap-6 text-[11px] text-zinc-300 font-medium">
+            <a href="mailto:hello@treefund.org" className="flex items-center gap-1.5 hover:text-white transition-colors no-underline text-zinc-300">
+              <FaEnvelope className="text-primary text-[9px]" />
+              hello@treefund.org
             </a>
-          )}
-        </nav>
+            <a href="tel:+8808235600433" className="hidden sm:flex items-center gap-1.5 hover:text-white transition-colors no-underline text-zinc-300">
+              <FaPhoneAlt className="text-primary text-[9px]" />
+              (+880) 0823 560 433
+            </a>
+          </div>
+          {/* Right: social icons */}
+          <div className="flex items-center gap-3 text-zinc-400 text-xs">
+            {[
+              { href: 'https://facebook.com', icon: <FaFacebookF />, label: 'Facebook' },
+              { href: 'https://linkedin.com', icon: <FaLinkedinIn />, label: 'LinkedIn' },
+              { href: 'https://instagram.com', icon: <FaInstagram />, label: 'Instagram' },
+              { href: 'https://x.com/CoderGUY47', icon: <FaXTwitter />, label: 'X' },
+              { href: 'https://github.com/CoderGUY47', icon: <FaGithub />, label: 'GitHub' },
+            ].map(s => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+                className="w-6 h-6 rounded flex items-center justify-center hover:bg-primary hover:text-white transition-all text-zinc-400">
+                {s.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
 
-        {/* Right Side: User Actions */}
-        <div className="flex items-center gap-4 shrink-0">
+      {/* ═══════════════════════════════════════════════════════════
+          TIER 2 — Logo + contact info blocks
+      ═══════════════════════════════════════════════════════════ */}
+      <div className="w-full bg-white border-b border-zinc-100">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10 h-[76px] flex items-center justify-between gap-8">
           
-          {user ? (
-            <div className="flex items-center gap-4">
-              
-              {/* Credits Counter badge */}
-              <div className="bg-emerald-50/65 text-emerald-700 px-3.5 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 border border-emerald-100/50">
-                <FaCoins className="text-amber-500 text-sm" />
-                <span>{user.credits} Credits</span>
-              </div>
+          {/* Logo */}
+          <a href="/" className="flex items-center no-underline shrink-0 group">
+            <Image
+              src="/images/tree-fund-logo.png"
+              alt="TreeFund Logo"
+              width={150}
+              height={50}
+              className="h-11 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+              priority
+            />
+          </a>
 
-              {/* Notifications bell dropdown */}
-              <div className="relative flex items-center" ref={notificationsRef}>
-                <button
-                  onClick={() => setNotificationsOpen(!notificationsOpen)}
-                  className="bg-transparent border-none text-zinc-600 hover:text-zinc-900 text-lg cursor-pointer relative p-1.5 outline-none hover:bg-zinc-50 rounded-xl transition-colors"
-                  aria-label="Notifications"
+          {/* Contact info blocks — hidden on mobile */}
+          <div className="hidden lg:flex items-center gap-8 ml-auto mr-6">
+            {[
+              {
+                icon: <FaRegClock className="text-primary text-xl" />,
+                title: 'Opening Hours',
+                detail: 'Mon – Sat: 9:00 to 18:00',
+              },
+              {
+                icon: <FaMapMarkerAlt className="text-primary text-xl" />,
+                title: 'Our Address',
+                detail: 'Road-2, East Shibgonj, Sylhet',
+              },
+              {
+                icon: <FaPhoneAlt className="text-primary text-xl" />,
+                title: 'Contact Us',
+                detail: '(+880) 0823 560 433',
+              },
+            ].map((block, i) => (
+              <div key={i} className="flex items-center gap-3 border-l border-zinc-100 pl-8 first:border-0 first:pl-0">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  {block.icon}
+                </div>
+                <div>
+                  <p className="text-[11px] font-black text-zinc-800 uppercase tracking-wider m-0">{block.title}</p>
+                  <p className="text-[11px] text-zinc-500 font-medium m-0 mt-0.5">{block.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Donate / Auth buttons (tier 2 right side) */}
+          <div className="flex items-center gap-3 shrink-0">
+            {user ? (
+              <div className="flex items-center gap-2 text-xs font-bold text-zinc-700">
+                <FaCoins className="text-amber-500" />
+                {user.credits} Cr
+              </div>
+            ) : (
+              <a href="/register" className="hidden sm:inline-flex h-10 px-5 rounded-full bg-primary text-white font-bold text-xs uppercase tracking-wider items-center justify-center no-underline hover:bg-primary/90 transition-all shadow-md shadow-primary/20">
+                Join Free
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+          TIER 3 — Dark navigation bar with links + Donate button
+      ═══════════════════════════════════════════════════════════ */}
+      <div className="w-full bg-[#1a3c34]">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10 h-[58px] flex items-center justify-between">
+
+          {/* Nav links */}
+          <nav className="hidden md:flex items-center gap-1">
+            {[
+              { href: '/', label: 'Home' },
+              { href: '/explore', label: 'Explore Campaigns', icon: <FaCompass className="text-[10px]" /> },
+              { href: '/developer', label: 'Developer', icon: <FaGithub className="text-[10px]" /> },
+              ...(user ? [{ href: '/dashboard', label: 'Dashboard', icon: <FaFolderOpen className="text-[10px]" /> }] : []),
+            ].map(link => {
+              const active = isNavLink(link.href);
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`relative flex items-center gap-1.5 px-4 h-[58px] text-[13px] font-semibold no-underline transition-all duration-200 ${
+                    active
+                      ? 'text-white bg-primary/30 border-b-2 border-primary'
+                      : 'text-zinc-200 hover:text-white hover:bg-white/5'
+                  }`}
                 >
-                  <FaBell />
+                  {link.icon} {link.label}
+                </a>
+              );
+            })}
+          </nav>
+
+          {/* Right side: search + notifications + user + donate btn */}
+          <div className="flex items-center gap-3 ml-auto">
+
+            {/* Search icon */}
+            <button className="text-zinc-300 hover:text-white p-2 transition-colors cursor-pointer bg-transparent border-none" aria-label="Search">
+              <FaSearch className="text-sm" />
+            </button>
+
+            {/* Notifications (logged in only) */}
+            {user && (
+              <div className="relative" ref={notificationsRef}>
+                <button
+                  onClick={() => setNotificationsOpen(o => !o)}
+                  aria-label="Notifications"
+                  className="relative p-2 text-zinc-300 hover:text-white transition-colors cursor-pointer bg-transparent border-none"
+                >
+                  <FaBell className="text-sm" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 bg-amber-500 text-zinc-950 font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-orange-500 text-white text-[8px] font-black rounded-full flex items-center justify-center">
                       {unreadCount}
                     </span>
                   )}
                 </button>
 
-                {/* Dropdown list */}
                 {notificationsOpen && (
-                  <div className="absolute right-0 top-11 w-80 bg-white border border-zinc-150 rounded-2xl shadow-xl z-50 overflow-hidden text-zinc-800 text-left animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-4 py-3 border-b border-zinc-100 bg-zinc-50/60 flex justify-between items-center">
-                      <strong className="text-xs text-zinc-800 uppercase font-black tracking-wider">Notifications</strong>
+                  <div className="absolute right-0 top-12 w-80 bg-white rounded-2xl border border-zinc-100 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-3 duration-150">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100 bg-zinc-50">
+                      <span className="text-xs font-black text-zinc-800 uppercase tracking-wider">Notifications</span>
                       {unreadCount > 0 && (
-                        <button 
-                          onClick={handleMarkAllAsRead} 
-                          className="bg-transparent border-none text-[10px] font-black text-emerald-600 hover:text-emerald-700 cursor-pointer uppercase tracking-wider"
-                        >
+                        <button onClick={handleMarkAllAsRead} className="text-[10px] text-primary font-bold cursor-pointer bg-transparent border-none hover:text-primary/70">
                           Mark all read
                         </button>
                       )}
                     </div>
-                    <div className="max-h-64 overflow-y-auto">
+                    <div className="max-h-64 overflow-y-auto divide-y divide-zinc-50">
                       {notifications.length === 0 ? (
-                        <div className="p-8 text-center text-xs text-zinc-400 font-bold">
-                          No alerts or notifications.
+                        <div className="py-8 text-center text-xs text-zinc-400 font-medium">No notifications yet.</div>
+                      ) : notifications.map(notif => (
+                        <div key={notif._id} onClick={() => { if (!notif.read) handleMarkAsRead(notif._id); }}
+                          className={`px-4 py-3 cursor-pointer hover:bg-zinc-50 transition-colors ${notif.read ? '' : 'bg-primary/[0.03]'}`}>
+                          <a href={notif.actionRoute} onClick={() => setNotificationsOpen(false)} className="no-underline block">
+                            <p className={`text-[11px] m-0 leading-relaxed ${notif.read ? 'text-zinc-600 font-medium' : 'text-zinc-900 font-bold'}`}>
+                              {notif.message}
+                            </p>
+                            <span className="text-[9px] text-zinc-400 mt-1 block">{new Date(notif.time).toLocaleString()}</span>
+                          </a>
                         </div>
-                      ) : (
-                        notifications.map((notif) => (
-                          <div 
-                            key={notif._id}
-                            onClick={() => { if (!notif.read) handleMarkAsRead(notif._id); }}
-                            className={`p-3.5 border-b border-zinc-50 cursor-pointer hover:bg-zinc-50/80 transition-colors ${
-                              notif.read ? 'bg-white' : 'bg-emerald-50/20'
-                            }`}
-                          >
-                            <a href={notif.actionRoute} onClick={() => setNotificationsOpen(false)} className="no-underline text-zinc-700 block">
-                              <p className={`text-xs m-0 leading-relaxed ${notif.read ? 'font-medium text-zinc-650' : 'font-extrabold text-zinc-900'}`}>
-                                {notif.message}
-                              </p>
-                              <span className="text-[9px] text-zinc-400 block mt-1">
-                                {new Date(notif.time).toLocaleString()}
-                              </span>
-                            </a>
-                          </div>
-                        ))
-                      )}
+                      ))}
                     </div>
                   </div>
                 )}
               </div>
+            )}
 
-              {/* Profile dropdown selector */}
+            {/* User avatar dropdown / Sign In link */}
+            {user ? (
               <div className="relative" ref={profileDropdownRef}>
                 <button
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="bg-transparent border-none flex items-center gap-1.5 cursor-pointer p-0.5 outline-none"
+                  onClick={() => setProfileDropdownOpen(o => !o)}
+                  className="flex items-center gap-1.5 cursor-pointer bg-transparent border-none p-0 outline-none"
                 >
-                  {user.photoUrl && 
-                   user.photoUrl !== 'null' && 
-                   user.photoUrl !== 'undefined' && 
-                   user.photoUrl.trim() !== '' && 
-                   (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && 
-                   !imageError ? (
-                    <img 
-                      src={user.photoUrl} 
-                      alt="Avatar" 
-                      onError={() => setImageError(true)}
-                      className="w-9 h-9 rounded-full object-cover border-2 border-emerald-500 shrink-0"
-                    />
+                  {user.photoUrl && user.photoUrl !== 'null' && user.photoUrl !== 'undefined' && user.photoUrl.trim() !== '' && (user.photoUrl.startsWith('http') || user.photoUrl.startsWith('/')) && !imageError ? (
+                    <img src={user.photoUrl} alt="Avatar" onError={() => setImageError(true)} className="w-8 h-8 rounded-full object-cover border-2 border-white/30" />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-black text-xs shrink-0 border border-emerald-400">
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-black text-xs border-2 border-white/30">
+                      {user.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                   )}
-                  <FaChevronDown className="text-[10px] text-zinc-400 mt-0.5" />
+                  <FaChevronDown className="text-[9px] text-zinc-300" />
                 </button>
-
                 {profileDropdownOpen && (
-                  <div className="absolute right-0 top-11 w-48 bg-white border border-zinc-150 rounded-2xl shadow-xl z-50 overflow-hidden text-zinc-800 text-left py-2 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-4 py-2 border-b border-zinc-50 pb-2 mb-1.5">
-                      <p className="text-xs font-black text-zinc-800 m-0 truncate">{user.name}</p>
+                  <div className="absolute right-0 top-12 w-52 bg-white rounded-2xl border border-zinc-100 shadow-2xl z-50 overflow-hidden py-1.5 animate-in fade-in duration-150">
+                    <div className="px-4 pt-3 pb-3 border-b border-zinc-50">
+                      <p className="text-xs font-black text-zinc-900 m-0 truncate">{user.name}</p>
                       <p className="text-[10px] text-zinc-400 m-0 mt-0.5 truncate">{user.role}</p>
                     </div>
-                    <a href="/dashboard" onClick={() => setProfileDropdownOpen(false)} className="px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 no-underline flex items-center gap-2">
-                      <FaFolderOpen className="text-emerald-500" /> Workspace
+                    <a href="/dashboard" onClick={() => setProfileDropdownOpen(false)} className="px-4 py-2.5 text-[11px] font-semibold text-zinc-700 hover:bg-zinc-50 no-underline flex items-center gap-2.5 transition-colors">
+                      <FaFolderOpen className="text-primary" /> Workspace
                     </a>
-                    <a href="/dashboard/profile" onClick={() => setProfileDropdownOpen(false)} className="px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 no-underline flex items-center gap-2">
-                      <FaUser className="text-emerald-500" /> My Profile
+                    <a href="/dashboard/profile" onClick={() => setProfileDropdownOpen(false)} className="px-4 py-2.5 text-[11px] font-semibold text-zinc-700 hover:bg-zinc-50 no-underline flex items-center gap-2.5 transition-colors">
+                      <FaUser className="text-primary" /> My Profile
                     </a>
-                    <button 
-                      onClick={logout}
-                      className="w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-zinc-50 no-underline flex items-center gap-2 bg-transparent border-none cursor-pointer"
-                    >
+                    <button onClick={logout} className="w-full text-left px-4 py-2.5 text-[11px] font-semibold text-red-500 hover:bg-zinc-50 flex items-center gap-2.5 bg-transparent border-none cursor-pointer transition-colors">
                       <FaSignOutAlt /> Log Out
                     </button>
                   </div>
                 )}
               </div>
-
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              <a 
-                href="/login" 
-                className="text-xs font-bold text-zinc-600 hover:text-zinc-900 no-underline transition-colors"
-              >
+            ) : (
+              <a href="/login" className="text-zinc-300 hover:text-white text-[13px] font-semibold no-underline transition-colors">
                 Sign In
               </a>
-              <a 
-                href="/register" 
-                className="h-10 px-5 rounded-full bg-emerald-600 hover:bg-emerald-555 text-white font-bold text-xs uppercase tracking-wide no-underline flex items-center justify-center transition-colors shadow-md shadow-emerald-600/10"
-              >
-                Get Started
-              </a>
-            </div>
-          )}
+            )}
 
-          {/* Mobile menu trigger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden bg-transparent border-none text-zinc-600 hover:text-zinc-950 p-2 cursor-pointer"
-            aria-label="Toggle Navigation"
-          >
-            {mobileMenuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
-          </button>
+            {/* DONATE NOW — prominent CTA button */}
+            <a
+              href="/register"
+              className="h-10 px-6 rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-[11px] uppercase tracking-widest no-underline flex items-center justify-center transition-all shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] ml-1"
+            >
+              Donate Now
+            </a>
+
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(o => !o)}
+              className="md:hidden p-2 text-white cursor-pointer bg-transparent border-none"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <FaTimes className="text-lg" /> : <FaBars className="text-lg" />}
+            </button>
+          </div>
         </div>
-
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-zinc-50 border-t border-zinc-100 py-4 flex flex-col gap-1 px-6 shadow-inner text-left">
-          <a href="/" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-zinc-700 hover:text-emerald-650 no-underline flex items-center gap-2">Home</a>
-          <a href="/explore" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-zinc-700 hover:text-emerald-650 no-underline flex items-center gap-2">Explore Campaigns</a>
-          <a href="https://github.com/CoderGUY47/tree-funding" target="_blank" rel="noopener noreferrer" className="py-2.5 text-sm font-bold text-zinc-700 hover:text-emerald-650 no-underline flex items-center gap-2">Join as Developer</a>
-          {user && (
-            <a href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-zinc-700 hover:text-emerald-650 no-underline flex items-center gap-2">Dashboard</a>
+        <div className="md:hidden bg-[#1a3c34] border-t border-white/10 px-6 py-4 flex flex-col gap-1 animate-in slide-in-from-top-2 duration-200">
+          {[
+            { href: '/', label: 'Home' },
+            { href: '/explore', label: 'Explore Campaigns' },
+            { href: '/developer', label: 'Developer' },
+            ...(user ? [{ href: '/dashboard', label: 'Dashboard' }] : []),
+          ].map(link => (
+            <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)}
+              className="py-3 text-sm font-semibold text-zinc-200 hover:text-white no-underline border-b border-white/10 last:border-0 transition-colors">
+              {link.label}
+            </a>
+          ))}
+          {!user && (
+            <div className="flex gap-3 pt-3">
+              <a href="/login" className="flex-1 h-10 rounded-xl bg-white/10 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center no-underline border border-white/20">Sign In</a>
+              <a href="/register" className="flex-1 h-10 rounded-xl bg-primary text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center no-underline">Donate Now</a>
+            </div>
           )}
         </div>
       )}
-
     </header>
   );
 }

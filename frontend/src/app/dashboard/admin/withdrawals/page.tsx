@@ -58,74 +58,76 @@ export default function AdminWithdrawals() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div className="text-left bg-white p-2 font-sans">
       
       {/* Title Header */}
-      <div style={{ marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FaPiggyBank style={{ color: '#7cb032' }} /> Withdrawal Requests
-        </h3>
-        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
+      <div className="mb-9 border-b border-zinc-100 pb-5">
+        <h2 className="text-3xl font-extrabold text-zinc-900 m-0 uppercase tracking-tight font-heading flex items-center gap-2.5">
+          <FaPiggyBank className="text-primary" /> Withdrawal Requests
+        </h2>
+        <p className="text-sm text-zinc-500 mt-2 font-medium">
           Review pending creator cash withdrawal requests and mark payouts as completed.
         </p>
       </div>
 
       {success && (
-        <div className="alert alert-success" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaCheckCircle style={{ color: '#3c763d', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-250 text-emerald-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaCheckCircle className="text-base shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="alert alert-danger" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', marginBottom: '20px' }}>
-          <FaExclamationCircle style={{ color: '#a94442', fontSize: '16px', flexShrink: 0 }} />
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-5 font-bold animate-in fade-in">
+          <FaExclamationCircle className="text-base shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading ? (
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div className="h-8 w-8 rounded-full border-4 border-zinc-200 border-t-emerald-500 animate-spin mx-auto" />
-          <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>Loading withdrawal requests...</p>
+        <div className="flex h-60 items-center justify-center">
+          <div className="h-10 w-10 rounded-full border-4 border-zinc-200 border-t-primary animate-spin" />
         </div>
       ) : withdrawals.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 20px', border: '2px dashed #eee', borderRadius: '4px', background: '#fdfdfd' }}>
-          <FaExclamationCircle style={{ fontSize: '32px', color: '#ccc', marginBottom: '10px' }} />
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', margin: '0 0 5px 0' }}>No Pending Requests</h4>
-          <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>When creators withdraw their earnings, requests will be listed here for confirmation.</p>
+        <div className="p-16 border-2 border-dashed border-zinc-200 rounded-[24px] text-center bg-zinc-50">
+          <FaExclamationCircle className="text-4xl text-zinc-400 mx-auto mb-4" />
+          <h4 className="text-base font-bold text-zinc-900 m-0 mb-1 font-heading">No Pending Requests</h4>
+          <p className="text-sm text-zinc-500 m-0 font-medium">When creators withdraw their earnings, requests will be listed here for confirmation.</p>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered" style={{ margin: 0, fontSize: '12px' }}>
+        <div className="overflow-x-auto border border-zinc-100 rounded-xl shadow-sm">
+          <table className="w-full border-collapse bg-white">
             <thead>
-              <tr style={{ background: '#f9f9f9', color: '#333' }}>
-                <th style={{ fontWeight: 'bold' }}>Creator</th>
-                <th style={{ fontWeight: 'bold' }}>Credits to Exchange</th>
-                <th style={{ fontWeight: 'bold' }}>Cash Payout (USD)</th>
-                <th style={{ fontWeight: 'bold' }}>Transfer Channel</th>
-                <th style={{ fontWeight: 'bold', textAlign: 'center' }}>Payout</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Creator</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Credits to Exchange</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Cash Payout (USD)</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-left tracking-wider">Transfer Channel</th>
+                <th className="px-5 py-4 text-xs uppercase text-zinc-500 font-bold text-center tracking-wider">Payout</th>
               </tr>
             </thead>
             <tbody>
               {withdrawals.map((w) => (
-                <tr key={w._id} style={{ verticalAlign: 'middle' }}>
-                  <td>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>{w.creatorName}</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#777' }}>{w.creatorEmail}</p>
+                <tr key={w._id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors last:border-b-0">
+                  <td className="px-5 py-5 text-sm font-bold text-zinc-805">
+                    <p className="m-0 leading-tight">{w.creatorName}</p>
+                    <p className="m-0 text-[10px] text-zinc-400 font-semibold mt-1">{w.creatorEmail}</p>
                   </td>
-                  <td style={{ fontWeight: 'bold', color: '#d9534f' }}>-{w.withdrawalCredit} Credits</td>
-                  <td style={{ fontWeight: 'bold', color: '#7cb032' }}>${w.withdrawalAmount.toFixed(2)}</td>
-                  <td>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>{w.paymentSystem}</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#777' }}>{w.accountNumber}</p>
+                  <td className="px-5 py-5 text-sm font-bold text-red-500 font-numbers">
+                    -{w.withdrawalCredit} cr
                   </td>
-                  <td style={{ textAlign: 'center' }}>
+                  <td className="px-5 py-5 text-sm font-bold text-emerald-600 font-numbers">
+                    ${w.withdrawalAmount.toFixed(2)} USD
+                  </td>
+                  <td className="px-5 py-5 text-sm text-zinc-700">
+                    <p className="m-0 font-bold leading-tight">{w.paymentSystem}</p>
+                    <p className="m-0 text-[10px] text-zinc-405 font-mono mt-1">{w.accountNumber}</p>
+                  </td>
+                  <td className="px-5 py-5 text-center">
                     <button
                       onClick={() => handlePaymentSuccess(w._id)}
                       disabled={processingId !== ''}
-                      className="btn btn-theme text-uppercase"
-                      style={{ padding: '6px 15px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', margin: '0 auto' }}
+                      className="h-9 px-4.5 rounded-xl bg-emerald-650 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border-none cursor-pointer disabled:opacity-50 mx-auto"
                     >
                       <FaCheck /> Confirm Success
                     </button>
