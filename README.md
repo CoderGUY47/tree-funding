@@ -1,7 +1,11 @@
 <div align="center">
 
-  # 🌳 TreeFund
-  ### Premium Environmental Crowdfunding & Climate Action Platform
+  <a href="https://tree-funding.vercel.app">
+    <img src="frontend/public/images/tree-fund-logo.png" width="240" alt="TreeFund Logo" />
+  </a>
+  <br /><br />
+  
+  ### Premium Environmental Crowdfunding &amp; Climate Action Platform
   
   [![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -15,6 +19,12 @@
   <br />
 
   [🌐 Live Demo (Vercel)](https://tree-funding.vercel.app) • [🐙 GitHub Repo](https://github.com/CoderGUY47/tree-funding) • [📖 API Docs](/developer)
+
+  <br /><br />
+
+  <a href="https://tree-funding.vercel.app">
+    <img src="frontend/public/images/treefund-hero-preview.png" alt="TreeFund Website UI Preview" width="100%" />
+  </a>
 
 </div>
 
