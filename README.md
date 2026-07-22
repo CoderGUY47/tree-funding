@@ -1,124 +1,165 @@
-# 🌳 TreeFund — Premium Crowdfunding Platform for Sustainability
+<div align="center">
 
-TreeFund is a full-stack MERN crowdfunding platform where **Supporters** buy platform credits to back active green campaigns, **Creators** raise funds for sustainability projects, and **Administrators** moderate every action. Built with **Next.js 14 App Router + TypeScript** on the frontend and **Node.js + Express + MongoDB** on the backend.
+  # 🌳 TreeFund
+  ### Premium Environmental Crowdfunding & Climate Action Platform
+  
+  [![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+  [![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+  [![Express.js](https://img.shields.io/badge/Express-v4.18-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+  [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+  [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=for-the-badge&logo=stripe)](https://stripe.com/)
+  [![Vercel](https://img.shields.io/badge/Vercel-Deployment-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
----
+  <br />
 
-## 🔑 Admin Credentials
+  [🌐 Live Demo (Vercel)](https://tree-funding.vercel.app) • [🐙 GitHub Repo](https://github.com/CoderGUY47/tree-funding) • [📖 API Docs](/developer)
 
-| Field | Value |
-|---|---|
-| **Email** | `admin@treefunding.com` |
-| **Password** | `adminpassword123` |
-
-> The database auto-seeds this admin account with 99,999 credits on first startup.
-
----
-
-## 🌐 Live Links
-
-| Resource | URL |
-|---|---|
-| **Live Frontend (Vercel)** | [https://tree-funding.vercel.app](https://tree-funding.vercel.app) |
-| **GitHub Repository** | [https://github.com/CoderGUY47/tree-funding](https://github.com/CoderGUY47/tree-funding) |
+</div>
 
 ---
 
-## ✨ Key Features (10+)
-
-1. **Role-Based Dashboards** — Three distinct workspace dashboards (Supporter, Creator, Admin) each with their own sidebar navigation, statistics, and access-controlled pages.
-2. **Credit Purchase via Stripe** — Supporters purchase credits using Stripe payment gateway (simulated sandbox). Credits are credited to their wallet balance instantly on checkout confirmation.
-3. **Campaign Contribution System** — Supporters pledge credits to approved campaigns. Contributions are held in a `pending` state until the Creator manually approves or rejects each pledge.
-4. **Admin Campaign Approval Pipeline** — Newly created campaigns are hidden until an Admin reviews and approves them. Admins can also suspend or permanently delete campaigns.
-5. **Creator Withdrawal Requests** — Creators request credit-to-cash payouts. Admins review and confirm or reject withdrawal requests on a dedicated management panel.
-6. **Automatic Supporter Refunds** — If a Creator deletes a campaign with active approved contributions, the system automatically calculates and refunds all supporter balances.
-7. **Real-Time Notification Bell** — A floating notification center in the navbar displays recent platform events (contribution statuses, campaign approvals, payout confirmations) with outside-click dismissal.
-8. **Campaign Reporting** — Supporters can flag suspicious campaigns with a detailed report. Admins review all flagged campaigns in a Reports management panel.
-9. **imgBB Media Uploads** — Campaign banner images are uploaded via drag-and-drop file inputs connected to the imgBB CDN API.
-10. **Recharts Statistics Visualizations** — Supporter and Creator home dashboards feature Bar Charts (contribution distributions / campaign funding progress) and Pie Charts (category breakdowns / funding share) powered by Recharts.
-11. **Google OAuth Login** — Users can sign in via Google using Better Auth, with automatic role assignment and credits setup on first sign-in.
-12. **Responsive Design** — Fully responsive layout across mobile, tablet, and desktop. Dashboard sidebar collapses gracefully on smaller screens.
-13. **Session Persistence on Reload** — Uses Better Auth session management to restore authenticated user sessions on page reload — private routes stay accessible without redirecting to login.
-14. **Environment Variable Security** — All sensitive credentials (MongoDB URI, JWT secrets, Stripe keys, Google OAuth) are stored in `.env` files and never exposed to the client.
+> [!NOTE]
+> **TreeFund** is a full-stack MERN & Next.js App Router crowdfunding platform designed to connect climate supporters directly with verified environmental project creators worldwide. Featuring **AidUs design aesthetics**, high-contrast dark green/gold themes, interactive Recharts analytics, role-based dashboards, and Stripe wallet credit allocations.
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 Key Highlights & Design Aesthetic
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 14+ (App Router), TypeScript, Tailwind CSS v4, Recharts, Axios |
-| **Backend** | Node.js, Express.js, Mongoose (MongoDB) |
-| **Auth** | Better Auth (JWT sessions + Google OAuth) |
-| **Payments** | Stripe Elements (sandbox mode) |
-| **Media CDN** | imgBB API |
-| **Deployment** | Vercel (Frontend) + Render/Railway (Backend) |
-
----
-
-## 🚀 Local Setup Guide
-
-### Prerequisites
-- Node.js v18+
-- MongoDB Atlas URI or local MongoDB running at `mongodb://127.0.0.1:27017`
-
-### 1. Backend
-
-```bash
-cd backend
-cp .env.example .env   # fill in your keys
-npm install
-npm run dev
-```
-
-Server starts at: `http://localhost:5000`
-
-### 2. Frontend
-
-```bash
-cd frontend
-cp .env.example .env   # fill in your keys
-npm install
-npm run dev
-```
-
-Client starts at: `http://localhost:3000`
+- 🎨 **AidUs Theme Aesthetics** — Crafted with curated color palettes (`#1a3c34` primary dark green, `#f0a500` gold accent, `#141b2b` charcoal navy), modern Google Fonts typography, and glassmorphism stat cards.
+- 📱 **3-Tier Fixed Navigation Bar** — Includes top contact utility bar (email/phone/socials), mid-tier branding section with opening hours, and bottom navigation bar with notification drawer.
+- 🎠 **Split Hero Slide Carousel** — Dynamic auto-play carousel with full-width background imagery, text drop shadows, call-to-action buttons, and right-aligned circular slide controls.
+- ⚡ **Full-Width Sponsors Marquee** — Continuous 100% full-width infinite marquee slider with brand icons, hover pause, and gradient edge overlays.
+- 📊 **Interactive Recharts Analytics** — Interactive Bar Charts & Donut/Pie Charts displaying contribution distributions, impact sector allocations, and verification progress.
+- 🌿 **12 Borderless Impact Categories** — High-resolution Unsplash photo cards covering Reforestation, Clean Solar, Ocean Cleanup, Wildlife Rescue, Disaster Relief, and Clean Tech.
+- 🔐 **3 Role-Based Workspace Dashboards** — Access-controlled dashboards for **Supporter**, **Creator**, and **Admin** users with persistent session handling via Better Auth.
+- 💳 **Stripe Credit Checkout** — Instant credit package top-ups and wallet credit allocations with automated balance tracking.
 
 ---
 
-## 🔐 Environment Variables
+## 🔐 Credentials for Demo Roles
 
-### Backend (`backend/.env`)
-```
-MONGODB_URI=your_mongodb_atlas_uri
-JWT_SECRET=your_jwt_secret_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
-```
+> [!TIP]
+> Use these pre-seeded demo accounts on the `/login` page to test different user roles:
 
-### Frontend (`frontend/.env`)
-```
-MONGODB_URI=your_mongodb_atlas_uri
-BETTER_AUTH_URL=http://localhost:3000
-BETTER_AUTH_SECRET=your_better_auth_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-NEXT_PUBLIC_SERVER_URL=http://localhost:5000
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-```
+| Role | Email | Password | Initial Balance | Workspace Access |
+|---|---|---|---|---|
+| 👑 **Administrator** | `admin@gmail.com` | `treefund123` | **99,999 Cr** | Moderation, Campaign Approvals, Reports, Withdrawals |
+| 🌿 **Green Creator** | `creater@gmail.com` | `treefund123` | **5,000 Cr** | Campaign Management, Add Projects, Payout Requests |
+| 💚 **Supporter** | `supporter@gmail.com` | `treefund123` | **1,500 Cr** | Pledges, Wallet Top-ups, Impact Analytics, Profile |
 
 ---
 
-## 📁 Project Structure
+## 🧩 Architecture & Modular Components
 
 ```
 tree-funding/
-├── frontend/          # Next.js 14 App Router client
-│   ├── src/app/       # Pages (dashboard, explore, auth)
-│   ├── src/components # Navbar, Footer, reusable UI
-│   └── src/context    # AuthContext (Better Auth session)
-├── backend/           # Express.js REST API server
-│   ├── routes/        # API route handlers
-│   ├── models/        # Mongoose schemas
-│   └── middleware/    # JWT auth guards
-└── README.md
+├── frontend/                          # Next.js 16 App Router Client
+│   ├── src/app/                       # App Pages & API Routes
+│   │   ├── page.tsx                   # Modular Homepage Container
+│   │   ├── explore/                   # Campaign Directory
+│   │   ├── campaign/[id]/             # Detailed Campaign View & Pledging
+│   │   ├── developer/                 # API Developer Documentation
+│   │   ├── login/ & register/         # Auth pages with AidUs side panels
+│   │   └── dashboard/                 # Role-based workspace routes
+│   │       ├── supporter/             # Supporter Analytics & Contributions
+│   │       ├── creator/               # Creator Campaign & Payout Management
+│   │       └── admin/                 # Platform Moderation & Audit Panels
+│   ├── src/components/
+│   │   ├── Navbar.tsx                 # 3-Tier Fixed Header with Notifications
+│   │   ├── Footer.tsx                 # AidUs Dark Upper/Lower Footer
+│   │   ├── PageBanner.tsx             # Reusable Inner-Page Header Banner
+│   │   └── home/                      # Modular Section Components
+│   │       ├── HeroBanner.tsx         # Hero Slide Carousel
+│   │       ├── SponsorsMarquee.tsx    # 100% Full-Width Sponsor Marquee
+│   │       ├── MissionSection.tsx     # "We Work Together" Narrative & Cards
+│   │       ├── TopCampaignsSection.tsx# Top Funded Campaigns Row
+│   │       ├── ProcessSection.tsx     # 3-Step "How TreeFund Works"
+│   │       ├── PlatformMetricsSection.tsx # AidUs Dark Green Impact Cards
+│   │       ├── CategoriesSection.tsx  # 12 Borderless Photo Cards
+│   │       ├── FeaturesSection.tsx    # 6 Feature Watermark Cards
+│   │       ├── TestimonialsSection.tsx# 2-Column Reviewer Slider
+│   │       └── CtaSection.tsx         # "Become a Creator Today" CTA
+│   └── src/context/AuthContext.tsx    # Session & Authentication State
+└── backend/                           # Node.js + Express.js REST API
+    ├── src/
+    │   ├── config/db.js               # MongoDB Mongoose Connection
+    │   ├── models/                    # User, Campaign, Contribution Schemas
+    │   └── routes/                    # Express Endpoint Handlers
+    ├── seedCampaigns.js               # Auto-Seeding Script
+    └── index.js                       # Entry Server File
 ```
+
+---
+
+## 🚀 Local Development Setup
+
+> [!IMPORTANT]
+> Ensure you have **Node.js v18+** installed and an active **MongoDB Atlas** database URI before running locally.
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/CoderGUY47/tree-funding.git
+cd tree-funding
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+cp .env.example .env    # Configure MONGODB_URI and JWT_SECRET
+npm run dev
+```
+> Server runs locally at: `http://localhost:5000`
+
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+cp .env.example .env    # Configure NEXT_PUBLIC_SERVER_URL=http://localhost:5000
+npm run dev
+```
+> Next.js client runs locally at: `http://localhost:3000`
+
+---
+
+## ⚙️ Environment Variables
+
+### Backend Configuration (`backend/.env`)
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/treefund
+JWT_SECRET=your_jwt_super_secret_key
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+CLIIENT_URL=http://localhost:3000
+```
+
+### Frontend Configuration (`frontend/.env`)
+```env
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/treefund
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=your_better_auth_secret_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+NEXT_PUBLIC_SERVER_URL=http://localhost:5000
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+```
+
+---
+
+## 🧪 Verification & Build Commands
+
+```bash
+# Run TypeScript compilation check
+npx tsc --noEmit
+
+# Run Next.js production build
+npm run build
+```
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for Environmental Sustainability & Climate Protection • © 2026 TreeFund Ltd.</sub>
+</div>
