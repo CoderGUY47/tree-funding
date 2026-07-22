@@ -72,6 +72,7 @@ export default function Footer() {
                 width={180} 
                 height={50} 
                 className="h-10 w-auto object-contain brightness-0 invert" 
+                unoptimized
               />
             </div>
             <h3 className="text-lg font-black text-white m-0 tracking-tight">
